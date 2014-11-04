@@ -9,12 +9,12 @@ namespace AdventureGame
 {
     class NPC
     {
-        public string NPCfile;
+        public string NPCFile;
 
         public DialogueTree Dialogue { get; set; }
-        public DialogueTree Comment { get; set; }
+        public DialogueTree Observation { get; set; }
         public string Image { get; set; }
-        public Item[] items { get; set; }
+        public List<Item> items;
         public Vector2 Position;
         public Texture2D Texture { get; set; }
         public float Scale { get; set; }
@@ -22,16 +22,21 @@ namespace AdventureGame
 
         public NPC(string fileName)
         {
-            this.NPCfile = fileName;
+            this.NPCFile = fileName;
         }
 
-        public void initializeNPC(DialogueTree conversation, DialogueTree comment, int x, int y, string img, Item[] item, float scale)
+        public void initializeNPC()
         {
+            DialogueTree conversation = new DialogueTree("");
+            DialogueTree observation = new DialogueTree("");
+            string imageName = "";
+            float scale = 0;
+
+            Utility.parseNPCFile(NPCFile, ref conversation, ref observation, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale, ref items);
+
             this.Dialogue = conversation;
-            this.Comment = comment;
-            this.Position.X = x;
-            this.Position.Y = y;
-            this.Image = img;
+            this.Observation = observation;
+            this.Image = imageName;
             this.Scale = scale;
         }
 
@@ -42,7 +47,7 @@ namespace AdventureGame
 
         public void lookAt()
         {
-            Comment.startConversation();
+            Observation.startConversation();
         }
 
         public void activateAnimation(string animationChoice) {}

@@ -9,6 +9,7 @@ namespace AdventureGame
     {
         public string StatementsFile { get; set; }
         public string AnswersFile { get; set; }
+        public int lastStatement { get; set; }
 
         public DialogueTree(string statements, string answers = null)
         {
@@ -32,6 +33,7 @@ namespace AdventureGame
             while(stillTalking)
             {
                 statementNumber = displayStatement(statementNumber);
+                lastStatement = statementNumber;
                 statementNumber = displayAnswers(statementNumber, ref endState);
                 if (statementNumber == 100) //Change 100 to appropriate number
                     stillTalking = false;
@@ -49,7 +51,7 @@ namespace AdventureGame
             }
             else
             {
-                return 1; //change this parrt
+                return 1; //change this part
             }
         }
 

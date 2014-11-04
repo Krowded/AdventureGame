@@ -12,7 +12,7 @@ namespace AdventureGame
         public string ItemFile;
 
         static DialogueTree combinationDialogue = new DialogueTree("TextContent/Items/CombinationDialogue.txt");
-        public string Name;
+        public string Name { get; set; }
         public string Image { get; set; }
         public DialogueTree CommentDialogue { get; set; }
         public Vector2 Position;
@@ -24,13 +24,16 @@ namespace AdventureGame
             this.ItemFile = fileName;
         }
 
-        public void initializeItem(DialogueTree comment, int x, int y, string name, string image, float scale) 
+        public void initializeItem() 
         {
+            DialogueTree tempDialogue = new DialogueTree("");
+            string name = "";
+            string image = "";
+            float scale = 0;
+            Utility.parseItemFile(this.ItemFile, ref tempDialogue, ref name, ref image, ref this.Position.X, ref this.Position.Y, ref scale);
             this.Name = name;
             this.Image = image;
-            this.CommentDialogue = comment;
-            this.Position.X = x;
-            this.Position.Y = y;
+            this.CommentDialogue = tempDialogue;
             this.Scale = scale;
         }
 

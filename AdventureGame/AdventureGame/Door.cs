@@ -17,21 +17,33 @@ namespace AdventureGame
         public Texture2D Texture { get; set; }
         public float Scale { get; set; }
         public Room Destination { get; set; }
-        public string partnerDoorName { get; set; }
+        public string Name { get; set; }
+        public string PartnerDoorName { get; set; }
 
         public Door(string fileName)
         {
             this.DoorFile = fileName;
         }
 
-        public void initializeDoor(DialogueTree doorDialogue, int x, int y, string imageName, Room destination, string partner, float scale)
+        public void initializeDoor()
         {
-            this.Dialogue = doorDialogue;
+            DialogueTree tempDialogue = new DialogueTree("");
+            Room tempDestination = new Room("");
+            string imageName = "";
+            float x = 0;
+            float y = 0;
+            float scale = 0;
+            string name = "";
+            string partner = "";
+
+            Utility.parseDoorFile(DoorFile, ref tempDialogue, ref name, ref imageName, ref tempDestination, ref partner, ref this.Position.X, ref this.Position.Y, ref scale);
+
+            this.Dialogue = tempDialogue;
             this.Position.X = x;
             this.Position.Y = y;
             this.Image = imageName;
-            this.Destination = destination;
-            this.partnerDoorName = partner;
+            this.Destination = tempDestination;
+            this.PartnerDoorName = partner;
             this.Scale = scale;
         }
 

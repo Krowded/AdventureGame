@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace AdventureGame
 {
     static class Utility
     {
-        public void ParseRoomFile(string textFile, ref string background, ref List<Door> doors, ref List<Item> items, ref List<NPC> npcs)
+        public static void parseRoomFile(string textFile, ref string background, ref List<Door> doors, ref List<Item> items, ref List<NPC> npcs)
         {
-            using (System.IO.StreamReader file =
-                    new System.IO.StreamReader(textFile))
-                {
+            StreamReader file = new StreamReader(textFile);
+            {
                 string line;
                 while ((line = file.ReadLine()) != null)
                 {
@@ -22,33 +22,80 @@ namespace AdventureGame
                             background = words[1];
                             break;
                         case "Door":
-                            doors.Add(parseDoor(words[1]));
+                            doors.Add(new Door(words[1]));
                             break;
                         case "NPC":
-                            npcs.Add(parseNPC(words[1]));
+                            npcs.Add(new NPC(words[1]));
                             break;
                         case "Item":
-                            items.Add(parseItem(words[1]));
+                            items.Add(new Item(words[1]));
                             break;
                         default:
-                            { 
-                                throw new InvalidOperationException("Text file error in " + textFile + ".txt"); 
-                                break;
+                            {
+                                throw new InvalidOperationException("Text file error in " + textFile + ".txt");
                             }
                     }
+                }
+            }
         }
 
-        public Item parseItem(string fileName) 
+        public static void parseItemFile(string textFile, ref DialogueTree dialogue, ref string name, ref string imageName, ref float x, ref float y, ref float scale) 
         {
-            return new Item( fileName );
+            StreamReader file = new StreamReader(textFile);
+            string line = file.ReadLine();
+            string[] words = line.Split(':');
+            dialogue = new DialogueTree(words[0]);
+            name = words[1];
+            imageName = words[2];
+            if (!float.TryParse(words[3], out x) ||
+                !float.TryParse(words[4], out y) ||
+                !float.TryParse(words[5], out scale))
+            {
+                throw new InvalidOperationException("Text file error in " + textFile + ".txt");
+            }
         }
-        public Door parseDoor(string fileName)
+
+        public static void parseDoorFile(string textFile, ref DialogueTree dialogue, ref string name, ref string imageName, ref Room destination, ref string partnerDoor, ref float x, ref float y, ref float scale)
         {
-            return new Door( fileName );
+            StreamReader file = new StreamReader(textFile);
+            string line = file.ReadLine();
+            string[] words = line.Split(':');
+            dialogue = new DialogueTree(words[0]);
+            name = words[1];
+            imageName = words[2];
+            destination = new Room(words[3]);
+            partnerDoor = words[4];
+            if (!float.TryParse(words[5], out x) ||
+                !float.TryParse(words[6], out y) ||
+                !float.TryParse(words[7], out scale))
+            {
+                throw new InvalidOperationException("Text file error in " + textFile + ".txt");
+            }
         }
-        public NPC parseNPC(string fileName) 
+
+
+        public static void parseNPCFile(string textFile, ref DialogueTree dialogue, ref DialogueTree observation, ref string imageName, ref float x, ref float y, ref float scale, ref List<Item> items)
         {
-            return new NPC( fileName ); 
+            StreamReader file = new StreamReader(textFile);
+            string line = file.ReadLine();
+            string[] words = line.Split(':');
+            dialogue = new DialogueTree(words[0]);
+            observation = new DialogueTree(words[1]);
+            imageName = words[2];
+            if (!float.TryParse(words[3], out x) ||
+                !float.TryParse(words[4], out y) ||
+                !float.TryParse(words[5], out scale))
+            {
+                throw new InvalidOperationException("Text file error in " + textFile + ".txt");
+            }
+            if (words.Length > 6)
+            {
+                string[] itemFiles = words[6].Split('|');
+                foreach (string fileName in itemFiles)
+                {
+                    items.Add(new Item(fileName));
+                }
+            }
         }
     }
 }
