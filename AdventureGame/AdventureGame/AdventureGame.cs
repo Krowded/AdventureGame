@@ -247,7 +247,7 @@ namespace AdventureGame
             //NPCs
             for (int i = 0; i < npcs.Count; i++)
             {
-                //Scale player sprite by it's Y relative to the background
+                //Scale NPC sprite by it's Y relative to the background
                 Rectangle rec = new Rectangle(npcs[i].Item3.X + plusX, npcs[i].Item3.Y + plusY, npcs[i].Item3.Width, npcs[i].Item3.Height);
                 npcs[i] = new Tuple<NPC, Animation, Rectangle>(npcs[i].Item1, npcs[i].Item2, rec);
 
@@ -263,7 +263,7 @@ namespace AdventureGame
             //Items
             for (int i = 0; i < items.Count; i++)
             {
-                //Scale player sprite by it's Y relative to the background
+                //Scale Item sprite by it's Y relative to the background
                 Rectangle rec = new Rectangle(items[i].Item3.X + plusX, items[i].Item3.Y + plusY, items[i].Item3.Width, items[i].Item3.Height);
                 items[i] = new Tuple<Item, Texture2D, Rectangle>(items[i].Item1, items[i].Item2, rec);
 
@@ -274,7 +274,7 @@ namespace AdventureGame
             //Doors
             for (int i = 0; i < doors.Count; i++)
             {
-                //Scale player sprite by it's Y relative to the background
+                //Scale Door sprite by it's Y relative to the background
                 Rectangle rec = new Rectangle(doors[i].Item3.X + plusX, npcs[i].Item3.Y + plusY, doors[i].Item3.Width, doors[i].Item3.Height);
                 doors[i] = new Tuple<Door, Texture2D, Rectangle>(doors[i].Item1, doors[i].Item2, rec);
 
