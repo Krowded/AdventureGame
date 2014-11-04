@@ -1,0 +1,13 @@
+﻿||mainbackground||
+mainbackground
+||smallestScale||
+1f
+||Exit||
+player:300:300:Room2.txt
+|||End||
+||Items||
+player:150:150:Item1.txt
+||End||
+||NPC||
+player:600:600:Item1.txt
+||End||
