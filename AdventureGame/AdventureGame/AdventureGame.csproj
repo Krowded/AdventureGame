@@ -56,16 +56,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\In-Game Objects\Rooms\bgLayer1.png" />
+    <Content Include="Content\In-Game Objects\Rooms\mainbackground.png" />
     <Content Include="Icon.ico" />
+    <Content Include="TextContent\Rooms\Room1.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\In-Game Objects\Items\" />
-    <Folder Include="Content\In-Game Objects\NPCs\" />
-    <Folder Include="Content\In-Game Objects\Player\" />
-    <Folder Include="Content\In-Game Objects\Rooms\" />
-    <Folder Include="Content\Sound\Music\" />
-    <Folder Include="Content\Sound\Sound Effects\" />
-    <Folder Include="Content\Sound\Speech\" />
+    <Folder Include="TextContent\Items\" />
+    <Folder Include="TextContent\NPCs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\In-Game Objects\Rooms\bgLayer1.xnb" />
+    <None Include="Content\In-Game Objects\Rooms\mainbackground.xnb" />
+    <None Include="Content\mainbackground.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\player.xnb" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdventureGameContent\AdventureGameContent\AdventureGameContent.csproj">
+      <Project>{ab539b17-4a1b-48ae-87be-d425e5a2fb93}</Project>
+      <Name>AdventureGameContent</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

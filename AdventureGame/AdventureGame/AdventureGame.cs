@@ -80,7 +80,7 @@ namespace AdventureGame
             //Load info from the Room
             currentRoom = new Room("/In-Game Objects/Rooms/Room1.txt");
             currentRoom.initializeRoom();
-            mainBg = currentRoom.BackgroundImages[0];
+            mainBg = "mainbackground";
 
             //Initialize all the miscellaneous variables
             player = new Player(0, 0);
@@ -115,19 +115,20 @@ namespace AdventureGame
             // TODO: use this.Content to load your game content here
             Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, 
                 GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-
+            
             //Initialize the player
             Animation playerAnimation = new Animation();
             Texture2D playerTexture = Content.Load<Texture2D>("player");
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, scale, true);
             player.Initialize(playerAnimation, playerPosition);
-
+            
             //Initialize the background
             mainBackground = Content.Load<Texture2D>(mainBg);
             rectBackground = new Rectangle(0, 0, GraphicsDevice.Viewport.Width*2, 
                 GraphicsDevice.Viewport.Height*2);
 
             //Load all Items
+            if (currentRoom.Items != null)
             foreach(Item i in currentRoom.Items)
             {
                 Item item = i;
@@ -137,6 +138,7 @@ namespace AdventureGame
             }
 
             //Load all NPCs
+            if( currentRoom.NPCs != null )
             foreach (NPC npc in currentRoom.NPCs)
             {
                 Animation anim = new Animation();
@@ -148,6 +150,7 @@ namespace AdventureGame
             }
 
             //Load all Doors
+            if( currentRoom.Doors != null )
             foreach (Door door in currentRoom.Doors)
             {
                 Texture2D texture = Content.Load<Texture2D>(door.Image);
