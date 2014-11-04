@@ -1,0 +1,3 @@
+﻿*Template for how to write an Item file*
+
+[Dialogue Text File]:[Name of Item]:[Image File Name]:[X-coordinate]:[Y-coordinate]:[Scale]  

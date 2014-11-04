@@ -59,12 +59,12 @@
     <Content Include="Content\In-Game Objects\Rooms\bgLayer1.png" />
     <Content Include="Content\In-Game Objects\Rooms\mainbackground.png" />
     <Content Include="Icon.ico" />
+    <Content Include="TextContent\Doors\DoorFileTemplate.txt" />
+    <Content Include="TextContent\Items\ItemFileTemplate.txt" />
+    <Content Include="TextContent\NPCs\NPCFileTemplate.txt" />
     <Content Include="TextContent\Rooms\Room1.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TextContent\Items\" />
-    <Folder Include="TextContent\NPCs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Content\In-Game Objects\Rooms\bgLayer1.xnb" />
     <None Include="Content\In-Game Objects\Rooms\mainbackground.xnb" />

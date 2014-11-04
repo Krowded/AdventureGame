@@ -11,6 +11,7 @@ namespace AdventureGame
     {
         public string NPCFile;
 
+        public string Name { get; set; }
         public DialogueTree Dialogue { get; set; }
         public DialogueTree Observation { get; set; }
         public string Image { get; set; }
@@ -30,12 +31,14 @@ namespace AdventureGame
             DialogueTree conversation = new DialogueTree("");
             DialogueTree observation = new DialogueTree("");
             string imageName = "";
+            string name = "";
             float scale = 0;
 
-            Utility.parseNPCFile(NPCFile, ref conversation, ref observation, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale, ref items);
+            Utility.parseNPCFile(NPCFile, ref conversation, ref observation, ref name, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale, ref items);
 
             this.Dialogue = conversation;
             this.Observation = observation;
+            this.Name = name;
             this.Image = imageName;
             this.Scale = scale;
         }

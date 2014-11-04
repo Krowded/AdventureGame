@@ -73,22 +73,22 @@ namespace AdventureGame
             }
         }
 
-
-        public static void parseNPCFile(string textFile, ref DialogueTree dialogue, ref DialogueTree observation, ref string imageName, ref float x, ref float y, ref float scale, ref List<Item> items)
+        public static void parseNPCFile(string textFile, ref DialogueTree dialogue, ref DialogueTree observation, ref string name, ref string imageName, ref float x, ref float y, ref float scale, ref List<Item> items)
         {
             StreamReader file = new StreamReader(textFile);
             string line = file.ReadLine();
             string[] words = line.Split(':');
             dialogue = new DialogueTree(words[0]);
             observation = new DialogueTree(words[1]);
-            imageName = words[2];
-            if (!float.TryParse(words[3], out x) ||
-                !float.TryParse(words[4], out y) ||
-                !float.TryParse(words[5], out scale))
+            name = words[2];
+            imageName = words[3];
+            if (!float.TryParse(words[4], out x) ||
+                !float.TryParse(words[5], out y) ||
+                !float.TryParse(words[6], out scale))
             {
                 throw new InvalidOperationException("Text file error in " + textFile + ".txt");
             }
-            if (words.Length > 6)
+            if (words.Length > 7)
             {
                 string[] itemFiles = words[6].Split('|');
                 foreach (string fileName in itemFiles)
