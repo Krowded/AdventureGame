@@ -12,7 +12,18 @@ namespace AdventureGame
         //public Texture2D PlayerTexture;
         public Animation PlayerAnimation;
         public Vector2 Position;
-        public bool Active;
+        private bool active = false;
+        public bool Active 
+        {
+            get
+            {
+                return active;
+            }
+            set
+            {
+                active = value;
+            }
+        }
         public bool movingLeft = true;
 
         public int Width

@@ -12,9 +12,9 @@ namespace AdventureGame
         public string[] BackgroundImages { get; set; }
         public string[] ForegroundImages { get; set; }
 
-        public NPC[] NPCs = null;
-        public Door[] Doors = null;
-        public Item[] Items = null;
+        public List<NPC> NPCs = null;
+        public List<Door> Doors = null;
+        public List<Item> Items = null;
         
         public Room(string roomInformationFile)
         {

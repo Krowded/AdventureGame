@@ -71,7 +71,9 @@
     <None Include="Content\mainbackground.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\player.xnb" />
+    <None Include="Content\player.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventureGameContent\AdventureGameContent\AdventureGameContent.csproj">

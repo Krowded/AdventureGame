@@ -133,7 +133,7 @@ namespace AdventureGame
             {
                 Item item = i;
                 Texture2D texture = Content.Load<Texture2D>(item.Image);
-                Rectangle rectang = new Rectangle(item.Coordinates.Item1, item.Coordinates.Item2, texture.Width, texture.Height);
+                Rectangle rectang = new Rectangle((int)item.Position.X, (int)item.Position.Y, texture.Width, texture.Height);
                 items.Add(new Tuple<Item, Texture2D, Rectangle>(item, texture, rectang));
             }
 
@@ -143,8 +143,8 @@ namespace AdventureGame
             {
                 Animation anim = new Animation();
                 Texture2D tex = Content.Load<Texture2D>(npc.Image);
-                anim.Initialize(tex, new Vector2(npc.Coordinates.Item1, npc.Coordinates.Item2), tex.Width, tex.Height, 1, 30, Color.White, npc.Scale, true);
-                Rectangle rectang = new Rectangle(npc.Coordinates.Item1, npc.Coordinates.Item2, anim.FrameWidth, anim.FrameHeight);
+                anim.Initialize(tex, new Vector2(npc.Position.X, npc.Position.Y), tex.Width, tex.Height, 1, 30, Color.White, npc.Scale, true);
+                Rectangle rectang = new Rectangle((int)npc.Position.X, (int)npc.Position.Y, anim.FrameWidth, anim.FrameHeight);
                 npc.Scale = 1;
                 npcs.Add(new Tuple<NPC, Animation, Rectangle>(npc, anim, rectang));
             }
@@ -154,7 +154,7 @@ namespace AdventureGame
             foreach (Door door in currentRoom.Doors)
             {
                 Texture2D texture = Content.Load<Texture2D>(door.Image);
-                Rectangle rectang = new Rectangle(door.Coordinates.Item1, door.Coordinates.Item2, texture.Width, texture.Height);
+                Rectangle rectang = new Rectangle((int)door.Position.X, (int)door.Position.Y, texture.Width, texture.Height);
                 doors.Add(new Tuple<Door, Texture2D, Rectangle>(door, texture, rectang));
             }
         }

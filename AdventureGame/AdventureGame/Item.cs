@@ -2,27 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AdventureGame
 {
     class Item
     {
-        static DialogueTree combinationDialogue = new DialogueTree("In-Game Objects/Items/CombinationDialogue");
+        public string ItemFile;
+
+        static DialogueTree combinationDialogue = new DialogueTree("TextContent/Items/CombinationDialogue.txt");
         public string Name;
         public string Image { get; set; }
         public DialogueTree CommentDialogue { get; set; }
-        public Tuple<int, int> Coordinates { get; set; }
+        public Vector2 Position;
         public Texture2D Texture { get; set; }
         public float Scale { get; set; }
 
+        public Item(string fileName)
+        {
+            this.ItemFile = fileName;
+        }
 
-        public Item(string name, string image, DialogueTree comment, int x, int y, float scale) 
+        public void initializeItem(DialogueTree comment, int x, int y, string name, string image, float scale) 
         {
             this.Name = name;
             this.Image = image;
             this.CommentDialogue = comment;
-            this.Coordinates = new Tuple<int, int>(x, y);
+            this.Position.X = x;
+            this.Position.Y = y;
             this.Scale = scale;
         }
 
