@@ -11,7 +11,7 @@ namespace AdventureGame
 
         public string[] BackgroundImages { get; set; }
         public string[] ForegroundImages { get; set; }
-        public string bg;
+        public string background;
 
 
         public List<NPC> NPCs = new List<NPC>();
@@ -21,14 +21,11 @@ namespace AdventureGame
         public Room(string roomInformationFile)
         {
             roomFile = roomInformationFile;
-            NPCs.Add(new NPC(""));
-            Doors.Add(new Door(""));
-            Items.Add(new Item(""));
         }
 
         public void initializeRoom()
         {
-            Utility.parseRoomFile(roomFile, ref bg, ref Doors, ref Items, ref NPCs);
+            Utility.parseRoomFile(roomFile, ref background, ref Doors, ref Items, ref NPCs);
         }
     }
 }

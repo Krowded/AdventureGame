@@ -70,7 +70,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="Content\In-Game Objects\Rooms\bgLayer1.xnb" />
+    <None Include="Content\bgLayer1.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\In-Game Objects\Rooms\mainbackground.xnb" />
     <None Include="Content\mainbackground.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
