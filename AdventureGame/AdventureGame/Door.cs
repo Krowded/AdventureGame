@@ -27,24 +27,27 @@ namespace AdventureGame
 
         public void initializeDoor()
         {
-            DialogueTree tempDialogue = new DialogueTree("");
-            Room tempDestination = new Room("");
-            string imageName = "";
-            float x = 0;
-            float y = 0;
-            float scale = 0;
-            string name = "";
-            string partner = "";
+            if (DoorFile != "")
+            {
+                DialogueTree tempDialogue = new DialogueTree("");
+                Room tempDestination = new Room("");
+                string imageName = "";
+                float x = 0;
+                float y = 0;
+                float scale = 0;
+                string name = "";
+                string partner = "";
 
-            Utility.parseDoorFile(DoorFile, ref tempDialogue, ref name, ref imageName, ref tempDestination, ref partner, ref this.Position.X, ref this.Position.Y, ref scale);
+                Utility.parseDoorFile(DoorFile, ref tempDialogue, ref name, ref imageName, ref tempDestination, ref partner, ref this.Position.X, ref this.Position.Y, ref scale);
 
-            this.Dialogue = tempDialogue;
-            this.Position.X = x;
-            this.Position.Y = y;
-            this.Image = imageName;
-            this.Destination = tempDestination;
-            this.PartnerDoorName = partner;
-            this.Scale = scale;
+                this.Dialogue = tempDialogue;
+                this.Position.X = x;
+                this.Position.Y = y;
+                this.Image = imageName;
+                this.Destination = tempDestination;
+                this.PartnerDoorName = partner;
+                this.Scale = scale;
+            }
         }
 
         public Room enterDoor()

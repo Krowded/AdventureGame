@@ -1,0 +1,4 @@
+﻿Background:[Background File Name]
+Door:[Door File Name]
+NPC:[NPC File Name]
+Item:[Item File Name]

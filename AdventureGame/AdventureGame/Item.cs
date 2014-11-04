@@ -26,15 +26,18 @@ namespace AdventureGame
 
         public void initializeItem() 
         {
-            DialogueTree tempDialogue = new DialogueTree("");
-            string name = "";
-            string image = "";
-            float scale = 0;
-            Utility.parseItemFile(this.ItemFile, ref tempDialogue, ref name, ref image, ref this.Position.X, ref this.Position.Y, ref scale);
-            this.Name = name;
-            this.Image = image;
-            this.CommentDialogue = tempDialogue;
-            this.Scale = scale;
+            if (ItemFile != "")
+            {
+                DialogueTree tempDialogue = new DialogueTree("");
+                string name = "";
+                string image = "";
+                float scale = 0;
+                Utility.parseItemFile(this.ItemFile, ref tempDialogue, ref name, ref image, ref this.Position.X, ref this.Position.Y, ref scale);
+                this.Name = name;
+                this.Image = image;
+                this.CommentDialogue = tempDialogue;
+                this.Scale = scale;
+            }
         }
 
         public Item combine(Item otherItem)

@@ -58,11 +58,15 @@
   <ItemGroup>
     <Content Include="Content\In-Game Objects\Rooms\bgLayer1.png" />
     <Content Include="Content\In-Game Objects\Rooms\mainbackground.png" />
+    <Content Include="Content\In-Game Objects\Rooms\Room1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
     <Content Include="TextContent\Doors\DoorFileTemplate.txt" />
     <Content Include="TextContent\Items\ItemFileTemplate.txt" />
     <Content Include="TextContent\NPCs\NPCFileTemplate.txt" />
     <Content Include="TextContent\Rooms\Room1.txt" />
+    <Content Include="TextContent\Rooms\RoomFileTemplate.txt" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
