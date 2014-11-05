@@ -97,5 +97,12 @@ namespace AdventureGame
                 }
             }
         }
+
+        public static string parsePlayer(string textFile)
+        {
+            StreamReader file = new StreamReader(textFile);
+            string line = file.ReadLine();
+            return line;
+        }
     }
 }

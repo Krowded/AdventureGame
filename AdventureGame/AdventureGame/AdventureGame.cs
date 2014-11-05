@@ -29,6 +29,7 @@ namespace AdventureGame
 
         //Player
         Player player;
+        string playerStandardTexture = Utility.parsePlayer(@"TextContent/Player/Player.txt");
 
         //Mousehandling variables
         MouseState currentMouseState;
@@ -118,7 +119,7 @@ namespace AdventureGame
             
             //Initialize the player
             Animation playerAnimation = new Animation();
-            Texture2D playerTexture = Content.Load<Texture2D>("In-Game Objects/Player/player");
+            Texture2D playerTexture = Content.Load<Texture2D>(playerStandardTexture);
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, scale, true);
             player.Initialize(playerAnimation, playerPosition);
             

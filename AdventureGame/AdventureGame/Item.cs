@@ -25,8 +25,6 @@ namespace AdventureGame
                 DialogueTree tempDialogue = new DialogueTree("");
                 string name = "";
                 string image = "";
-                float positionx;
-                float positiony;
                 float scale = 0;
 
                 Utility.parseItemFile(this.FileName, ref tempDialogue, ref name, ref image, ref this.Position.X, ref this.Position.Y, ref scale);
