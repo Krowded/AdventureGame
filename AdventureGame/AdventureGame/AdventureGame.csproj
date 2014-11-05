@@ -38,6 +38,7 @@
     <Compile Include="Animation.cs" />
     <Compile Include="DialogueTree.cs" />
     <Compile Include="Door.cs" />
+    <Compile Include="InteractiveObject.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="NPC.cs" />
@@ -56,28 +57,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\In-Game Objects\Rooms\bgLayer1.png" />
-    <Content Include="Content\In-Game Objects\Rooms\mainbackground.png" />
-    <Content Include="Content\In-Game Objects\Rooms\Room1.txt">
+    <Content Include="TextContent\Doors\Door1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextContent\Items\Item1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextContent\NPCs\NPC1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextContent\Rooms\Room1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
     <Content Include="TextContent\Doors\DoorFileTemplate.txt" />
     <Content Include="TextContent\Items\ItemFileTemplate.txt" />
     <Content Include="TextContent\NPCs\NPCFileTemplate.txt" />
-    <Content Include="TextContent\Rooms\Room1.txt" />
     <Content Include="TextContent\Rooms\RoomFileTemplate.txt" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Content\bgLayer1.xnb">
+    <None Include="Content\In-Game Objects\Doors\door.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\In-Game Objects\Rooms\mainbackground.xnb" />
-    <None Include="Content\mainbackground.xnb">
+    <None Include="Content\In-Game Objects\Items\item.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\player.xnb">
+    <None Include="Content\In-Game Objects\NPCs\npc.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\In-Game Objects\Player\player.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\In-Game Objects\Rooms\bgLayer1.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\In-Game Objects\Rooms\mainbackground.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

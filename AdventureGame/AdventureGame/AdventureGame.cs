@@ -56,7 +56,7 @@ namespace AdventureGame
         string mainBg;
         Rectangle rectBackground;
         List<Tuple<Item, Texture2D, Rectangle>> items = new List<Tuple<Item, Texture2D, Rectangle>>();
-        List<Tuple<NPC, Animation, Rectangle>> npcs = new List<Tuple<NPC, Animation, Rectangle>>();
+        List<Tuple<NPC, Texture2D, Rectangle>> npcs = new List<Tuple<NPC, Texture2D, Rectangle>>();
         List<Tuple<Door, Texture2D, Rectangle>> doors = new List<Tuple<Door, Texture2D, Rectangle>>();
 
         public AdventureGame()
@@ -78,7 +78,7 @@ namespace AdventureGame
             // TODO: Add your initialization logic here
 
             //Load info from the Room
-            currentRoom = new Room(@"Content/In-Game Objects/Rooms/Room1.txt");
+            currentRoom = new Room(@"TextContent/Rooms/Room1.txt");
             currentRoom.initializeRoom();
             mainBg = currentRoom.background;
 
@@ -118,36 +118,48 @@ namespace AdventureGame
             
             //Initialize the player
             Animation playerAnimation = new Animation();
-            Texture2D playerTexture = Content.Load<Texture2D>("player");
+            Texture2D playerTexture = Content.Load<Texture2D>("In-Game Objects/Player/player");
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, scale, true);
             player.Initialize(playerAnimation, playerPosition);
             
             //Initialize the background
             mainBackground = Content.Load<Texture2D>(mainBg);
             rectBackground = new Rectangle(0, 0, GraphicsDevice.Viewport.Width*2, 
-                GraphicsDevice.Viewport.Height*2);
+                             GraphicsDevice.Viewport.Height*2);
+            LoadNewRoom();
 
-            //Load all Items
-            foreach(Item i in currentRoom.Items)
+        }
+
+        protected void LoadNewRoom()
+        {
+            //Hide old room
+            items.Clear();
+            npcs.Clear();
+            doors.Clear();
+
+            //Load new room
+            loadItems();
+            loadNPCs();
+            loadDoors();
+        }
+
+/// <summary>
+/// Loads
+/// </summary>
+
+        private void loadItems()
+        {
+            foreach (Item i in currentRoom.Items)
             {
                 Item item = i;
                 Texture2D texture = Content.Load<Texture2D>(item.Image);
                 Rectangle rectang = new Rectangle((int)item.Position.X, (int)item.Position.Y, texture.Width, texture.Height);
                 items.Add(new Tuple<Item, Texture2D, Rectangle>(item, texture, rectang));
             }
+        }
 
-            //Load all NPCs
-            foreach (NPC npc in currentRoom.NPCs)
-            {
-                Animation anim = new Animation();
-                Texture2D tex = Content.Load<Texture2D>(npc.Image);
-                anim.Initialize(tex, new Vector2(npc.Position.X, npc.Position.Y), tex.Width, tex.Height, 1, 30, Color.White, npc.Scale, true);
-                Rectangle rectang = new Rectangle((int)npc.Position.X, (int)npc.Position.Y, anim.FrameWidth, anim.FrameHeight);
-                npc.Scale = 1;
-                npcs.Add(new Tuple<NPC, Animation, Rectangle>(npc, anim, rectang));
-            }
-
-            //Load all Doors
+        private void loadDoors()
+        {
             foreach (Door door in currentRoom.Doors)
             {
                 Texture2D texture = Content.Load<Texture2D>(door.Image);
@@ -155,6 +167,19 @@ namespace AdventureGame
                 doors.Add(new Tuple<Door, Texture2D, Rectangle>(door, texture, rectang));
             }
         }
+
+        private void loadNPCs()
+        {
+            foreach (NPC npc in currentRoom.NPCs)
+            {
+                Texture2D texture = Content.Load<Texture2D>(npc.Image);
+                Rectangle rectang = new Rectangle((int)npc.Position.X, (int)npc.Position.Y, texture.Width, texture.Height);
+                npcs.Add(new Tuple<NPC, Texture2D, Rectangle>(npc, texture, rectang));
+            }
+        }
+
+        
+
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -244,23 +269,27 @@ namespace AdventureGame
         /// <param name="plusY"></param>
         private void UpdateBackgroundThings(GameTime gameTime, int plusX, int plusY)
         {
-            //NPCs
+            UpdateNPCs(gameTime, plusX, plusY);
+            UpdateItems(gameTime, plusX, plusY);
+            UpdateDoors(gameTime, plusX, plusY);
+        }
+
+        private void UpdateNPCs(GameTime gameTime, int plusX, int plusY)
+        {
             for (int i = 0; i < npcs.Count; i++)
             {
                 //Scale NPC sprite by it's Y relative to the background
                 Rectangle rec = new Rectangle(npcs[i].Item3.X + plusX, npcs[i].Item3.Y + plusY, npcs[i].Item3.Width, npcs[i].Item3.Height);
-                npcs[i] = new Tuple<NPC, Animation, Rectangle>(npcs[i].Item1, npcs[i].Item2, rec);
+                npcs[i] = new Tuple<NPC, Texture2D, Rectangle>(npcs[i].Item1, npcs[i].Item2, rec);
 
                 npcs[i].Item1.Scale = (((npcs[i].Item3.Y - rectBackground.Y) / rectBackground.Height + smallestScale)
                     * ((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
-
-
-                npcs[i].Item2.Active = true;
-                npcs[i].Item2.Update(gameTime);
             }
 
+        }
 
-            //Items
+        private void UpdateItems(GameTime gameTime, int plusX, int plusY)
+        {
             for (int i = 0; i < items.Count; i++)
             {
                 //Scale Item sprite by it's Y relative to the background
@@ -270,18 +299,21 @@ namespace AdventureGame
                 items[i].Item1.Scale = (((items[i].Item3.Y - rectBackground.Y) / rectBackground.Height + smallestScale)
                     * ((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
             }
+        }
 
-            //Doors
+        private void UpdateDoors(GameTime gameTime, int plusX, int plusY)
+        {
             for (int i = 0; i < doors.Count; i++)
             {
                 //Scale Door sprite by it's Y relative to the background
-                Rectangle rec = new Rectangle(doors[i].Item3.X + plusX, npcs[i].Item3.Y + plusY, doors[i].Item3.Width, doors[i].Item3.Height);
+                Rectangle rec = new Rectangle(doors[i].Item3.X + plusX, doors[i].Item3.Y + plusY, doors[i].Item3.Width, doors[i].Item3.Height);
                 doors[i] = new Tuple<Door, Texture2D, Rectangle>(doors[i].Item1, doors[i].Item2, rec);
 
                 doors[i].Item1.Scale = (((doors[i].Item3.Y - rectBackground.Y) / rectBackground.Height + smallestScale)
                     * ((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
             }
         }
+
 
         /// <summary>
         /// Updates the background by taking care of scrolling etc.
@@ -417,23 +449,24 @@ namespace AdventureGame
                 Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
             
             //Draw each door
-            foreach(Tuple<Door, Texture2D, Rectangle> i in doors)
+            foreach(Tuple<Door, Texture2D, Rectangle> door in doors)
             {
-                spriteBatch.Draw(i.Item2, i.Item3, null,
+                spriteBatch.Draw(door.Item2, door.Item3, null,
                     Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
             }
 
             //Draw each npc
-            foreach (Tuple<NPC, Animation, Rectangle> i in npcs)
+            foreach (Tuple<NPC, Texture2D, Rectangle> npc in npcs)
             {
-                i.Item2.Draw(spriteBatch, i.Item1.Scale, SpriteEffects.None);
+                spriteBatch.Draw(npc.Item2, npc.Item3, null,
+                    Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
             }
 
             
             //Draw each item
-            foreach (Tuple<Item, Texture2D, Rectangle> i in items)
+            foreach (Tuple<Item, Texture2D, Rectangle> item in items)
             {
-                spriteBatch.Draw(i.Item2, i.Item3, null,
+                spriteBatch.Draw(item.Item2, item.Item3, null,
                     Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
             }
 

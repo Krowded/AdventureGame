@@ -1,2 +1,4 @@
 ﻿*Template for how to write a Door file*
 [Dialogue Text File]:[Door Name]:[Image File Name]:[Destination Text File]:[Partner Door Name]:[X-coordinate]:[Y-coordinate]:[Scale]
+
+*Remember to set to "Copy Always"*

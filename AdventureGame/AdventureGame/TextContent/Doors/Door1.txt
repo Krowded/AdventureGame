@@ -1,0 +1,1 @@
+﻿:Test Door:In-Game Objects/Doors/door:Content/In-Game Objects/Rooms/Room1.txt::200:600:1

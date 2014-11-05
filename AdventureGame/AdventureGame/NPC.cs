@@ -7,28 +7,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AdventureGame
 {
-    class NPC
+    class NPC : InteractiveObject
     {
-        public string NPCFile;
-
-        public string Name { get; set; }
         public DialogueTree Dialogue { get; set; }
-        public DialogueTree Observation { get; set; }
-        public string Image { get; set; }
-        public List<Item> items;
-        public Vector2 Position;
+        public List<Item> items;        
         public Texture2D Texture { get; set; }
-        public float Scale { get; set; }
+        
 
 
         public NPC(string fileName)
         {
-            this.NPCFile = fileName;
+            this.FileName = fileName;
         }
 
-        public void initializeNPC()
+        public override void initialize()
         {
-            if (NPCFile != "")
+            if (FileName != "")
             {
                 DialogueTree conversation = new DialogueTree("");
                 DialogueTree observation = new DialogueTree("");
@@ -36,7 +30,7 @@ namespace AdventureGame
                 string name = "";
                 float scale = 0;
 
-                Utility.parseNPCFile(NPCFile, ref conversation, ref observation, ref name, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale, ref items);
+                Utility.parseNPCFile(FileName, ref conversation, ref observation, ref name, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale, ref items);
 
                 this.Dialogue = conversation;
                 this.Observation = observation;
@@ -49,11 +43,6 @@ namespace AdventureGame
         public void talkTo()
         {
             Dialogue.startConversation();
-        }
-
-        public void lookAt()
-        {
-            Observation.startConversation();
         }
 
         public void activateAnimation(string animationChoice) {}

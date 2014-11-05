@@ -1,0 +1,26 @@
+Checklist:
+
+1. Collision
+	- Ska inte kunna gå ovanpå folk och saker, om inte annat sägs (dvs collidable konstant)
+	- Ska kunna interagera med saker genom att klicka på dem
+	- När man endast tittar på saker eller pratar med folks så ska karaktären kunna stanna på lagom avstånd från objektet
+
+2. Conversation
+	- Ska kunna ladda en hel konversation från en fil
+	- Ska kunna läsa upp en del av en konversation, ge svarsmöjligheter och sen reagera på svaret
+	- Ska kunna leda till att:
+		* Item flyttas från NPC till Player(inventory)
+		* Item tas från Player
+		* Dörrar öppnas
+		* Etc.
+
+3. Inventory
+	- Ska finnas och kunna öppnas för att se på saker
+	- Saker i inventory ska kunna användas genom att klicka på dem, även med varandra
+
+4. Foreground
+	- Ska kunna finnas saker i förgrunder som spelarkaraktären ska gå bakom
+
+
+5. Pathing
+	- Om det finns ett opasserbart objekt mellan karaktären och dess destination så ska den själv hitta en väg runt objektet

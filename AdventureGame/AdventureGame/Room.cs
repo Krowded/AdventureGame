@@ -26,6 +26,25 @@ namespace AdventureGame
         public void initializeRoom()
         {
             Utility.parseRoomFile(roomFile, ref background, ref Doors, ref Items, ref NPCs);
+            initializeLists();           
+        }
+
+        private void initializeLists()
+        {
+            foreach (Door door in Doors)
+            {
+                door.initialize();
+            }
+
+            foreach (Item item in Items)
+            {
+                item.initialize();
+            }
+
+            foreach (NPC npc in NPCs)
+            {
+                npc.initialize();
+            }
         }
     }
 }

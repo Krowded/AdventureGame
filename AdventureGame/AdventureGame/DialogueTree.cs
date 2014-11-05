@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AdventureGame
 {
-    class DialogueTree
+    public class DialogueTree
     {
         public string StatementsFile { get; set; }
         public string AnswersFile { get; set; }

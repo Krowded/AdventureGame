@@ -1,4 +1,8 @@
-﻿Background:[Background File Name]
+﻿*Template for how to write a Room file*
+
+Background:[Background File Name]
 Door:[Door File Name]
 NPC:[NPC File Name]
 Item:[Item File Name]
+
+*Remember to set to "Copy Always"*

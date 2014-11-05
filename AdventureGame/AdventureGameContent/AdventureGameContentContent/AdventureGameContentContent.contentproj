@@ -48,9 +48,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ContentMaker\In-Game Objects\Items\" />
-    <Folder Include="ContentMaker\In-Game Objects\NPCs\" />
-    <Folder Include="ContentMaker\In-Game Objects\Player\" />
     <Folder Include="ContentMaker\Sound\Music\" />
     <Folder Include="ContentMaker\Sound\Sound Effects\" />
     <Folder Include="ContentMaker\Sound\Speech\" />
@@ -70,14 +67,28 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentMaker\mainbackground.png">
-      <Name>mainbackground</Name>
+    <Compile Include="ContentMaker\In-Game Objects\Doors\door.png">
+      <Name>door</Name>
       <Importer>TextureImporter</Importer>
-      <Processor>MGTextureProcessor</Processor>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentMaker\player.png">
+    <Compile Include="ContentMaker\In-Game Objects\Items\item.png">
+      <Name>item</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ContentMaker\In-Game Objects\NPCs\npc.png">
+      <Name>npc</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ContentMaker\In-Game Objects\Player\player.png">
       <Name>player</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
