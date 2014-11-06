@@ -17,7 +17,7 @@ namespace AdventureGame
     public class AdventureGame : Game
     {
         //Window  and graphics managing
-        GraphicsDeviceManager graphics;
+        GraphicsDeviceManager Graphics;
         SpriteBatch spriteBatch;
 
         //The size for which the game is programmed (consistency important for scaling)
@@ -25,36 +25,36 @@ namespace AdventureGame
         const int NaturalScreenHeight = 1080;
 
         //The current room, where most is loaded from
-        Room currentRoom;
+        Room CurrentRoom;
 
         //Player
         Player player;
-        string playerStandardTexture = Utility.parsePlayer(@"TextContent/Player/Player.txt");
+        string PlayerStandardTexture = Utility.ParsePlayer(@"TextContent/Player/Player.txt");
 
         //Mousehandling variables
-        MouseState currentMouseState;
-        MouseState previousMouseState;
-        Vector2 mousePosition = new Vector2();
-        Vector2 posDelta = new Vector2();
-        bool mousePressed;
-        bool begin;
+        MouseState CurrentMouseState;
+        MouseState PreviousMouseState;
+        Vector2 MousePosition = new Vector2();
+        Vector2 PosDelta = new Vector2();
+        bool MousePressed;
+        bool Begin;
 
         //Scaling
-        float scale;
-        float smallestScale = 0.5f;
-        int elapsedTime;
+        float Scale;
+        float SmallestScale = 0.5f;
+        int ElapsedTime;
 
         //Variables for moving things
-        int scrollSpeed;
+        float ScrollSpeed;
         float MoveSpeed;
-        bool scrollingRight;
-        bool scrollingLeft;
-        bool scrollingDown;
-        bool scrollingUp;
+        bool ScrollingRight;
+        bool ScrollingLeft;
+        bool ScrollingDown;
+        bool ScrollingUp;
 
         //Background
         Texture2D mainBackground;
-        string mainBg;
+        string MainBg;
         Rectangle rectBackground;
         List<Tuple<Item, Texture2D, Rectangle>> items = new List<Tuple<Item, Texture2D, Rectangle>>();
         List<Tuple<NPC, Texture2D, Rectangle>> npcs = new List<Tuple<NPC, Texture2D, Rectangle>>();
@@ -63,7 +63,7 @@ namespace AdventureGame
         public AdventureGame()
             : base()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -79,24 +79,24 @@ namespace AdventureGame
             // TODO: Add your initialization logic here
 
             //Load info from the Room
-            currentRoom = new Room(@"TextContent/Rooms/Room1.txt");
-            currentRoom.initializeRoom();
-            mainBg = currentRoom.background;
+            CurrentRoom = new Room(@"TextContent/Rooms/Room1.txt");
+            CurrentRoom.InitializeRoom();
+            MainBg = CurrentRoom.Background;
 
             //Initialize all the miscellaneous variables
             player = new Player(0, 0);
-            mousePressed = false;
-            begin = false;
-            elapsedTime = 0;
+            MousePressed = false;
+            Begin = false;
+            ElapsedTime = 0;
 
             //Scrollspeed (should it really just be a multiple of movespeed?
             Running(true);
-            scrollSpeed = 4 * (int)MoveSpeed;
+            ScrollSpeed = 4 * MoveSpeed;
             Running(false);
             
             //Sets the natural screen size (supposed to resize automatically)
-            graphics.PreferredBackBufferWidth = NaturalScreenWidth;
-            graphics.PreferredBackBufferHeight = NaturalScreenHeight;
+            Graphics.PreferredBackBufferWidth = NaturalScreenWidth;
+            Graphics.PreferredBackBufferHeight = NaturalScreenHeight;
 
             //TouchPanel.EnabledGestures = GestureType.FreeDrag;  <- fix this at the end so that it works for phones, etc. as well
 
@@ -119,12 +119,12 @@ namespace AdventureGame
             
             //Initialize the player
             Animation playerAnimation = new Animation();
-            Texture2D playerTexture = Content.Load<Texture2D>(playerStandardTexture);
-            playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, scale, true);
+            Texture2D playerTexture = Content.Load<Texture2D>(PlayerStandardTexture);
+            playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, Scale, true);
             player.Initialize(playerAnimation, playerPosition);
             
             //Initialize the background
-            mainBackground = Content.Load<Texture2D>(mainBg);
+            mainBackground = Content.Load<Texture2D>(MainBg);
             rectBackground = new Rectangle(0, 0, GraphicsDevice.Viewport.Width*2, 
                              GraphicsDevice.Viewport.Height*2);
             LoadNewRoom();
@@ -139,18 +139,18 @@ namespace AdventureGame
             doors.Clear();
 
             //Load new room
-            loadItems();
-            loadNPCs();
-            loadDoors();
+            LoadItems();
+            LoadNPCs();
+            LoadDoors();
         }
 
 /// <summary>
 /// Loads
 /// </summary>
 
-        private void loadItems()
+        private void LoadItems()
         {
-            foreach (Item i in currentRoom.Items)
+            foreach (Item i in CurrentRoom.Items)
             {
                 Item item = i;
                 Texture2D texture = Content.Load<Texture2D>(item.Image);
@@ -159,9 +159,9 @@ namespace AdventureGame
             }
         }
 
-        private void loadDoors()
+        private void LoadDoors()
         {
-            foreach (Door door in currentRoom.Doors)
+            foreach (Door door in CurrentRoom.Doors)
             {
                 Texture2D texture = Content.Load<Texture2D>(door.Image);
                 Rectangle rectang = new Rectangle((int)door.Position.X, (int)door.Position.Y, texture.Width, texture.Height);
@@ -169,9 +169,9 @@ namespace AdventureGame
             }
         }
 
-        private void loadNPCs()
+        private void LoadNPCs()
         {
-            foreach (NPC npc in currentRoom.NPCs)
+            foreach (NPC npc in CurrentRoom.NPCs)
             {
                 Texture2D texture = Content.Load<Texture2D>(npc.Image);
                 Rectangle rectang = new Rectangle((int)npc.Position.X, (int)npc.Position.Y, texture.Width, texture.Height);
@@ -203,8 +203,8 @@ namespace AdventureGame
                 Exit();
 
             //Save mousestates
-            previousMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
+            PreviousMouseState = CurrentMouseState;
+            CurrentMouseState = Mouse.GetState();
 
             // TODO: Add your update logic here
             UpdatePlayer(gameTime);
@@ -234,31 +234,31 @@ namespace AdventureGame
             }
 
             //Compensate for screen scrolling
-            if (scrollingRight)
+            if (ScrollingRight)
             {
                 player.Position.X -= MoveSpeed;
             }
-            else if (scrollingLeft)
+            else if (ScrollingLeft)
             {
                 player.Position.X += MoveSpeed;
             }
 
-            if (scrollingUp)
+            if (ScrollingUp)
             {
                 player.Position.Y += MoveSpeed;
             }
-            else if (scrollingDown)
+            else if (ScrollingDown)
             {
                 player.Position.Y -= MoveSpeed;
             }
             
             //Scale player sprite by it's Y relative to the background
-            scale = (((player.Position.Y - rectBackground.Y) / rectBackground.Height + smallestScale)
+            Scale = (((player.Position.Y - rectBackground.Y) / rectBackground.Height + SmallestScale)
                 *((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
 
             //Keeps player from running off screen
-            player.Position.X = MathHelper.Clamp(player.Position.X, scale*player.Width/2, GraphicsDevice.Viewport.Width - player.Width*scale/2);
-            player.Position.Y = MathHelper.Clamp(player.Position.Y, scale*player.Height, GraphicsDevice.Viewport.Height - player.Height*scale);
+            player.Position.X = MathHelper.Clamp(player.Position.X, Scale*player.Width/2, GraphicsDevice.Viewport.Width - player.Width*Scale/2);
+            player.Position.Y = MathHelper.Clamp(player.Position.Y, Scale*player.Height, GraphicsDevice.Viewport.Height - player.Height*Scale);
                
         }
 
@@ -283,7 +283,7 @@ namespace AdventureGame
                 Rectangle rec = new Rectangle(npcs[i].Item3.X + plusX, npcs[i].Item3.Y + plusY, npcs[i].Item3.Width, npcs[i].Item3.Height);
                 npcs[i] = new Tuple<NPC, Texture2D, Rectangle>(npcs[i].Item1, npcs[i].Item2, rec);
 
-                npcs[i].Item1.Scale = (((npcs[i].Item3.Y - rectBackground.Y) / rectBackground.Height + smallestScale)
+                npcs[i].Item1.Scale = (((npcs[i].Item3.Y - rectBackground.Y) / rectBackground.Height + SmallestScale)
                     * ((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
             }
 
@@ -297,7 +297,7 @@ namespace AdventureGame
                 Rectangle rec = new Rectangle(items[i].Item3.X + plusX, items[i].Item3.Y + plusY, items[i].Item3.Width, items[i].Item3.Height);
                 items[i] = new Tuple<Item, Texture2D, Rectangle>(items[i].Item1, items[i].Item2, rec);
 
-                items[i].Item1.Scale = (((items[i].Item3.Y - rectBackground.Y) / rectBackground.Height + smallestScale)
+                items[i].Item1.Scale = (((items[i].Item3.Y - rectBackground.Y) / rectBackground.Height + SmallestScale)
                     * ((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
             }
         }
@@ -310,7 +310,7 @@ namespace AdventureGame
                 Rectangle rec = new Rectangle(doors[i].Item3.X + plusX, doors[i].Item3.Y + plusY, doors[i].Item3.Width, doors[i].Item3.Height);
                 doors[i] = new Tuple<Door, Texture2D, Rectangle>(doors[i].Item1, doors[i].Item2, rec);
 
-                doors[i].Item1.Scale = (((doors[i].Item3.Y - rectBackground.Y) / rectBackground.Height + smallestScale)
+                doors[i].Item1.Scale = (((doors[i].Item3.Y - rectBackground.Y) / rectBackground.Height + SmallestScale)
                     * ((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
             }
         }
@@ -328,38 +328,38 @@ namespace AdventureGame
             //Check if scroll should be made and scroll
             if(player.Position.X > 2 * GraphicsDevice.Viewport.Width / 3 )
             {
-                posDelta.Normalize();
-                rectBackground.X -= scrollSpeed;
-                scrollingRight = true;
+                PosDelta.Normalize();
+                rectBackground.X -= (int)ScrollSpeed;
+                ScrollingRight = true;
             }
             else if (player.Position.X < GraphicsDevice.Viewport.Width / 3)
             {
-                posDelta.Normalize();
-                rectBackground.X += scrollSpeed;
-                scrollingLeft = true;
+                PosDelta.Normalize();
+                rectBackground.X += (int)ScrollSpeed;
+                ScrollingLeft = true;
             }
             else
             {
-                scrollingRight = false;
-                scrollingLeft = false;
+                ScrollingRight = false;
+                ScrollingLeft = false;
             }
 
             if (player.Position.Y > 2 * GraphicsDevice.Viewport.Height / 3)
             {
-                posDelta.Normalize();
-                rectBackground.Y -= scrollSpeed;
-                scrollingDown = true;
+                PosDelta.Normalize();
+                rectBackground.Y -= (int)ScrollSpeed;
+                ScrollingDown = true;
             }
             else if (player.Position.Y < GraphicsDevice.Viewport.Height / 3)
             {
-                posDelta.Normalize();
-                rectBackground.Y += scrollSpeed;
-                scrollingUp = true;
+                PosDelta.Normalize();
+                rectBackground.Y += (int)ScrollSpeed;
+                ScrollingUp = true;
             }
             else
             {
-                scrollingDown = false;
-                scrollingUp = false;
+                ScrollingDown = false;
+                ScrollingUp = false;
             }
 
             //If screen is still, then don't compensate for scrolling
@@ -368,8 +368,8 @@ namespace AdventureGame
             if ((rectBackground.X == 0) || 
                 (rectBackground.X == -(rectBackground.Width - GraphicsDevice.Viewport.Width)))
             {
-                scrollingRight = false;
-                scrollingLeft = false;
+                ScrollingRight = false;
+                ScrollingLeft = false;
             }
 
             rectBackground.Y = (int)MathHelper.Clamp(rectBackground.Y, 
@@ -377,8 +377,8 @@ namespace AdventureGame
             if ((rectBackground.Y == 0) || 
                 (rectBackground.Y == -(rectBackground.Height - GraphicsDevice.Viewport.Height)))
             {
-                scrollingUp = false;
-                scrollingDown = false;
+                ScrollingUp = false;
+                ScrollingDown = false;
             }
             
             //Update NPCs, Items and doors so that they move with the background
@@ -392,16 +392,16 @@ namespace AdventureGame
         private void HandleMouse(GameTime gameTime)
         {
             //Run to mouse if double click, walk if single click
-            if (currentMouseState.LeftButton == ButtonState.Pressed)
+            if (CurrentMouseState.LeftButton == ButtonState.Pressed)
             {
-                begin = true;
-                if (!mousePressed)
+                Begin = true;
+                if (!MousePressed)
                 {
-                    mousePressed = true;
-                    mousePosition.X = currentMouseState.X - rectBackground.X;
-                    mousePosition.Y = currentMouseState.Y - rectBackground.Y;
+                    MousePressed = true;
+                    MousePosition.X = CurrentMouseState.X - rectBackground.X;
+                    MousePosition.Y = CurrentMouseState.Y - rectBackground.Y;
 
-                    if (elapsedTime <= 500)
+                    if (ElapsedTime <= 500)
                     {
                         Running(true);
                     }
@@ -409,24 +409,24 @@ namespace AdventureGame
                     {
                         Running(false); 
                     } 
-                    elapsedTime = 0;
+                    ElapsedTime = 0;
                 }
             }
             else
             {
-                mousePressed = false;
-                elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                MousePressed = false;
+                ElapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
             }
 
             //Moves it until within a 10 pixel square of the target
-            if (begin && !((Math.Abs(player.Position.X - rectBackground.X - mousePosition.X) < 10) &&
-                           (Math.Abs(player.Position.Y - rectBackground.Y - mousePosition.Y) < 10)))
+            if (Begin && !((Math.Abs(player.Position.X - rectBackground.X - MousePosition.X) < 10) &&
+                           (Math.Abs(player.Position.Y - rectBackground.Y - MousePosition.Y) < 10)))
             {
-                posDelta.X = mousePosition.X - (player.Position.X - rectBackground.X);
-                posDelta.Y = mousePosition.Y - (player.Position.Y - rectBackground.Y);
-                posDelta.Normalize();
-                posDelta = posDelta * MoveSpeed;
-                player.Position = player.Position + posDelta;
+                PosDelta.X = MousePosition.X - (player.Position.X - rectBackground.X);
+                PosDelta.Y = MousePosition.Y - (player.Position.Y - rectBackground.Y);
+                PosDelta.Normalize();
+                PosDelta = PosDelta * MoveSpeed;
+                player.Position = player.Position + PosDelta;
             }
             else
             {
@@ -473,7 +473,7 @@ namespace AdventureGame
 
 
             //Draw player
-            player.Draw(spriteBatch, scale);
+            player.Draw(spriteBatch, Scale);
 
             //End
             spriteBatch.End();
@@ -489,12 +489,12 @@ namespace AdventureGame
             if(on)
             {
                 MoveSpeed = GraphicsDevice.Viewport.Width / 240;
-                scrollSpeed = (int)MoveSpeed * 2;
+                ScrollSpeed = MoveSpeed * 2;
             }
             else
             {
                 MoveSpeed = GraphicsDevice.Viewport.Width / 480;
-                scrollSpeed = (int)MoveSpeed * 2;
+                ScrollSpeed = MoveSpeed * 2;
             }
         }
     }

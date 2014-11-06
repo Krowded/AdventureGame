@@ -9,7 +9,7 @@ namespace AdventureGame
     {
         public string StatementsFile { get; set; }
         public string AnswersFile { get; set; }
-        public int lastStatement { get; set; }
+        public int LastStatement { get; set; }
 
         public DialogueTree(string statements, string answers = null)
         {
@@ -21,7 +21,7 @@ namespace AdventureGame
         /// DialogueTree takes over the gameplay; showing statements and giving answer options
         /// </summary>
         /// <returns>What the conversation led to</returns>
-        public string startConversation(int startingStatement = 0) 
+        public string StartConversation(int startingStatement = 0) 
         {
             bool stillTalking = true;
             
@@ -32,18 +32,18 @@ namespace AdventureGame
             
             while(stillTalking)
             {
-                statementNumber = displayStatement(statementNumber);
-                lastStatement = statementNumber;
-                statementNumber = displayAnswers(statementNumber, ref endState);
+                statementNumber = DisplayStatement(statementNumber);
+                LastStatement = statementNumber;
+                statementNumber = DisplayAnswers(statementNumber, ref endState);
                 if (statementNumber == 100) //Change 100 to appropriate number
                     stillTalking = false;
             }
 
-            return resolveConversation(endState);
+            return ResolveConversation(endState);
 
         }
 
-        private int displayAnswers(int answerNumber, ref int endState)
+        private int DisplayAnswers(int answerNumber, ref int endState)
         {
             if (this.AnswersFile == null)
             {
@@ -55,10 +55,10 @@ namespace AdventureGame
             }
         }
 
-        private int displayStatement(int statementNumber)
+        private int DisplayStatement(int statementNumber)
         { return 0; }
 
-        private string resolveConversation(int state)
+        private string ResolveConversation(int state)
         { return "end state"; }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace AdventureGame
         /// <param name="txtFile"></param>
         /// <param name="rows"></param>
         /// <returns></returns>
-        private string[] getLines(string txtFile, int[] rows)
+        private string[] GetLines(string txtFile, int[] rows)
         {
             string[] linesOfText = null;
             return linesOfText;

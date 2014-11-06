@@ -10,7 +10,6 @@ namespace AdventureGame
     class NPC : InteractiveObject
     {
         public DialogueTree Dialogue { get; set; }
-        public List<Item> items;        
         public Texture2D Texture { get; set; }
         
 
@@ -20,7 +19,7 @@ namespace AdventureGame
             this.FileName = fileName;
         }
 
-        public override void initialize()
+        public override void Initialize()
         {
             if (FileName != "")
             {
@@ -30,7 +29,7 @@ namespace AdventureGame
                 string name = "";
                 float scale = 0;
 
-                Utility.parseNPCFile(FileName, ref conversation, ref observation, ref name, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale, ref items);
+                Utility.ParseNPCFile(FileName, ref conversation, ref observation, ref name, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale);
 
                 this.Dialogue = conversation;
                 this.Observation = observation;
@@ -40,9 +39,9 @@ namespace AdventureGame
             }
         }       
 
-        public void talkTo()
+        public void TalkTo()
         {
-            Dialogue.startConversation();
+            Dialogue.StartConversation();
         }
 
         public void activateAnimation(string animationChoice) {}

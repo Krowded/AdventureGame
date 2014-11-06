@@ -8,7 +8,7 @@ namespace AdventureGame
 {
     static class Utility
     {
-        public static void parseRoomFile(string textFile, ref string background, ref List<Door> doors, ref List<Item> items, ref List<NPC> npcs)
+        public static void ParseRoomFile(string textFile, ref string background, ref List<Door> doors, ref List<Item> items, ref List<NPC> npcs)
         {
             StreamReader file = new StreamReader(textFile);
             {
@@ -39,7 +39,7 @@ namespace AdventureGame
             }
         }
 
-        public static void parseItemFile(string textFile, ref DialogueTree dialogue, ref string name, ref string imageName, ref float x, ref float y, ref float scale) 
+        public static void ParseItemFile(string textFile, ref DialogueTree dialogue, ref string name, ref string imageName, ref float x, ref float y, ref float scale) 
         {
             StreamReader file = new StreamReader(textFile);
             string line = file.ReadLine();
@@ -55,7 +55,7 @@ namespace AdventureGame
             }
         }
 
-        public static void parseDoorFile(string textFile, ref DialogueTree dialogue, ref string name, ref string imageName, ref Room destination, ref string partnerDoor, ref float x, ref float y, ref float scale)
+        public static void ParseDoorFile(string textFile, ref DialogueTree dialogue, ref string name, ref string imageName, ref Room destination, ref string partnerDoor, ref float x, ref float y, ref float scale)
         {
             StreamReader file = new StreamReader(textFile);
             string line = file.ReadLine();
@@ -73,7 +73,7 @@ namespace AdventureGame
             }
         }
 
-        public static void parseNPCFile(string textFile, ref DialogueTree dialogue, ref DialogueTree observation, ref string name, ref string imageName, ref float x, ref float y, ref float scale, ref List<Item> items)
+        public static void ParseNPCFile(string textFile, ref DialogueTree dialogue, ref DialogueTree observation, ref string name, ref string imageName, ref float x, ref float y, ref float scale)
         {
             StreamReader file = new StreamReader(textFile);
             string line = file.ReadLine();
@@ -88,17 +88,9 @@ namespace AdventureGame
             {
                 throw new InvalidOperationException("Text file error in " + textFile + ".txt");
             }
-            if (words.Length > 7)
-            {
-                string[] itemFiles = words[6].Split('|');
-                foreach (string fileName in itemFiles)
-                {
-                    items.Add(new Item(fileName));
-                }
-            }
         }
 
-        public static string parsePlayer(string textFile)
+        public static string ParsePlayer(string textFile)
         {
             StreamReader file = new StreamReader(textFile);
             string line = file.ReadLine();

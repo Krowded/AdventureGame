@@ -19,7 +19,7 @@ namespace AdventureGame
             this.FileName = fileName;
         }
 
-        public override void initialize()
+        public override void Initialize()
         {
             if (FileName != "")
             {
@@ -30,7 +30,7 @@ namespace AdventureGame
                 string name = "";
                 string partner = "";
 
-                Utility.parseDoorFile(FileName, ref tempDialogue, ref name, ref imageName, ref tempDestination, ref partner, ref this.Position.X, ref this.Position.Y, ref scale);
+                Utility.ParseDoorFile(FileName, ref tempDialogue, ref name, ref imageName, ref tempDestination, ref partner, ref this.Position.X, ref this.Position.Y, ref scale);
 
                 this.Observation = tempDialogue;
                 this.Scale = scale;
@@ -41,12 +41,12 @@ namespace AdventureGame
             }
         }
 
-        public Room enterDoor()
+        public Room EnterDoor()
         {
             string passageGranted = "true";
             if (Dialogue != null)
             {
-                passageGranted = Dialogue.startConversation();
+                passageGranted = Dialogue.StartConversation();
             }
 
             if (passageGranted == "true")

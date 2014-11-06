@@ -13,6 +13,8 @@ namespace AdventureGame
         public Animation PlayerAnimation;
         public Vector2 Position;
         private bool active = false;
+
+
         public bool Active 
         {
             get
@@ -63,8 +65,6 @@ namespace AdventureGame
             if (movingLeft)
             {
                 PlayerAnimation.Draw(spriteBatch, scale, SpriteEffects.None);
-                //spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, scale,
-                //    SpriteEffects.None, 0f);
             }
             else
             {

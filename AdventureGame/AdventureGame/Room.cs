@@ -7,11 +7,11 @@ namespace AdventureGame
 {
     class Room
     {
-        private string roomFile { get; set; }
+        private string RoomFile { get; set; }
 
         public string[] BackgroundImages { get; set; }
         public string[] ForegroundImages { get; set; }
-        public string background;
+        public string Background;
 
 
         public List<NPC> NPCs = new List<NPC>();
@@ -20,30 +20,30 @@ namespace AdventureGame
         
         public Room(string roomInformationFile)
         {
-            roomFile = roomInformationFile;
+            RoomFile = roomInformationFile;
         }
 
-        public void initializeRoom()
+        public void InitializeRoom()
         {
-            Utility.parseRoomFile(roomFile, ref background, ref Doors, ref Items, ref NPCs);
-            initializeLists();           
+            Utility.ParseRoomFile(RoomFile, ref Background, ref Doors, ref Items, ref NPCs);
+            InitializeLists();           
         }
 
-        private void initializeLists()
+        private void InitializeLists()
         {
             foreach (Door door in Doors)
             {
-                door.initialize();
+                door.Initialize();
             }
 
             foreach (Item item in Items)
             {
-                item.initialize();
+                item.Initialize();
             }
 
             foreach (NPC npc in NPCs)
             {
-                npc.initialize();
+                npc.Initialize();
             }
         }
     }

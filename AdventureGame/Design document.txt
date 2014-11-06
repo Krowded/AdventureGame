@@ -8,11 +8,8 @@ Checklist:
 2. Conversation
 	- Ska kunna ladda en hel konversation från en fil
 	- Ska kunna läsa upp en del av en konversation, ge svarsmöjligheter och sen reagera på svaret
-	- Ska kunna leda till att:
-		* Item flyttas från NPC till Player(inventory)
-		* Item tas från Player
-		* Dörrar öppnas
-		* Etc.
+	- Ska kunna leda till att spelet ändras på något sätt
+		*Sköts genom att startConversation() returnerar en sträng i stil med "GiveItem:[ItemName]" som sedan tolkas
 
 3. Inventory
 	- Ska finnas och kunna öppnas för att se på saker

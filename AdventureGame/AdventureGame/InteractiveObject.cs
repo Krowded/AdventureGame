@@ -16,12 +16,12 @@ namespace AdventureGame
         public float Scale { get; set; }
         public DialogueTree Observation { get; set; }
 
-        public string lookAt()
+        public string LookAt()
         {
-            return Observation.startConversation();
+            return Observation.StartConversation();
         }
 
-        public virtual void initialize() { }
+        public virtual void Initialize() { }
 
     }
 }
