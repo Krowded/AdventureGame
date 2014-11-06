@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
+
 
 namespace AdventureGame
 {
@@ -16,29 +18,6 @@ namespace AdventureGame
         public Door(string fileName)
         {
             this.FileName = fileName;
-        }
-
-        public override void Initialize()
-        {
-            if (FileName != "")
-            {
-                DialogueTree tempDialogue = new DialogueTree("");
-                Room tempDestination = new Room("");
-                string imageName = "";
-                float scale = 0;
-                string name = "";
-                string partner = "";
-
-                Utility.ParseDoorFile(FileName, ref tempDialogue, ref name, ref imageName, ref tempDestination, ref partner, ref this.Position.X, ref this.Position.Y, ref scale);
-
-                this.PositionOnBackground = this.Position;
-                this.Observation = tempDialogue;
-                this.Scale = scale;
-                this.Image = imageName;
-
-                this.Destination = tempDestination;
-                this.PartnerDoorName = partner;
-            }
         }
 
         public Room EnterDoor()
@@ -57,6 +36,27 @@ namespace AdventureGame
             {
                 return null;
             }
+        }
+
+        protected override void ParseTextFile()
+        {
+            StreamReader file = new StreamReader(FileName);
+            string line = file.ReadLine();
+            string[] words = line.Split(':');
+            this.Observation = new DialogueTree(words[0]);
+            this.Name = words[1];
+            this.Image = words[2];
+            this.Destination = new Room(words[3]);
+            this.PartnerDoorName = words[4];
+            float scale;
+            if (!float.TryParse(words[5], out this.Position.X) ||
+                !float.TryParse(words[6], out this.Position.Y) ||
+                !float.TryParse(words[7], out scale))
+            {
+                throw new InvalidOperationException("Text file error in " + this.FileName + ".txt");
+            }
+            this.PositionOnBackground += Position;
+            this.Scale = scale;
         }
     }
 }

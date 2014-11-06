@@ -1,4 +1,4 @@
-﻿Background:In-Game Objects/Rooms/bgLayer1
+﻿Background:In-Game Objects/Rooms/mainbackground
 Item:TextContent/Items/Item1.txt
 NPC:TextContent/NPCs/NPC1.txt
 Door:TextContent/Doors/Door1.txt

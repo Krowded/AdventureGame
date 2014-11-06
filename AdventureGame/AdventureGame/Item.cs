@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace AdventureGame
 {
@@ -16,25 +17,6 @@ namespace AdventureGame
             this.FileName = fileName;
         }
 
-        public override void Initialize() 
-        {
-            if (FileName != "")
-            {
-                DialogueTree tempDialogue = new DialogueTree("");
-                string name = "";
-                string image = "";
-                float scale = 0;
-
-                Utility.ParseItemFile(this.FileName, ref tempDialogue, ref name, ref image, ref this.Position.X, ref this.Position.Y, ref scale);
-
-                this.PositionOnBackground = this.Position;
-                this.Name = name;
-                this.Image = image;
-                this.Observation = tempDialogue;
-                this.Scale = scale;
-            }
-        }
-
         public Item Combine(Item otherItem)
         {
             int line = FindCombination(this.Name, otherItem.Name);
@@ -45,6 +27,25 @@ namespace AdventureGame
         public int FindCombination(string item1, string item2)
         {
             return 0;
+        }
+
+        protected override void ParseTextFile()
+        {
+            StreamReader file = new StreamReader(this.FileName);
+            string line = file.ReadLine();
+            string[] words = line.Split(':');
+            this.Observation = new DialogueTree(words[0]);
+            this.Name = words[1];
+            this.Image = words[2];
+            float scale = 0;
+            if (!float.TryParse(words[3], out this.Position.X) ||
+                !float.TryParse(words[4], out this.Position.Y) ||
+                !float.TryParse(words[5], out scale))
+            {
+                throw new InvalidOperationException("Text file error in " + this.FileName + ".txt");
+            }
+            this.PositionOnBackground += this.Position;
+            this.Scale = scale;
         }
     }
 }

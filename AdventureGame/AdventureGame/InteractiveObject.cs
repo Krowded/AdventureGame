@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace AdventureGame
 {
@@ -17,13 +18,26 @@ namespace AdventureGame
         public Texture2D Texture { get; set; }
         public float Scale { get; set; }
         public DialogueTree Observation { get; set; }
+        public bool Collidable { get; set; }
 
         public string LookAt()
         {
             return Observation.StartConversation();
         }
 
-        public virtual void Initialize() { }
+        public virtual void Initialize() 
+        {
+            if (FileName != "")
+            {
+                ParseTextFile();
+            }
+            else
+            {
+                throw new ArgumentException("FileName can not be empty");
+            }
+        }
+
+        protected virtual void ParseTextFile() { }
 
     }
 }

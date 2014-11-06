@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace AdventureGame
 {
     class Room
     {
-        private string RoomFile { get; set; }
+        private string FileName { get; set; }
 
         public string[] BackgroundImages { get; set; }
         public string[] ForegroundImages { get; set; }
@@ -19,12 +20,12 @@ namespace AdventureGame
         
         public Room(string roomInformationFile)
         {
-            RoomFile = roomInformationFile;
+            this.FileName = roomInformationFile;
         }
 
         public void InitializeRoom()
         {
-            Utility.ParseRoomFile(RoomFile, ref Background, ref Doors, ref Items, ref NPCs);
+            ParseTextFile();
             InitializeLists();           
         }
 
@@ -43,6 +44,37 @@ namespace AdventureGame
             foreach (NPC npc in NPCs)
             {
                 npc.Initialize();
+            }
+        }
+
+        private  void ParseTextFile()
+        {
+            StreamReader file = new StreamReader(FileName);
+            {
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] words = line.Split(':');
+                    switch (words[0])
+                    {
+                        case "Background":
+                            this.Background = words[1];
+                            break;
+                        case "Door":
+                            this.Doors.Add(new Door(words[1]));
+                            break;
+                        case "NPC":
+                            this.NPCs.Add(new NPC(words[1]));
+                            break;
+                        case "Item":
+                            this.Items.Add(new Item(words[1]));
+                            break;
+                        default:
+                            {
+                                throw new InvalidOperationException("Text file error in " + FileName + ".txt");
+                            }
+                    }
+                }
             }
         }
     }

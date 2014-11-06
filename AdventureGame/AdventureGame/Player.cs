@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace AdventureGame
 {
     class Player
     {
-        //public Texture2D PlayerTexture;
         public Animation PlayerAnimation;
         public Vector2 Position;
         private bool active = false;
         public float Scale { get; set; }
+        public string PlayerTexture;
 
 
         public bool Active 
@@ -60,6 +61,15 @@ namespace AdventureGame
             PlayerAnimation.Position = Position;
             PlayerAnimation.Update(gameTime);
         }
+
+
+        public void ParseTextFile(string FileName)
+        {
+            StreamReader file = new StreamReader(FileName);
+            string line = file.ReadLine();
+            PlayerTexture = line;
+        }
+
 
         public void Draw(SpriteBatch spriteBatch, float scale)
         {
