@@ -26,7 +26,8 @@ namespace AdventureGame
                 float scale = 0;
 
                 Utility.ParseItemFile(this.FileName, ref tempDialogue, ref name, ref image, ref this.Position.X, ref this.Position.Y, ref scale);
-                
+
+                this.PositionOnBackground = this.Position;
                 this.Name = name;
                 this.Image = image;
                 this.Observation = tempDialogue;

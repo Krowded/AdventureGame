@@ -40,7 +40,6 @@ namespace AdventureGame
         bool Begin;
 
         //Scaling
-        float Scale;
         float SmallestScale = 0.5f;
         int ElapsedTime;
 
@@ -122,7 +121,7 @@ namespace AdventureGame
             //Initialize the player
             Animation playerAnimation = new Animation();
             Texture2D playerTexture = Content.Load<Texture2D>(PlayerStandardTexture);
-            playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, Scale, true);
+            playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, player.Scale, true);
             player.Initialize(playerAnimation, playerPosition);
             
             //Initialize the background
@@ -242,12 +241,12 @@ namespace AdventureGame
             }
             
             //Scale player sprite by it's Y relative to the background
-            Scale = (((player.Position.Y - BackgroundVector.Y) / BackgroundHeight + SmallestScale)
+            player.Scale = (((player.Position.Y - BackgroundVector.Y) / BackgroundHeight + SmallestScale)
                 *((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
 
             //Keeps player from running off screen
-            player.Position.X = MathHelper.Clamp(player.Position.X, Scale*player.Width/2, GraphicsDevice.Viewport.Width - player.Width*Scale/2);
-            player.Position.Y = MathHelper.Clamp(player.Position.Y, Scale*player.Height, GraphicsDevice.Viewport.Height - player.Height*Scale);
+            player.Position.X = MathHelper.Clamp(player.Position.X, player.Scale*player.Width/2, GraphicsDevice.Viewport.Width - player.Width*player.Scale/2);
+            player.Position.Y = MathHelper.Clamp(player.Position.Y, player.Scale*player.Height, GraphicsDevice.Viewport.Height - player.Height*player.Scale);
                
         }
 
@@ -259,16 +258,15 @@ namespace AdventureGame
         /// <param name="plusY"></param>
         private void UpdateBackgroundThings(GameTime gameTime, Vector2 movementVector)
         {
-            UpdateInteractiveObject(AllThings, movementVector);
+            UpdateInteractiveObject(AllThings);
         }
 
-        private void UpdateInteractiveObject(List<InteractiveObject> objectList, Vector2 movementVector)
+        //Makes sure things stay in sync with background
+        private void UpdateInteractiveObject(List<InteractiveObject> objectList)
         {
             foreach (InteractiveObject i in objectList)
             {
-                i.Position += movementVector;
-                i.Scale = (((i.Position.Y - BackgroundVector.Y) / BackgroundHeight + SmallestScale)
-                    * ((float)GraphicsDevice.Viewport.Width / (float)NaturalScreenWidth));
+                i.Position = BackgroundVector + i.PositionOnBackground;
             }
         }
 
@@ -279,20 +277,22 @@ namespace AdventureGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         private void UpdateBackground(GameTime gameTime)
         {
+            const float epsilon = 0.001f;
             IsScrolling();
 
             //Make sure the screen doesnt go outside the background
             BackgroundVector.X = MathHelper.Clamp(BackgroundVector.X, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0);
             BackgroundVector.Y = MathHelper.Clamp(BackgroundVector.Y, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
-            if ((BackgroundVector.X == 0 && ScrollingLeft) ||
-               ((BackgroundVector.X == -(1920 - GraphicsDevice.Viewport.Width)) && ScrollingRight))
+            if ((((int)BackgroundVector.X == 0) && ScrollingLeft) ||
+               (((BackgroundVector.X + (BackgroundWidth - GraphicsDevice.Viewport.Width)) < epsilon) && ScrollingRight))
             {
                 ScrollingLeft = false;
                 ScrollingRight = false;
                 PosDelta.X = 0;
             }
-            if ((BackgroundVector.Y == 0 && ScrollingUp) || 
-               ((BackgroundVector.Y == -(1080 - GraphicsDevice.Viewport.Height)) && ScrollingDown))
+
+            if ((((int)BackgroundVector.Y == 0) && ScrollingUp) || 
+               (((BackgroundVector.Y + (BackgroundHeight - GraphicsDevice.Viewport.Height) < epsilon)) && ScrollingDown))
             {
                 ScrollingUp = false;
                 ScrollingDown = false;
@@ -300,11 +300,12 @@ namespace AdventureGame
             }
 
             if (ScrollingLeft || ScrollingRight || ScrollingUp || ScrollingDown)
-                BackgroundVector -= PosDelta * ScrollSpeed;
-
-
-            //Update NPCs, Items and doors so that they move with the background
-            UpdateBackgroundThings(gameTime, PosDelta);//(int)-(PosDelta.X*ScrollSpeed), (int)-(PosDelta.Y*ScrollSpeed));//////////////////////////////////////////////////SHOULD NOT BE INT
+            {
+                BackgroundVector -= PosDelta * ScrollSpeed;    
+        
+                //Update NPCs, Items and Doors so that they move with the background
+                UpdateBackgroundThings(gameTime, -(PosDelta * ScrollSpeed));
+            }
         }
 
         //Check if player is trying to move towards the edge of the screen
@@ -395,14 +396,15 @@ namespace AdventureGame
 
             spriteBatch.Begin();
 
-
+            //Draw the background
             spriteBatch.Draw(MainBackground, BackgroundVector, null, Color.Red, 0, Vector2.Zero, 1080.0f/MainBackground.Height, 
                 SpriteEffects.None, 0);
 
+            //Draw all things in the room
             DrawInteractiveObjects(AllThings);
 
             //Draw player
-            player.Draw(spriteBatch, Scale);
+            player.Draw(spriteBatch, player.Scale);
 
             //End
             spriteBatch.End();

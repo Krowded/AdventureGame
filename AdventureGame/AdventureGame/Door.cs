@@ -31,6 +31,7 @@ namespace AdventureGame
 
                 Utility.ParseDoorFile(FileName, ref tempDialogue, ref name, ref imageName, ref tempDestination, ref partner, ref this.Position.X, ref this.Position.Y, ref scale);
 
+                this.PositionOnBackground = this.Position;
                 this.Observation = tempDialogue;
                 this.Scale = scale;
                 this.Image = imageName;

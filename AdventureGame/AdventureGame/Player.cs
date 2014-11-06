@@ -13,6 +13,7 @@ namespace AdventureGame
         public Animation PlayerAnimation;
         public Vector2 Position;
         private bool active = false;
+        public float Scale { get; set; }
 
 
         public bool Active 

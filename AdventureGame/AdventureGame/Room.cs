@@ -13,7 +13,6 @@ namespace AdventureGame
         public string[] ForegroundImages { get; set; }
         public string Background;
 
-
         public List<NPC> NPCs = new List<NPC>();
         public List<Door> Doors = new List<Door>();
         public List<Item> Items = new List<Item>();

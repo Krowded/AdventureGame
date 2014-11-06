@@ -29,6 +29,7 @@ namespace AdventureGame
 
                 Utility.ParseNPCFile(FileName, ref conversation, ref observation, ref name, ref imageName, ref this.Position.X, ref this.Position.Y, ref scale);
 
+                this.PositionOnBackground = this.Position;
                 this.Dialogue = conversation;
                 this.Observation = observation;
                 this.Name = name;
