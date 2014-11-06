@@ -71,7 +71,7 @@ namespace AdventureGame
                             break;
                         default:
                             {
-                                throw new InvalidOperationException("Text file error in " + FileName + ".txt");
+                                throw new InvalidOperationException("Text file error in " + FileName);
                             }
                     }
                 }

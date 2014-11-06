@@ -49,14 +49,17 @@ namespace AdventureGame
             this.Destination = new Room(words[3]);
             this.PartnerDoorName = words[4];
             float scale;
+            bool collidable;
             if (!float.TryParse(words[5], out this.Position.X) ||
                 !float.TryParse(words[6], out this.Position.Y) ||
-                !float.TryParse(words[7], out scale))
+                !float.TryParse(words[7], out scale) ||
+                !bool.TryParse(words[8], out collidable))
             {
-                throw new InvalidOperationException("Text file error in " + this.FileName + ".txt");
+                throw new InvalidOperationException("Text file error in " + this.FileName);
             }
             this.PositionOnBackground += Position;
             this.Scale = scale;
+            this.Collidable = collidable;
         }
     }
 }

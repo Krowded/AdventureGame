@@ -37,15 +37,18 @@ namespace AdventureGame
             this.Observation = new DialogueTree(words[0]);
             this.Name = words[1];
             this.Image = words[2];
-            float scale = 0;
+            float scale;
+            bool collidable;
             if (!float.TryParse(words[3], out this.Position.X) ||
                 !float.TryParse(words[4], out this.Position.Y) ||
-                !float.TryParse(words[5], out scale))
+                !float.TryParse(words[5], out scale) ||
+                !bool.TryParse(words[6], out collidable))
             {
-                throw new InvalidOperationException("Text file error in " + this.FileName + ".txt");
+                throw new InvalidOperationException("Text file error in " + this.FileName);
             }
             this.PositionOnBackground += this.Position;
             this.Scale = scale;
+            this.Collidable = collidable;
         }
     }
 }
