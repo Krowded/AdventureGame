@@ -11,8 +11,6 @@ namespace AdventureGame
     {
         static readonly DialogueTree CombinationDialogue = new DialogueTree("TextContent/Items/CombinationDialogue.txt");
 
-        public Texture2D Texture { get; set; }
-
         public Item(string fileName)
         {
             this.FileName = fileName;

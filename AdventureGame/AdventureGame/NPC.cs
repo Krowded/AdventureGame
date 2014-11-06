@@ -9,9 +9,7 @@ namespace AdventureGame
 {
     class NPC : InteractiveObject
     {
-        public DialogueTree Dialogue { get; set; }
-        public Texture2D Texture { get; set; }
-        
+        public DialogueTree Dialogue { get; set; }       
 
 
         public NPC(string fileName)

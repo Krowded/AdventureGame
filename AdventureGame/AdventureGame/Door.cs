@@ -10,7 +10,6 @@ namespace AdventureGame
     class Door : InteractiveObject
     {
         public DialogueTree Dialogue { get; set; }
-        public Texture2D Texture { get; set; }
         public Room Destination { get; set; }
         public string PartnerDoorName { get; set; }
         

@@ -13,6 +13,7 @@ namespace AdventureGame
         public string Name { get; set; }
         public string Image { get; set; }
         public Vector2 Position;
+        public Texture2D Texture { get; set; }
         public float Scale { get; set; }
         public DialogueTree Observation { get; set; }
 
