@@ -383,8 +383,43 @@ namespace AdventureGame
             PosDelta.X = point.X - player.Position.X;
             PosDelta.Y = point.Y - player.Position.Y;
             PosDelta.Normalize();
+
             player.Position += PosDelta * MoveSpeed;
+
+            if (CollisionCheck())
+            {
+                player.Position -= PosDelta * MoveSpeed;
+                PosDelta = Vector2.Zero;
+            }
         }
+
+        private bool CollisionCheck()
+        {
+            foreach (InteractiveObject thing in AllThings)
+            {
+                if (CollidesWithPlayer(thing))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool CollidesWithPlayer(InteractiveObject thing)
+        {
+            return (CollidesWithPlayerX(thing) && CollidesWithPlayerY(thing));
+        }
+
+        private bool CollidesWithPlayerX(InteractiveObject thing)
+        {
+            return ((player.Position.X + player.PlayerAnimation.FrameWidth*player.Scale > thing.Position.X) && (player.Position.X < (thing.Position.X + thing.Texture.Width*thing.Scale)));
+        }
+
+        private bool CollidesWithPlayerY(InteractiveObject thing)
+        {
+            return ((player.Position.Y + player.PlayerAnimation.FrameHeight*player.Scale > thing.Position.Y) && (player.Position.Y < (thing.Position.Y + thing.Texture.Height*thing.Scale)));
+        }
+
 
         /// <summary>
         /// This is called when the game should draw itself.

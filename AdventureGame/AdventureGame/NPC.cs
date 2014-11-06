@@ -12,7 +12,6 @@ namespace AdventureGame
     {
         public DialogueTree Dialogue { get; set; }       
 
-
         public NPC(string fileName)
         {
             this.FileName = fileName;
@@ -47,7 +46,5 @@ namespace AdventureGame
             this.Scale = scale;
             this.Collidable = collidable;
         }
-
-
     }
 }
