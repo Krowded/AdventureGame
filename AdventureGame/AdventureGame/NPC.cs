@@ -35,16 +35,19 @@ namespace AdventureGame
             this.Image = words[3];
             float scale;
             bool collidable;
+            bool foreground;
             if (!float.TryParse(words[4], out this.Position.X) ||
                 !float.TryParse(words[5], out this.Position.Y) ||
                 !float.TryParse(words[6], out scale) ||
-                !bool.TryParse(words[7], out collidable))
+                !bool.TryParse(words[7], out collidable) ||
+                !bool.TryParse(words[8], out foreground))
             {
                 throw new InvalidOperationException("Text file error in " + FileName);
             }
             this.PositionOnBackground += this.Position;
             this.Scale = scale;
             this.Collidable = collidable;
+            this.Foreground = foreground;
         }
     }
 }

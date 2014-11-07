@@ -59,6 +59,8 @@ namespace AdventureGame
         List<NPC> npcs = new List<NPC>();
         List<Door> doors = new List<Door>();
         List<InteractiveObject> AllThings = new List<InteractiveObject>();
+        List<InteractiveObject> BackgroundThings = new List<InteractiveObject>();
+        List<InteractiveObject> ForegroundThings = new List<InteractiveObject>();
 
         public AdventureGame()
             : base()
@@ -147,6 +149,7 @@ namespace AdventureGame
             AllThings.AddRange(items);
             AllThings.AddRange(npcs);
             AllThings.AddRange(doors);
+            LoadBackgroundAndForegroundThings();
         }
 
 /// <summary>
@@ -180,6 +183,20 @@ namespace AdventureGame
             }
         }
 
+        private void LoadBackgroundAndForegroundThings() 
+        {
+            foreach (InteractiveObject thing in AllThings)
+            {
+                if (thing.Foreground)
+                {
+                    ForegroundThings.Add(thing);
+                }
+                else
+                {
+                    BackgroundThings.Add(thing);
+                }
+            }
+        }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -437,11 +454,14 @@ namespace AdventureGame
             spriteBatch.Draw(MainBackground, BackgroundVector, null, Color.Red, 0, Vector2.Zero, 1080.0f/MainBackground.Height, 
                 SpriteEffects.None, 0);
 
-            //Draw all things in the room
-            DrawInteractiveObjects(AllThings);
+            //Draw all background things in the room
+            DrawInteractiveObjects(BackgroundThings);
 
             //Draw player
             player.Draw(spriteBatch, player.Scale);
+
+            //Draw all foreground things
+            DrawInteractiveObjects(ForegroundThings);
 
             //End
             spriteBatch.End();

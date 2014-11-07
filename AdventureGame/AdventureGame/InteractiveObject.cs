@@ -19,6 +19,7 @@ namespace AdventureGame
         public float Scale { get; set; }
         public DialogueTree Observation { get; set; }
         public bool Collidable { get; set; }
+        public bool Foreground { get; set; }
 
         public string LookAt()
         {
