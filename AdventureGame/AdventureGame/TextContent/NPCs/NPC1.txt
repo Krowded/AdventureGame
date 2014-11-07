@@ -1,1 +1,1 @@
-﻿::Test NPC:In-Game Objects/NPCs/npc:200:400:1:true:false
+﻿::Test NPC:In-Game Objects/NPCs/npc:200:400:1:false:true

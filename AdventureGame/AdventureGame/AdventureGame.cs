@@ -277,7 +277,7 @@ namespace AdventureGame
         /// <param name="plusY"></param>
         private void UpdateBackgroundThings(GameTime gameTime, Vector2 movementVector)
         {
-            UpdateInteractiveObject(AllThings);
+            UpdateInteractiveObject(BackgroundThings);
         }
 
         //Makes sure things stay in sync with background
@@ -403,7 +403,7 @@ namespace AdventureGame
 
             player.Position += PosDelta * MoveSpeed;
 
-            if (CollisionCheck())
+            if (false)//CollisionCheck())
             {
                 player.Position -= PosDelta * MoveSpeed;
                 PosDelta = Vector2.Zero;
@@ -414,7 +414,7 @@ namespace AdventureGame
         {
             foreach (InteractiveObject thing in AllThings)
             {
-                if (CollidesWithPlayer(thing))
+                if (thing.Collidable && CollidesWithPlayer(thing))
                 {
                     return true;
                 }
