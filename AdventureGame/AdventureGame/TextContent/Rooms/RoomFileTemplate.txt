@@ -1,8 +1,8 @@
 ﻿*Template for how to write a Room file*
 
-Background:[Background File Name]
+Background:[Background File Name];[Scale (with a , and not a . for decimal point)]
 Door:[Door File Name]
-NPC:[NPC File Name]
+NPC:[NPC File Name]11
 Item:[Item File Name]
 
 *Remember to set to "Copy Always"*

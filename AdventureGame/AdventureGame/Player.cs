@@ -71,15 +71,15 @@ namespace AdventureGame
         }
 
 
-        public void Draw(SpriteBatch spriteBatch, float scale)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (movingLeft)
             {
-                PlayerAnimation.Draw(spriteBatch, scale, SpriteEffects.None);
+                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.None);
             }
             else
             {
-                PlayerAnimation.Draw(spriteBatch, scale, SpriteEffects.FlipHorizontally);
+                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.FlipHorizontally);
             }
         }
     }

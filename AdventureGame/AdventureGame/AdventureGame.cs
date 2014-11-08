@@ -40,7 +40,9 @@ namespace AdventureGame
 
         //Scaling
         float SmallestScale = 0.5f;
-        int ElapsedTime;
+
+        //Elapsed time in milliseconds
+        int ElapsedTime = 0;
 
         //Variables for moving things
         float ScrollSpeed;
@@ -54,6 +56,7 @@ namespace AdventureGame
         int BackgroundHeight = 1080;
         string BackgroundImageName;
 
+        Texture2D InteractiveSymbol;
 
         List<Item> items = new List<Item>();
         List<NPC> npcs = new List<NPC>();
@@ -117,24 +120,38 @@ namespace AdventureGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, 
-                GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            
             
             //Initialize the player
+            player.Position = CurrentRoom.PlayerStartingPosition;
             Animation playerAnimation = new Animation();
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, player.Scale, true);
-            player.Initialize(playerAnimation, playerPosition);
+            player.Initialize(playerAnimation, player.Position);
             
             //Initialize the background
             MainBackground = Content.Load<Texture2D>(BackgroundImageName);
-            //BackgroundHeight = MainBackground.Height;
-            //BackgroundWidth = MainBackground.Width;
+            BackgroundHeight = (int)(MainBackground.Height * CurrentRoom.Scale);
+            BackgroundWidth = (int)(MainBackground.Width * CurrentRoom.Scale);
+            InitializeBackground();
+            AdjustPlayerStartingPosition();
             LoadNewRoom();
 
         }
 
-        protected void LoadNewRoom()
+        private void InitializeBackground() 
+        {
+            BackgroundVector.X = player.Position.X - BackgroundWidth * CurrentRoom.Scale / 2;
+            BackgroundVector.Y = player.Position.Y - BackgroundHeight * CurrentRoom.Scale / 2;
+        }
+
+        private void AdjustPlayerStartingPosition()
+        {
+            player.Position.X = GraphicsDevice.Viewport.Width / 2;
+            player.Position.Y = GraphicsDevice.Viewport.Height / 2;
+        }
+
+        private void LoadNewRoom()
         {
             //Hide old room
             items.Clear();
@@ -150,6 +167,11 @@ namespace AdventureGame
             AllThings.AddRange(npcs);
             AllThings.AddRange(doors);
             LoadBackgroundAndForegroundThings();
+
+            foreach (InteractiveObject thing in AllThings)
+            {
+                thing.Position += BackgroundVector;
+            }
         }
 
 /// <summary>
@@ -224,7 +246,7 @@ namespace AdventureGame
 
             // TODO: Add your update logic here
             UpdatePlayer(gameTime);
-            UpdateBackground(gameTime);
+            UpdateScrolling(gameTime);
             player.Update(gameTime);
             base.Update(gameTime);
         }
@@ -265,7 +287,7 @@ namespace AdventureGame
 
             //Keeps player from running off screen
             player.Position.X = MathHelper.Clamp(player.Position.X, player.Scale*player.Width/2, GraphicsDevice.Viewport.Width - player.Width*player.Scale/2);
-            player.Position.Y = MathHelper.Clamp(player.Position.Y, player.Scale*player.Height, GraphicsDevice.Viewport.Height - player.Height*player.Scale);
+            player.Position.Y = MathHelper.Clamp(player.Position.Y, player.Scale*player.Height/2, GraphicsDevice.Viewport.Height - player.Height*player.Scale/2);
                
         }
 
@@ -275,9 +297,9 @@ namespace AdventureGame
         /// <param name="gameTime"></param>
         /// <param name="plusX"></param>
         /// <param name="plusY"></param>
-        private void UpdateBackgroundThings(GameTime gameTime, Vector2 movementVector)
+        private void UpdateAllThings(GameTime gameTime, Vector2 movementVector)
         {
-            UpdateInteractiveObject(BackgroundThings);
+            UpdateInteractiveObject(AllThings);
         }
 
         //Makes sure things stay in sync with background
@@ -291,10 +313,10 @@ namespace AdventureGame
 
 
         /// <summary>
-        /// Updates the background by taking care of scrolling etc.
+        /// Takes care of scrolling
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        private void UpdateBackground(GameTime gameTime)
+        private void UpdateScrolling(GameTime gameTime)
         {
             const float epsilon = 0.001f;
             IsScrolling();
@@ -320,10 +342,11 @@ namespace AdventureGame
 
             if (ScrollingLeft || ScrollingRight || ScrollingUp || ScrollingDown)
             {
-                BackgroundVector -= PosDelta * ScrollSpeed;    
+                BackgroundVector -= PosDelta * ScrollSpeed;
+                MousePosition -= PosDelta * ScrollSpeed;
         
                 //Update NPCs, Items and Doors so that they move with the background
-                UpdateBackgroundThings(gameTime, -(PosDelta * ScrollSpeed));
+                UpdateAllThings(gameTime, -(PosDelta * ScrollSpeed));
             }
         }
 
@@ -368,6 +391,7 @@ namespace AdventureGame
                     if (ElapsedTime <= 500)
                     {
                         Running(true);
+                        ElapsedTime = 0;
                     }
                     else
                     {
@@ -379,14 +403,14 @@ namespace AdventureGame
             else
             {
                 MousePressed = false;
-                ElapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                ElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
             }
 
             //Moves it until within a 10 pixel square of the target
             if (Begin && !((Math.Abs(player.Position.X - MousePosition.X) < 10) &&
-                           (Math.Abs(player.Position.Y - MousePosition.Y) < 10)))
+                            (Math.Abs(player.Position.Y - MousePosition.Y) < 10)))
             {
-                MovePlayerTowardsPoint(MousePosition);
+                MovePlayerTowardsPoint(ref MousePosition);
             }
             else
             {
@@ -395,14 +419,14 @@ namespace AdventureGame
             }
         }
 
-        private void MovePlayerTowardsPoint(Vector2 point)
+        private void MovePlayerTowardsPoint(ref Vector2 point)
         {
             PosDelta.X = point.X - player.Position.X;
             PosDelta.Y = point.Y - player.Position.Y;
             PosDelta.Normalize();
 
             player.Position += PosDelta * MoveSpeed;
-
+            
             if (false)//CollisionCheck())
             {
                 player.Position -= PosDelta * MoveSpeed;
@@ -429,12 +453,12 @@ namespace AdventureGame
 
         private bool CollidesWithPlayerX(InteractiveObject thing)
         {
-            return ((player.Position.X + player.PlayerAnimation.FrameWidth*player.Scale > thing.Position.X) && (player.Position.X < (thing.Position.X + thing.Texture.Width*thing.Scale)));
+            return ((player.Position.X + player.Width * player.Scale/2 > thing.Position.X) && (player.Position.X - player.Width * player.Scale/2 < (thing.Position.X + thing.Texture.Width*thing.Scale)));
         }
 
         private bool CollidesWithPlayerY(InteractiveObject thing)
         {
-            return ((player.Position.Y + player.PlayerAnimation.FrameHeight*player.Scale > thing.Position.Y) && (player.Position.Y < (thing.Position.Y + thing.Texture.Height*thing.Scale)));
+            return ((player.Position.Y + player.Height * player.Scale/2 > thing.Position.Y) && (player.Position.Y - player.Height * player.Scale/2 < (thing.Position.Y + thing.Texture.Height*thing.Scale)));
         }
 
 
@@ -451,17 +475,22 @@ namespace AdventureGame
             spriteBatch.Begin();
 
             //Draw the background
-            spriteBatch.Draw(MainBackground, BackgroundVector, null, Color.Red, 0, Vector2.Zero, 1080.0f/MainBackground.Height, 
+            spriteBatch.Draw(MainBackground, BackgroundVector, null, Color.Red, 0, Vector2.Zero, CurrentRoom.Scale, 
                 SpriteEffects.None, 0);
 
             //Draw all background things in the room
             DrawInteractiveObjects(BackgroundThings);
 
             //Draw player
-            player.Draw(spriteBatch, player.Scale);
+            player.Draw(spriteBatch);
 
             //Draw all foreground things
             DrawInteractiveObjects(ForegroundThings);
+
+            if (RevealkeyPressed())
+            {
+                DrawInteractiveSymbol();
+            }
 
             //End
             spriteBatch.End();
@@ -475,6 +504,24 @@ namespace AdventureGame
             {
                 spriteBatch.Draw(i.Texture, i.Position, null, Color.White, 0f, Vector2.Zero, i.Scale, SpriteEffects.None, 0f);
             }
+        }
+
+        //Draw a symbol to mark anything interactable (to prevent pixelhunting problems)
+        private void DrawInteractiveSymbol()
+        {
+            Vector2 temp = new Vector2(0,0);
+            foreach(InteractiveObject thing in AllThings)
+            {
+                temp.X = thing.Position.X + thing.Texture.Width/2 - InteractiveSymbol.Width/2;
+                temp.Y = thing.Position.Y + thing.Texture.Height/2 - InteractiveSymbol.Height/2;
+                spriteBatch.Draw(InteractiveSymbol, temp, null, Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, 0f);
+            }
+        }
+
+        //Check if the key for revealing interactives is pressed (probably space)
+        private bool RevealkeyPressed()
+        {
+            return false;
         }
 
         /// <summary>

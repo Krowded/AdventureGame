@@ -1,4 +1,6 @@
-﻿Background:In-Game Objects/Rooms/mainbackground
+﻿Background:In-Game Objects/Rooms/mainbackground:2,4
 Item:TextContent/Items/Item1.txt
 NPC:TextContent/NPCs/NPC1.txt
 Door:TextContent/Doors/Door1.txt
+PlayerStartingX:100
+PlayerStartingY:800
