@@ -11,10 +11,12 @@ namespace AdventureGame
     class Player
     {
         public Animation PlayerAnimation;
+        //Coordinates of the middle of the player sprite
         public Vector2 Position;
         public Vector2 Direction;
         private bool active = false;
         public float Scale { get; set; }
+        public float RoomScale { get; set; }
         public string PlayerTexture;
         public bool Active 
         {
@@ -43,11 +45,11 @@ namespace AdventureGame
 
         public Player() { }
 
-        public Player(Vector2 startingPosition)
+        public Player(Vector2 startingPositionOnBackground)
             : this()
         {
-            this.Position.X = startingPosition.X;
-            this.Position.Y = startingPosition.Y;
+            this.Position.X = startingPositionOnBackground.X;
+            this.Position.Y = startingPositionOnBackground.Y;
         }
 
         public void Initialize(Animation animation, Vector2 position)
@@ -156,7 +158,7 @@ namespace AdventureGame
         /// </summary>
         public void ScalePlayerSprite(Vector2 backgroundVector, int backgroundHeight, float viewportWidth, float smallestScale, float naturalScreenWidth)
         {
-            this.Scale = (((this.Position.Y - backgroundVector.Y) / backgroundHeight + smallestScale)
+            this.Scale = this.RoomScale*(((this.Position.Y - backgroundVector.Y) / backgroundHeight + smallestScale)
                 * (viewportWidth / naturalScreenWidth));
         }
 
@@ -165,8 +167,8 @@ namespace AdventureGame
         /// </summary>
         public void ClampPlayer(int viewportWidth, int viewportHeight)
         {
-            Position.X = MathHelper.Clamp(Position.X, Scale * Width / 2, viewportWidth - Width * Scale / 2);
-            Position.Y = MathHelper.Clamp(Position.Y, Scale * Height / 2, viewportHeight - Height * Scale / 2);
+            this.Position.X = MathHelper.Clamp(Position.X, Scale * this.Width / 2, viewportWidth - this.Width * Scale / 2);
+            this.Position.Y = MathHelper.Clamp(Position.Y, Scale * this.Height / 2, viewportHeight - this.Height * Scale / 2);
 
         }
 

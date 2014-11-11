@@ -1,8 +1,13 @@
 ﻿*Template for how to write a Room file*
 
-Background:[Background File Name];[Scale (with a , and not a . for decimal point)]
+Background:[Background File Name]
 Door:[Door File Name]
-NPC:[NPC File Name]11
+NPC:[NPC File Name]
 Item:[Item File Name]
+PlayerStartingXOnBackground:[X-coordinate relative to the background]
+PlayerStartingYOnBackground:[Y-coordinate relative to the background]
+BackgroundScale:[Scale float (with a , and not a . for decimal point)]
+PlayerScale:[Float]
+SmallestScale:[Smallest scale float]
 
 *Remember to set to "Copy Always"*

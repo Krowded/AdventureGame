@@ -15,8 +15,7 @@ namespace AdventureGame
         public float ScrollSpeed { get; set; }
         private bool ClampedX { get; set; }
         private bool ClampedY { get; set; }
-        private bool ScrollingX { get; set; }
-        private bool ScrollingY { get; set; }
+        private bool StillScrolling { get; set; }
 
         public Scrolling()
         {
@@ -26,8 +25,7 @@ namespace AdventureGame
             ScrollingRight = false;
             ClampedX = false;
             ClampedY = false;
-            ScrollingX = false;
-            ScrollingY = false;
+            StillScrolling = false;
         }
 
         /// <summary>
@@ -36,7 +34,7 @@ namespace AdventureGame
         /// </summary>
         public void IsScrolling(Vector2 playerPosition, int viewportWidth, int viewportHeight, Vector2 playerDirection)
         {
-            const int epsilon = 1;
+            const int epsilon = 10;
 
             if ((playerPosition.X > 2 * viewportWidth / 3) && playerDirection.X > 0)
             {
@@ -56,8 +54,10 @@ namespace AdventureGame
                 ScrollingUp = true;
             }
 
-            ScrollingX = !((playerPosition.X - viewportWidth / 2 < epsilon) || ClampedX);
-            ScrollingY = !((playerPosition.Y - viewportHeight / 2 < epsilon) || ClampedY);
+            bool middleX = playerPosition.X - viewportWidth / 2 < epsilon;
+            bool middleY = playerPosition.Y - viewportHeight / 2 < epsilon;
+
+            StillScrolling = !((middleX && middleY) || (ClampedX && middleY) || (ClampedY && middleX) || (ClampedX && ClampedY));
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace AdventureGame
         /// <param name="scrollDirection">Opposite of player direction</param>
         public void Scroll(ref Vector2 backgroundPosition, ref Vector2 mousePosition, Vector2 scrollDirection)
         {
-            if (ScrollingLeft || ScrollingRight || ScrollingUp || ScrollingDown || (ScrollingX && ScrollingY))
+            if (ScrollingLeft || ScrollingRight || ScrollingUp || ScrollingDown)// || StillScrolling)
             {
                 backgroundPosition += scrollDirection * ScrollSpeed;
                 mousePosition += scrollDirection * ScrollSpeed;

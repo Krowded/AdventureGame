@@ -124,6 +124,7 @@ namespace AdventureGame
             
             //Initialize the player
             player.Position = CurrentRoom.PlayerStartingPosition;
+            player.RoomScale = CurrentRoom.PlayerScale;
             Animation playerAnimation = new Animation();
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, player.Scale, true);
@@ -131,8 +132,8 @@ namespace AdventureGame
             
             //Initialize the background
             MainBackground = Content.Load<Texture2D>(BackgroundImageName);
-            BackgroundHeight = (int)(MainBackground.Height * CurrentRoom.Scale);
-            BackgroundWidth = (int)(MainBackground.Width * CurrentRoom.Scale);
+            BackgroundHeight = (int)(MainBackground.Height * CurrentRoom.BackgroundScale);
+            BackgroundWidth = (int)(MainBackground.Width * CurrentRoom.BackgroundScale);
             InitializeBackground();
             LoadNewRoom();
 
@@ -140,10 +141,40 @@ namespace AdventureGame
 
         private void InitializeBackground() 
         {
-            BackgroundPosition.X = player.Position.X - BackgroundWidth * CurrentRoom.Scale / 2;
-            BackgroundPosition.Y = player.Position.Y - BackgroundHeight * CurrentRoom.Scale / 2;
+            //Adjust background to player in X
+            if ((player.Position.X > GraphicsDevice.Viewport.Width / 2) && (player.Position.X < BackgroundWidth - GraphicsDevice.Viewport.Width / 2))
+            {
+                BackgroundPosition.X = -(player.Position.X + GraphicsDevice.Viewport.Width / 2);
+                player.Position.X = GraphicsDevice.Viewport.Width / 2;
+            }
+            else if (player.Position.X < GraphicsDevice.Viewport.Width / 2)
+            {
+                BackgroundPosition.X = 0;
+            }
+            else if (player.Position.X > (BackgroundWidth - GraphicsDevice.Viewport.Width / 2))
+            {
+                BackgroundPosition.X = -(BackgroundWidth - GraphicsDevice.Viewport.Width);
+                player.Position.X = BackgroundWidth - player.Position.X;
+            }
+
+            //Adjust background to player in Y
+            if ((player.Position.Y > GraphicsDevice.Viewport.Height / 2) && player.Position.Y < (BackgroundHeight - GraphicsDevice.Viewport.Height / 2))
+            {
+                BackgroundPosition.Y = -(player.Position.Y + GraphicsDevice.Viewport.Height / 2);
+                player.Position.Y = GraphicsDevice.Viewport.Height / 2;
+            }
+            else if (player.Position.Y < (GraphicsDevice.Viewport.Height / 2))
+            {
+                BackgroundPosition.Y = 0;
+            }
+            else if (player.Position.Y > (BackgroundHeight - GraphicsDevice.Viewport.Height / 2))
+            {
+                BackgroundPosition.Y = -(BackgroundHeight - GraphicsDevice.Viewport.Height);
+                player.Position.Y = BackgroundHeight - player.Position.Y;
+            }
         }
 
+        /// Loads
         private void LoadNewRoom()
         {
             //Hide old room
@@ -166,8 +197,6 @@ namespace AdventureGame
                 thing.Position += BackgroundPosition;
             }
         }
-
-        /// Loads
         private void LoadItems()
         {
             foreach (Item item in CurrentRoom.Items)
@@ -341,7 +370,7 @@ namespace AdventureGame
             spriteBatch.Begin();
 
             //Draw the background
-            spriteBatch.Draw(MainBackground, BackgroundPosition, null, Color.Red, 0, Vector2.Zero, CurrentRoom.Scale, 
+            spriteBatch.Draw(MainBackground, BackgroundPosition, null, Color.Red, 0, Vector2.Zero, CurrentRoom.BackgroundScale, 
                 SpriteEffects.None, 0);
 
             //Draw all background things in the room

@@ -14,8 +14,9 @@ namespace AdventureGame
         public string[] BackgroundImages { get; set; }
         public string[] ForegroundImages { get; set; }
         public string Background;
-        public float Scale;
-        public float SmallestScale;
+        public float BackgroundScale = 1;
+        public float PlayerScale = 1;
+        public float SmallestScale = 1;
         public Vector2 PlayerStartingPosition = Vector2.Zero;
 
         public List<NPC> NPCs = new List<NPC>();
@@ -63,10 +64,6 @@ namespace AdventureGame
                     {
                         case "Background":
                             this.Background = words[1];
-                            if (!float.TryParse(words[2], out this.Scale))
-                            {
-                                this.Scale = 1;
-                            }
                             break;
                         case "Door":
                             this.Doors.Add(new Door(words[1]));
@@ -77,14 +74,20 @@ namespace AdventureGame
                         case "Item":
                             this.Items.Add(new Item(words[1]));
                             break;
-                        case "PlayerStartingX":
+                        case "PlayerStartingXOnBackground":
                              float.TryParse(words[1], out this.PlayerStartingPosition.X);
                             break;
-                        case "PlayerStartingY":
-                            float.TryParse(words[1], out PlayerStartingPosition.Y);
+                        case "PlayerStartingYOnBackground":
+                            float.TryParse(words[1], out this.PlayerStartingPosition.Y);
                             break;
                         case "SmallestScale":
-                            float.TryParse(words[1], out SmallestScale);
+                            float.TryParse(words[1], out this.SmallestScale);
+                            break;
+                        case "PlayerScale":
+                            float.TryParse(words[1], out this.PlayerScale);
+                            break;
+                        case "BackgroundScale":
+                            float.TryParse(words[1], out this.BackgroundScale);
                             break;
                         default:
                             {
