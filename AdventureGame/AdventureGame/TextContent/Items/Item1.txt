@@ -1,1 +1,7 @@
-﻿:Test Item:In-Game Objects/Items/item:200:200:1:true:false
+﻿PositionX:200
+PositionY:200
+Name:Test Item
+Image:In-Game Objects/Items/item
+Scale:1
+Collidable:true
+Foreground:false

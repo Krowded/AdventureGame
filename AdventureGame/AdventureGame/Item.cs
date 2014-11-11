@@ -28,30 +28,5 @@ namespace AdventureGame
         {
             return 0;
         }
-
-        protected override void ParseTextFile()
-        {
-            StreamReader file = new StreamReader(this.FileName);
-            string line = file.ReadLine();
-            string[] words = line.Split(':');
-            this.Observation = new DialogueTree(words[0]);
-            this.Name = words[1];
-            this.Image = words[2];
-            float scale;
-            bool collidable;
-            bool foreground;
-            if (!float.TryParse(words[3], out this.Position.X) ||
-                !float.TryParse(words[4], out this.Position.Y) ||
-                !float.TryParse(words[5], out scale) ||
-                !bool.TryParse(words[6], out collidable)||
-                !bool.TryParse(words[7], out foreground))
-            {
-                throw new InvalidOperationException("Text file error in " + this.FileName);
-            }
-            this.PositionOnBackground += this.Position;
-            this.Scale = scale;
-            this.Collidable = collidable;
-            this.Foreground = Foreground;
-        }
     }
 }

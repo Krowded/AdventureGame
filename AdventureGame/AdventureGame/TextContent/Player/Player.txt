@@ -1,1 +1,1 @@
-﻿In-Game Objects/Player/player
+﻿PlayerTexture:In-Game Objects/Player/player

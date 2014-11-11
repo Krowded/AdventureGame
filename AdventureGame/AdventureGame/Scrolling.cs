@@ -15,9 +15,8 @@ namespace AdventureGame
         public float ScrollSpeed { get; set; }
         private bool ClampedX { get; set; }
         private bool ClampedY { get; set; }
-
-        public bool ScrollingX { get; set; }
-        public bool ScrollingY { get; set; }
+        private bool ScrollingX { get; set; }
+        private bool ScrollingY { get; set; }
 
         public Scrolling()
         {

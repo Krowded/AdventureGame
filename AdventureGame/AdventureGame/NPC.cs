@@ -10,7 +10,7 @@ namespace AdventureGame
 {
     class NPC : InteractiveObject
     {
-        public DialogueTree Dialogue { get; set; }       
+        public DialogueTree Dialogue { get; set; }
 
         public NPC(string fileName)
         {
@@ -22,32 +22,26 @@ namespace AdventureGame
             Dialogue.StartConversation();
         }
 
-        public void activateAnimation(string animationChoice) {}
+        public void activateAnimation(string animationChoice) { }
+
 
         protected override void ParseTextFile()
         {
+            base.ParseTextFile();
             StreamReader file = new StreamReader(FileName);
-            string line = file.ReadLine();
-            string[] words = line.Split(':');
-            this.Dialogue = new DialogueTree(words[0]);
-            this.Observation = new DialogueTree(words[1]);
-            this.Name = words[2];
-            this.Image = words[3];
-            float scale;
-            bool collidable;
-            bool foreground;
-            if (!float.TryParse(words[4], out this.Position.X) ||
-                !float.TryParse(words[5], out this.Position.Y) ||
-                !float.TryParse(words[6], out scale) ||
-                !bool.TryParse(words[7], out collidable) ||
-                !bool.TryParse(words[8], out foreground))
             {
-                throw new InvalidOperationException("Text file error in " + FileName);
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] words = line.Split(':');
+                    switch (words[0])
+                    {
+                        case "Dialogue":
+                            this.Dialogue = new DialogueTree(words[1]);
+                            break;
+                    }
+                }
             }
-            this.PositionOnBackground += this.Position;
-            this.Scale = scale;
-            this.Collidable = collidable;
-            this.Foreground = foreground;
         }
     }
 }

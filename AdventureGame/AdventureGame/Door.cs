@@ -40,29 +40,28 @@ namespace AdventureGame
 
         protected override void ParseTextFile()
         {
+            base.ParseTextFile();
             StreamReader file = new StreamReader(FileName);
-            string line = file.ReadLine();
-            string[] words = line.Split(':');
-            this.Observation = new DialogueTree(words[0]);
-            this.Name = words[1];
-            this.Image = words[2];
-            this.Destination = new Room(words[3]);
-            this.PartnerDoorName = words[4];
-            float scale;
-            bool collidable;
-            bool foreground;
-            if (!float.TryParse(words[5], out this.Position.X) ||
-                !float.TryParse(words[6], out this.Position.Y) ||
-                !float.TryParse(words[7], out scale) ||
-                !bool.TryParse(words[8], out collidable) ||
-                !bool.TryParse(words[9], out foreground))
             {
-                throw new InvalidOperationException("Text file error in " + this.FileName);
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] words = line.Split(':');
+                    switch (words[0])
+                    {
+                        case "PartnerDoorName":
+                            this.PartnerDoorName = words[1];
+                            break;
+                        case "Destination":
+                            this.Destination = new Room(words[1]);
+                            break;
+                        case "Dialogue":
+                            this.Dialogue = new DialogueTree(words[1]);
+                            break;
+                    }
+
+                }
             }
-            this.PositionOnBackground += Position;
-            this.Scale = scale;
-            this.Collidable = collidable;
-            this.Foreground = foreground;
         }
     }
 }

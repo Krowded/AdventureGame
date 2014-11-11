@@ -1,4 +1,13 @@
 ﻿*Template for how to write a Door file*
-[Dialogue Text File]:[Door Name]:[Image File Name]:[Destination Text File]:[Partner Door Name]:[X-coordinate]:[Y-coordinate]:[Scale]:[Collidable Bool]:[In Foreground Bool]
+
+PositionX:[X-coordinate]
+PositionY:[Y-coordinate}
+Name:[Door name]
+PartnerDoorName:[Destination door name]
+Image:[Image filepath]
+Scale:[Scale float. Use , instead of .]
+Collidable:[true or false]
+Foreground:[true or false]
+Observation:[Text file path]
 
 *Remember to set to "Copy Always"*

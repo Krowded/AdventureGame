@@ -291,8 +291,6 @@ namespace AdventureGame
             }
         }
 
-
-
         /// <summary>
         /// Handles all in game mouse actions
         /// </summary>
@@ -370,9 +368,9 @@ namespace AdventureGame
         /// </summary>
         private void DrawInteractiveObjects(List<InteractiveObject> objectList)
         {
-            foreach (InteractiveObject i in objectList)
+            foreach (InteractiveObject thing in objectList)
             {
-                i.Draw(spriteBatch);
+                thing.Draw(spriteBatch);
             }
         }
 

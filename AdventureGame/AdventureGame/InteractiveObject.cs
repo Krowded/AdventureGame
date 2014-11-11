@@ -38,7 +38,57 @@ namespace AdventureGame
             }
         }
 
-        protected virtual void ParseTextFile() { }
+        protected virtual void ParseTextFile()
+        {
+            StreamReader file = new StreamReader(FileName);
+            {
+                string line;
+                float scale = 0;
+                bool collidable = false;
+                bool foreground = false;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] words = line.Split(':');
+                    switch (words[0])
+                    {
+                        case "PositionX":
+                            if (!float.TryParse(words[1], out this.Position.X))
+                            {
+                                this.Position.X = 0;
+                            }
+                            break;
+                        case "PositionY":
+                            if (!float.TryParse(words[1], out this.Position.Y))
+                            {
+                                this.Position.Y = 0;
+                            }
+                            break;
+                        case "Observation":
+                            this.Observation = new DialogueTree(words[1]);
+                            break;
+                        case "Name":
+                            this.Name = words[1];
+                            break;
+                        case "Image":
+                            this.Image = words[1];
+                            break;
+                        case "Scale":
+                            float.TryParse(words[1], out scale);
+                            break;
+                        case "Collidable":
+                            bool.TryParse(words[1], out collidable);
+                            break;
+                        case "Foreground":
+                            bool.TryParse(words[1], out foreground);
+                            break;
+                    }
+                }
+                this.PositionOnBackground += this.Position;
+                this.Scale = scale;
+                this.Collidable = collidable;
+                this.Foreground = foreground;
+            }
+        }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {

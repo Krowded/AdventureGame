@@ -1,5 +1,12 @@
 ﻿*Template for how to write an Item file*
 
-[Dialogue Text File]:[Name of Item]:[Image File Name]:[X-coordinate]:[Y-coordinate]:[Scale]:[Collidable Bool]:[In Foreground Bool] 
+PositionX:[X-coordinate]
+PositionY:[Y-coordinate}
+Name:[Item name]
+Image:[Image filepath]
+Scale:[Scale float. Use , instead of .]
+Collidable:[true or false]
+Foreground:[true or false]
+Observation:[Text file path]
 
 *Remember to set to "Copy Always"*

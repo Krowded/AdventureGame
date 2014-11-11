@@ -1,2 +1,10 @@
 ﻿*Template for how to write an NPC file*
-[Dialogue Text File]:[Observation Text File]:[NPC Name]:[Image File Name]:[X-coordinate]:[Y-coordinate]:[Scale]:[Collidable Bool]:[In Foreground Bool]
+PositionX:[X-coordinate]
+PositionY:[Y-coordinate}
+Name:[NPC name]
+Image:[Image filepath]
+Scale:[Scale float. Use , instead of .]
+Collidable:[true or false]
+Foreground:[true or false]
+Dialogue:[Text file path]
+Observation:[Text file path]

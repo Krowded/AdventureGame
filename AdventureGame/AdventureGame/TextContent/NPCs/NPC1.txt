@@ -1,1 +1,9 @@
-﻿::Test NPC:In-Game Objects/NPCs/npc:200:400:1:false:true
+﻿PositionX:200
+PositionY:400
+Name:Test NPC
+Image:In-Game Objects/NPCs/npc
+Scale:1
+Collidable:false
+Foreground:true
+Dialogue:
+Observation:

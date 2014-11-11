@@ -1,1 +1,9 @@
-﻿:Test Door:In-Game Objects/Doors/door:Content/In-Game Objects/Rooms/Room1.txt::200:600:1:true:false
+﻿PositionX:200
+PositionY:600
+Name:Test Door
+PartnerDoorName:Test Destination Door
+Image:In-Game Objects/Doors/door
+Destination:Content/In-Game Objects/Rooms/Room1.txt
+Scale:1
+Collidable:true
+Foreground:false

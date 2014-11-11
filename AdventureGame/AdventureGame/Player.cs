@@ -68,8 +68,23 @@ namespace AdventureGame
         public void ParseTextFile(string FileName)
         {
             StreamReader file = new StreamReader(FileName);
-            string line = file.ReadLine();
-            PlayerTexture = line;
+            {
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] words = line.Split(':');
+                    switch (words[0])
+                    {
+                        case "PlayerTexture":
+                            this.PlayerTexture = words[1];
+                            break;
+                        default:
+                            {
+                                throw new InvalidOperationException("Text file error in " + FileName);
+                            }
+                    }
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
