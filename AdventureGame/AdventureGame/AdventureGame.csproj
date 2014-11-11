@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="Collision.cs" />
     <Compile Include="DialogueTree.cs" />
     <Compile Include="Door.cs" />
     <Compile Include="InteractiveObject.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="AdventureGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scrolling.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

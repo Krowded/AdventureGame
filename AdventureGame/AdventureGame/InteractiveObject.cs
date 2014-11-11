@@ -40,5 +40,10 @@ namespace AdventureGame
 
         protected virtual void ParseTextFile() { }
 
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(this.Texture, this.Position, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, 0f);
+        }
+
     }
 }

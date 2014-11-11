@@ -4,3 +4,4 @@ NPC:TextContent/NPCs/NPC1.txt
 Door:TextContent/Doors/Door1.txt
 PlayerStartingX:100
 PlayerStartingY:800
+SmallestScale:0,5

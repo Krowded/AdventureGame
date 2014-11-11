@@ -15,6 +15,7 @@ namespace AdventureGame
         public string[] ForegroundImages { get; set; }
         public string Background;
         public float Scale;
+        public float SmallestScale;
         public Vector2 PlayerStartingPosition = Vector2.Zero;
 
         public List<NPC> NPCs = new List<NPC>();
@@ -81,6 +82,9 @@ namespace AdventureGame
                             break;
                         case "PlayerStartingY":
                             float.TryParse(words[1], out PlayerStartingPosition.Y);
+                            break;
+                        case "SmallestScale":
+                            float.TryParse(words[1], out SmallestScale);
                             break;
                         default:
                             {
