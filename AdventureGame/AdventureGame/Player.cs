@@ -11,7 +11,9 @@ namespace AdventureGame
     class Player
     {
         public Animation PlayerAnimation;
-        //Coordinates of the middle of the player sprite
+        /// <summary>
+        /// The coordinates of the middle of the player sprite
+        /// </summary>
         public Vector2 Position;
         public Vector2 Direction;
         private bool active = false;
@@ -93,11 +95,11 @@ namespace AdventureGame
         {
             if (MovingLeft)
             {
-                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.None);
+                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.FlipHorizontally);
             }
             else
             {
-                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.FlipHorizontally);
+                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.None);
             }
         }
 
@@ -167,8 +169,8 @@ namespace AdventureGame
         /// </summary>
         public void ClampPlayer(int viewportWidth, int viewportHeight)
         {
-            this.Position.X = MathHelper.Clamp(Position.X, Scale * this.Width / 2, viewportWidth - this.Width * Scale / 2);
-            this.Position.Y = MathHelper.Clamp(Position.Y, Scale * this.Height / 2, viewportHeight - this.Height * Scale / 2);
+            this.Position.X = MathHelper.Clamp(Position.X, this.Scale * this.Width / 2, viewportWidth - this.Width * this.Scale / 2);
+            this.Position.Y = MathHelper.Clamp(Position.Y, this.Scale * this.Height / 2, viewportHeight - this.Height * this.Scale / 2);
 
         }
 

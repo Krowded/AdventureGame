@@ -147,7 +147,7 @@ namespace AdventureGame
             float middleX = GraphicsDevice.Viewport.Width / 2;
             float middleY = GraphicsDevice.Viewport.Height / 2;
 
-            //Adjust background to player in X
+            //Adjust background to player on X-axis
             if ((player.Position.X > middleX) && 
                 (player.Position.X < BackgroundWidth - middleX))
             {
@@ -164,7 +164,7 @@ namespace AdventureGame
                 player.Position.X = BackgroundWidth - player.Position.X;
             }
 
-            //Adjust background to player in Y
+            //Adjust background to player on Y-axis
             if ((player.Position.Y > middleY) &&
                 (player.Position.Y < BackgroundHeight - middleY))
             {
@@ -274,7 +274,7 @@ namespace AdventureGame
             Direction = player.Direction;  //Temporary solution
 
             UpdateScrolling(gameTime);
-            player.Update(gameTime);
+            //UpdateAllThings(gameTime);
             base.Update(gameTime);
         }
 
@@ -287,11 +287,12 @@ namespace AdventureGame
             //Movement controlled by mouse
             Vector2 targetPoint = HandleMouse(gameTime);
             player.Running = this.DoubleClick;
-
+            
             //Move some of those into player itself?
             player.MoveToPoint(Begin, targetPoint);
             player.ScalePlayerSprite(BackgroundPosition, BackgroundHeight, GraphicsDevice.Viewport.Width, CurrentRoom.SmallestScale, NaturalScreenWidth); //Needs to be improved/changed
-            player.ClampPlayer(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);            
+            player.ClampPlayer(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);    
+            player.Update(gameTime);        
         }
 
         /// <summary>
@@ -308,11 +309,14 @@ namespace AdventureGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         private void UpdateScrolling(GameTime gameTime)
         {
-            Scroller.IsScrolling(player.Position, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, player.Direction);
+            Scroller.CheckForScrolling(player.Position,  player.Direction,
+                                        (2 * GraphicsDevice.Viewport.Width / 3), (GraphicsDevice.Viewport.Width / 3), 
+                                        (GraphicsDevice.Viewport.Height / 3), (2 * GraphicsDevice.Viewport.Height / 3),
+                                        (GraphicsDevice.Viewport.Width / 2), (GraphicsDevice.Viewport.Height / 2));
+            //Scroller.LimitScroll(ref Direction);
+            Scroller.Scroll(ref BackgroundPosition, ref MousePosition, -player.Direction);
             Scroller.BackgroundClamp(ref BackgroundPosition, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
-            Scroller.LimitScroll(ref Direction);
-            Scroller.Scroll(ref BackgroundPosition, ref MousePosition, -Direction);
-            Scroller.CompensateForScrolling(player);
+            //Scroller.CompensateForScrolling(player);
 
             SyncInteractiveObjectsWithBackground(AllThings);
         }
