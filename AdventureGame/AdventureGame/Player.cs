@@ -116,7 +116,7 @@ namespace AdventureGame
             }
             else
             {
-                Direction = Vector2.Zero;
+                this.Direction = Vector2.Zero;
                 this.Running = false;
             }
         }

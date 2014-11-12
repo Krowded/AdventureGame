@@ -34,7 +34,6 @@ namespace AdventureGame
         MouseState CurrentMouseState;
         MouseState PreviousMouseState;
         Vector2 MousePosition = new Vector2();
-        Vector2 Direction = new Vector2();
         bool MousePressed;
         bool Begin;
         bool DoubleClick { get; set; }
@@ -274,11 +273,8 @@ namespace AdventureGame
 
             // TODO: Add your update logic here
             UpdatePlayer(gameTime);
-
-            Direction = player.Direction;  //Temporary solution
-
             UpdateScrolling(gameTime);
-            //UpdateAllThings(gameTime);
+            UpdateAllThings(gameTime); //Does nothing
             base.Update(gameTime);
         }
 
@@ -313,7 +309,7 @@ namespace AdventureGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         private void UpdateScrolling(GameTime gameTime)
         {
-            Scroller.CheckForScrolling(player);
+            Scroller.UpdateScrollingVariables(player);
             Scroller.Scroll(ref BackgroundPosition, ref MousePosition);
             Scroller.BackgroundClamp(ref BackgroundPosition, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
             Scroller.CompensateForScrolling(player);
