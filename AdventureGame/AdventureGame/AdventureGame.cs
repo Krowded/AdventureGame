@@ -97,9 +97,13 @@ namespace AdventureGame
             Begin = false;
             ElapsedTime = 0;
 
-            //Scrollspeed (should it really just be a multiple of movespeed?
-            Scroller = new Scrolling();
-            Scroller.ScrollSpeed = 4 * player.RunSpeed;
+            //Scroller
+            Scroller = new Scrolling(GraphicsDevice.Viewport.Width / 3,
+                                     2 * GraphicsDevice.Viewport.Width / 3,
+                                     GraphicsDevice.Viewport.Height / 3,
+                                     2 * GraphicsDevice.Viewport.Height / 3,
+                                     GraphicsDevice.Viewport.Width / 2,
+                                     GraphicsDevice.Viewport.Height / 2);
             
             //Sets the natural screen size (supposed to resize automatically)
             Graphics.PreferredBackBufferWidth = NaturalScreenWidth;
@@ -309,14 +313,10 @@ namespace AdventureGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         private void UpdateScrolling(GameTime gameTime)
         {
-            Scroller.CheckForScrolling(player.Position,  player.Direction,
-                                        (2 * GraphicsDevice.Viewport.Width / 3), (GraphicsDevice.Viewport.Width / 3), 
-                                        (GraphicsDevice.Viewport.Height / 3), (2 * GraphicsDevice.Viewport.Height / 3),
-                                        (GraphicsDevice.Viewport.Width / 2), (GraphicsDevice.Viewport.Height / 2));
-            //Scroller.LimitScroll(ref Direction);
-            Scroller.Scroll(ref BackgroundPosition, ref MousePosition, -player.Direction);
+            Scroller.CheckForScrolling(player);
+            Scroller.Scroll(ref BackgroundPosition, ref MousePosition);
             Scroller.BackgroundClamp(ref BackgroundPosition, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
-            //Scroller.CompensateForScrolling(player);
+            Scroller.CompensateForScrolling(player);
 
             SyncInteractiveObjectsWithBackground(AllThings);
         }
