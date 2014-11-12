@@ -139,35 +139,43 @@ namespace AdventureGame
 
         }
 
+        /// <summary>
+        /// Makes the background match player starting coordinates
+        /// </summary>
         private void InitializeBackground() 
         {
+            float middleX = GraphicsDevice.Viewport.Width / 2;
+            float middleY = GraphicsDevice.Viewport.Height / 2;
+
             //Adjust background to player in X
-            if ((player.Position.X > GraphicsDevice.Viewport.Width / 2) && (player.Position.X < BackgroundWidth - GraphicsDevice.Viewport.Width / 2))
+            if ((player.Position.X > middleX) && 
+                (player.Position.X < BackgroundWidth - middleX))
             {
-                BackgroundPosition.X = -(player.Position.X + GraphicsDevice.Viewport.Width / 2);
-                player.Position.X = GraphicsDevice.Viewport.Width / 2;
+                BackgroundPosition.X = -(player.Position.X - middleX);
+                player.Position.X = middleX;
             }
-            else if (player.Position.X < GraphicsDevice.Viewport.Width / 2)
+            else if (player.Position.X < middleX)
             {
                 BackgroundPosition.X = 0;
             }
-            else if (player.Position.X > (BackgroundWidth - GraphicsDevice.Viewport.Width / 2))
+            else if (player.Position.X > (BackgroundWidth - middleX))
             {
                 BackgroundPosition.X = -(BackgroundWidth - GraphicsDevice.Viewport.Width);
                 player.Position.X = BackgroundWidth - player.Position.X;
             }
 
             //Adjust background to player in Y
-            if ((player.Position.Y > GraphicsDevice.Viewport.Height / 2) && player.Position.Y < (BackgroundHeight - GraphicsDevice.Viewport.Height / 2))
+            if ((player.Position.Y > middleY) &&
+                (player.Position.Y < BackgroundHeight - middleY))
             {
-                BackgroundPosition.Y = -(player.Position.Y + GraphicsDevice.Viewport.Height / 2);
-                player.Position.Y = GraphicsDevice.Viewport.Height / 2;
+                BackgroundPosition.Y = -(player.Position.Y - middleY);
+                player.Position.Y = middleY;
             }
-            else if (player.Position.Y < (GraphicsDevice.Viewport.Height / 2))
+            else if (player.Position.Y < middleY)
             {
                 BackgroundPosition.Y = 0;
             }
-            else if (player.Position.Y > (BackgroundHeight - GraphicsDevice.Viewport.Height / 2))
+            else if (player.Position.Y > (BackgroundHeight - middleY))
             {
                 BackgroundPosition.Y = -(BackgroundHeight - GraphicsDevice.Viewport.Height);
                 player.Position.Y = BackgroundHeight - player.Position.Y;
