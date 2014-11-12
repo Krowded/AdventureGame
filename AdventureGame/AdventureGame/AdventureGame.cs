@@ -310,6 +310,7 @@ namespace AdventureGame
         private void UpdateScrolling(GameTime gameTime)
         {
             Scroller.UpdateScrollingVariables(player);
+            Scroller.UpdateStillScrollingDirection(player);
             Scroller.Scroll(ref BackgroundPosition, ref MousePosition);
             Scroller.BackgroundClamp(ref BackgroundPosition, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
             Scroller.CompensateForScrolling(player);

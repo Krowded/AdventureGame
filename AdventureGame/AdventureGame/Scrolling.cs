@@ -10,7 +10,7 @@ namespace AdventureGame
     {
         //Scrolling varibles
         private float ScrollSpeed { get; set; }
-        private Vector2 ScrollDirection { get; set; }
+        private Vector2 ScrollDirection;
         private int LeftScrollBorder { get; set; }
         private int RightScrollBorder { get; set; }
         private int UpperScrollBorder { get; set; }
@@ -241,6 +241,30 @@ namespace AdventureGame
         }
 
         /// <summary>
+        /// Makes sure the screen scrolls in the right direction during StillScrolling
+        /// </summary>
+        public void UpdateStillScrollingDirection(Player player)
+        {
+            if (StillScrollingX)
+            {
+                if ((player.Position.X < MiddleOfScreenX && this.ScrollDirection.X < 0) ||
+                    (player.Position.X > MiddleOfScreenX && this.ScrollDirection.X > 0))
+                {
+                    this.ScrollDirection.X = -this.ScrollDirection.X;
+                }
+            }
+
+            if (StillScrollingY)
+            {
+                if ((player.Position.Y < MiddleOfScreenY && this.ScrollDirection.Y < 0) ||
+                    (player.Position.Y > MiddleOfScreenY && this.ScrollDirection.Y > 0))
+                {
+                    this.ScrollDirection.Y = -this.ScrollDirection.Y;
+                }
+            }
+        }
+
+        /// <summary>
         /// Compensate for screen scrolling
         /// </summary>
         public void CompensateForScrolling(Player player)
@@ -252,8 +276,11 @@ namespace AdventureGame
             }
             else if (StillScrollingX && !ClampedX)
             {
+                //Sometimes it gets too slow, this is a quick fix
+                float scrollDirection = MathHelper.Clamp(this.ScrollDirection.X, 0.1f, 1f);
+
                 player.Position.X -= player.Direction.X * player.MoveSpeed;
-                player.Position.X += this.ScrollDirection.X * ScrollSpeed;
+                player.Position.X += scrollDirection * ScrollSpeed;
             }
 
             //Y-axis
@@ -263,8 +290,11 @@ namespace AdventureGame
             }
             else if (StillScrollingY && !ClampedY)
             {
+                //Sometimes it gets too slow, this is a quick fix
+                float scrollDirection = MathHelper.Clamp(this.ScrollDirection.Y, 0.1f, 1f);
+                
                 player.Position.Y -= player.Direction.Y * player.MoveSpeed;
-                player.Position.Y += this.ScrollDirection.Y * ScrollSpeed;
+                player.Position.Y += scrollDirection * ScrollSpeed;
             }
 
         }
