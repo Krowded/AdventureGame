@@ -37,9 +37,13 @@ namespace AdventureGame
         bool MousePressed;
         bool Begin;
         bool DoubleClick { get; set; }
+        bool TargetReached = true;
 
         //Scrolling
         Scrolling Scroller;
+
+        //Collision
+        Collision Collider;
         
         //Elapsed time in milliseconds
         int ElapsedTime = 0;
@@ -58,6 +62,7 @@ namespace AdventureGame
         List<Item> items = new List<Item>();
         List<NPC> npcs = new List<NPC>();
         List<Door> doors = new List<Door>();
+        List<InteractiveObject> Collidables = new List<InteractiveObject>();
         List<InteractiveObject> AllThings = new List<InteractiveObject>();
         List<InteractiveObject> BackgroundThings = new List<InteractiveObject>();
         List<InteractiveObject> ForegroundThings = new List<InteractiveObject>();
@@ -103,6 +108,9 @@ namespace AdventureGame
                                      2 * GraphicsDevice.Viewport.Height / 3,
                                      GraphicsDevice.Viewport.Width / 2,
                                      GraphicsDevice.Viewport.Height / 2);
+
+            //Collision
+            Collider = new Collision();
             
             //Sets the natural screen size (supposed to resize automatically)
             Graphics.PreferredBackBufferWidth = NaturalScreenWidth;
@@ -202,6 +210,7 @@ namespace AdventureGame
             AllThings.AddRange(npcs);
             AllThings.AddRange(doors);
             LoadBackgroundAndForegroundThings();
+            LoadCollidables();
 
             foreach (InteractiveObject thing in AllThings)
             {
@@ -246,6 +255,16 @@ namespace AdventureGame
                 }
             }
         }
+        private void LoadCollidables()
+        {
+            foreach (InteractiveObject thing in AllThings)
+            {
+                if (thing.Collidable)
+                {
+                    Collidables.Add(thing);
+                }
+            }
+        }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -287,9 +306,22 @@ namespace AdventureGame
             //Movement controlled by mouse
             Vector2 targetPoint = HandleMouse(gameTime);
             player.Running = this.DoubleClick;
-            
-            //Move some of those into player itself?
-            player.MoveToPoint(Begin, targetPoint);
+
+            bool targetReached = ((Math.Abs(player.Position.X - targetPoint.X) < 10) &&
+                                  (Math.Abs(player.Position.Y - targetPoint.Y) < 10));
+
+            //See if player will collide with anything on the way to it's destination
+            if (Begin && !targetReached)
+            {
+                if (Collider.CollisionCheck(Collidables, player, targetPoint, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height))
+                {
+                    targetPoint = player.Position;
+                    player.Direction = Vector2.Zero;
+                }
+            }
+
+            //Move some of these into player itself?
+            TargetReached = player.MoveToPoint(Begin, targetPoint);
             player.ScalePlayerSprite(BackgroundPosition, BackgroundHeight, GraphicsDevice.Viewport.Width, CurrentRoom.SmallestScale, NaturalScreenWidth); //Needs to be improved/changed
             player.ClampPlayer(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);    
             player.Update(gameTime);        

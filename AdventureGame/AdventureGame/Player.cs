@@ -107,10 +107,14 @@ namespace AdventureGame
         /// Moves player until within a 10 pixel square of the target
         /// </summary>
         /// <param name="point">Target point</param>
-        public void MoveToPoint(bool startMoving, Vector2 point)
+       
+
+        public bool MoveToPoint(bool startMoving, Vector2 point)
         {
-            if (startMoving && !((Math.Abs(this.Position.X - point.X) < 10) &&
-                            (Math.Abs(this.Position.Y - point.Y) < 10)))
+            bool targetReached = ((Math.Abs(this.Position.X - point.X) < 10) &&
+                                  (Math.Abs(this.Position.Y - point.Y) < 10));
+
+            if (startMoving && !targetReached)
             {
                 MoveTowardsPoint(point);
             }
@@ -119,6 +123,8 @@ namespace AdventureGame
                 this.Direction = Vector2.Zero;
                 this.Running = false;
             }
+
+            return targetReached;
         }
 
         /// <summary>
@@ -132,12 +138,6 @@ namespace AdventureGame
             this.Direction.Normalize();
 
             this.Position += this.Direction * this.MoveSpeed;
-
-            if (false)//CollisionCheck())
-            {
-                this.Position -= this.Direction * this.MoveSpeed;
-                this.Direction = Vector2.Zero;
-            }
         }
 
         /// <summary>
