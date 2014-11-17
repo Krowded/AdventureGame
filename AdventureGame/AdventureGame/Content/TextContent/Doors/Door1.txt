@@ -2,8 +2,8 @@
 PositionY:600
 Name:Test Door
 PartnerDoorName:Test Destination Door
-Image:In-Game Objects/Doors/door
-Destination:Content/In-Game Objects/Rooms/Room1.txt
+Image:Visuals/In-Game Objects/Doors/door
+Destination:Content/TextContent/In-Game Objects/Rooms/Room1.txt
 Scale:1
 Collidable:true
 Foreground:false

@@ -273,6 +273,7 @@ namespace AdventureGame
             if ((ScrollingLeft || ScrollingRight) && !ClampedX)
             {
                 player.Position.X -= player.Direction.X * player.MoveSpeed;
+                player.TargetPoint.X -= player.Direction.X * player.MoveSpeed;
             }
             else if (StillScrollingX && !ClampedX)
             {

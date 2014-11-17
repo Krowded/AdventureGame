@@ -1,7 +1,7 @@
 ﻿PositionX:200
 PositionY:200
 Name:Test Item
-Image:In-Game Objects/Items/item
+Image:Visuals/In-Game Objects/Items/item
 Scale:1
 Collidable:true
 Foreground:false

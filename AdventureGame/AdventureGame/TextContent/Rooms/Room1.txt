@@ -1,9 +1,0 @@
-﻿Background:In-Game Objects/Rooms/mainbackground
-Item:TextContent/Items/Item1.txt
-NPC:TextContent/NPCs/NPC1.txt
-Door:TextContent/Doors/Door1.txt
-PlayerStartingXOnBackground:500
-PlayerStartingYOnBackground:500
-SmallestScale:0,5
-BackgroundScale:2,4
-PlayerScale:1

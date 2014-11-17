@@ -1,12 +1,11 @@
 ﻿#region Using Statements
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Storage;
+using System;
+using System.Collections.Generic;
 #endregion
 
 namespace AdventureGame
@@ -24,6 +23,8 @@ namespace AdventureGame
         const int NaturalScreenWidth = 1920;
         const int NaturalScreenHeight = 1080;
 
+        float WindowScale;
+
         //The current room, where most is loaded from
         Room CurrentRoom;
 
@@ -31,13 +32,7 @@ namespace AdventureGame
         Player player;
 
         //Mousehandling variables
-        MouseState CurrentMouseState;
-        MouseState PreviousMouseState;
-        Vector2 MousePosition = new Vector2();
-        bool MousePressed;
-        bool Begin;
-        bool DoubleClick { get; set; }
-        bool TargetReached = true;
+        InputHandling InputHandler = new InputHandling();
 
         //Scrolling
         Scrolling Scroller;
@@ -45,15 +40,14 @@ namespace AdventureGame
         //Collision
         Collision Collider;
         
-        //Elapsed time in milliseconds
-        int ElapsedTime = 0;
+        //State variables
+        Vector2 LastTargetPoint;
         
         //Background
         Texture2D MainBackground;
         Vector2 BackgroundPosition;
         int BackgroundWidth = 1920;
         int BackgroundHeight = 1080;
-        string BackgroundImageName;
 
         //The symbol for interactives
         Texture2D InteractiveSymbol;
@@ -85,21 +79,21 @@ namespace AdventureGame
         {
             // TODO: Add your initialization logic here
 
-            //Load info from the Room
-            CurrentRoom = new Room(@"TextContent/Rooms/Room1.txt");
-            CurrentRoom.InitializeRoom();
-            BackgroundImageName = CurrentRoom.Background;
+            //Initialize mouse
+            InputHandler.Begin = false;
+            InputHandler.MousePressed = false;
+            InputHandler.DoubleClick = false;
+
+            //Initialize savefile
+            //???
 
             //Initialize player variables
-            player = new Player(CurrentRoom.PlayerStartingPosition);
-            player.ParseTextFile(@"TextContent/Player/Player.txt");
+            player = new Player();
+            player.ParseTextFile(@"Content/TextContent/Player/Player.txt");
+
+            //Probably Room dependent
             player.RunSpeed = GraphicsDevice.Viewport.Width / 240;
             player.WalkSpeed = GraphicsDevice.Viewport.Width / 480;
-
-            //Initialize mouse variables
-            MousePressed = false;
-            Begin = false;
-            ElapsedTime = 0;
 
             //Scroller
             Scroller = new Scrolling(GraphicsDevice.Viewport.Width / 3,
@@ -115,6 +109,7 @@ namespace AdventureGame
             //Sets the natural screen size (supposed to resize automatically)
             Graphics.PreferredBackBufferWidth = NaturalScreenWidth;
             Graphics.PreferredBackBufferHeight = NaturalScreenHeight;
+            WindowScale = GraphicsDevice.Viewport.Width / NaturalScreenWidth;;
 
             //TouchPanel.EnabledGestures = GestureType.FreeDrag;  <- fix this at the end so that it works for phones, etc. as well
 
@@ -134,20 +129,12 @@ namespace AdventureGame
             // TODO: use this.Content to load your game content here
             
             //Initialize the player
-            player.Position = CurrentRoom.PlayerStartingPosition;
-            player.RoomScale = CurrentRoom.PlayerScale;
             Animation playerAnimation = new Animation();
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, player.Scale, true);
             player.Initialize(playerAnimation, player.Position);
-            
-            //Initialize the background
-            MainBackground = Content.Load<Texture2D>(BackgroundImageName);
-            BackgroundHeight = (int)(MainBackground.Height * CurrentRoom.BackgroundScale);
-            BackgroundWidth = (int)(MainBackground.Width * CurrentRoom.BackgroundScale);
-            InitializeBackground();
-            LoadNewRoom();
 
+            LoadNewRoom(new Room(@"Content/TextContent/Rooms/Room1.txt"));
         }
 
         /// <summary>
@@ -194,15 +181,19 @@ namespace AdventureGame
         }
 
         /// Loads
-        private void LoadNewRoom()
+        private void LoadNewRoom(Room newRoom)
         {
+            //Initialize new room
+            CurrentRoom = newRoom;
+            CurrentRoom.Initialize();
+
             //Hide old room
             items.Clear();
             npcs.Clear();
             doors.Clear();
             AllThings.Clear();
 
-            //Load new room
+            //Load new things
             LoadItems();
             LoadNPCs();
             LoadDoors();
@@ -211,11 +202,28 @@ namespace AdventureGame
             AllThings.AddRange(doors);
             LoadBackgroundAndForegroundThings();
             LoadCollidables();
-
             foreach (InteractiveObject thing in AllThings)
             {
                 thing.Position += BackgroundPosition;
             }
+
+            //Update player to new room
+            player.Position = CurrentRoom.PlayerStartingPosition;
+            player.BaseScale = CurrentRoom.PlayerScaleBase;
+            player.MaxScale = CurrentRoom.PlayerScaleMax;
+            player.MinScale = CurrentRoom.PlayerScaleMin;
+
+            //Initialize the background
+            MainBackground = Content.Load<Texture2D>(CurrentRoom.Background);
+            BackgroundHeight = (int)(MainBackground.Height * CurrentRoom.BackgroundScale);
+            BackgroundWidth = (int)(MainBackground.Width * CurrentRoom.BackgroundScale);
+            InitializeBackground();
+
+            //Reset basic variables
+            InputHandler.MousePressed = false;
+            InputHandler.Begin = false;
+            InputHandler.ElapsedTime = 0;
+
         }
         private void LoadItems()
         {
@@ -283,12 +291,11 @@ namespace AdventureGame
         protected override void Update(GameTime gameTime)
         {
             //Exit if esc is hit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (InputHandler.EscPressed())
                 Exit();
 
             //Save mousestates
-            PreviousMouseState = CurrentMouseState;
-            CurrentMouseState = Mouse.GetState();
+            InputHandler.UpdateMouseStates();
 
             // TODO: Add your update logic here
             UpdatePlayer(gameTime);
@@ -304,28 +311,39 @@ namespace AdventureGame
         private void UpdatePlayer(GameTime gameTime)
         {
             //Movement controlled by mouse
-            Vector2 targetPoint = HandleMouse(gameTime);
-            player.Running = this.DoubleClick;
-
-            bool targetReached = ((Math.Abs(player.Position.X - targetPoint.X) < 10) &&
-                                  (Math.Abs(player.Position.Y - targetPoint.Y) < 10));
-
-            //See if player will collide with anything on the way to it's destination
-            if (Begin && !targetReached)
-            {
-                if (Collider.CollisionCheck(Collidables, player, targetPoint, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height))
-                {
-                    targetPoint = player.Position;
-                    player.Direction = Vector2.Zero;
-                }
-            }
+            player.TargetPoint = InputHandler.HandleMouse(gameTime);
+            player.Running = InputHandler.DoubleClick;
 
             //Move some of these into player itself?
-            TargetReached = player.MoveToPoint(Begin, targetPoint);
-            player.ScalePlayerSprite(BackgroundPosition, BackgroundHeight, GraphicsDevice.Viewport.Width, CurrentRoom.SmallestScale, NaturalScreenWidth); //Needs to be improved/changed
+            if (InputHandler.Begin)
+            {
+                //Check if click on interactable object
+                InteractiveObject thing = new InteractiveObject();
+                if (Collider.ClickOnObjectCheck(player.TargetPoint, AllThings, ref thing))
+                {
+                    if (Vector2.Distance(player.Position, thing.MidPointPosition) < thing.DistanceToInteract)
+                    {
+                        thing.LookAt();
+                    }
+                    else
+                    {
+
+                    }
+                }
+                //Check for collisions
+                else if(Collider.ManagedCollisionCheck(player, Collidables, LastTargetPoint, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height))
+                {
+                    player.TargetPoint = player.Position;
+                    InputHandler.MousePosition = player.Position; //This should be changed, MousePosition shouldnt have to be changed anymore here
+                    player.Direction = Vector2.Zero;
+                }
+                LastTargetPoint = player.TargetPoint;
+                player.MoveToTargetPoint();
+            }
+            player.ScalePlayerSprite(BackgroundPosition, BackgroundHeight);
             player.ClampPlayer(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);    
             player.Update(gameTime);        
-        }
+        }     
 
         /// <summary>
         /// Updates all NPCs, Items and Doors
@@ -343,7 +361,7 @@ namespace AdventureGame
         {
             Scroller.UpdateScrollingVariables(player);
             Scroller.UpdateStillScrollingDirection(player);
-            Scroller.Scroll(ref BackgroundPosition, ref MousePosition);
+            Scroller.Scroll(ref BackgroundPosition, ref InputHandler.MousePosition);
             Scroller.BackgroundClamp(ref BackgroundPosition, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
             Scroller.CompensateForScrolling(player);
 
@@ -359,43 +377,6 @@ namespace AdventureGame
             {
                 thing.Position = BackgroundPosition + thing.PositionOnBackground;
             }
-        }
-
-        /// <summary>
-        /// Handles all in game mouse actions
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        private Vector2 HandleMouse(GameTime gameTime)
-        {
-            //Run to mouse if double click, walk if single click
-            if (CurrentMouseState.LeftButton == ButtonState.Pressed)
-            {
-                Begin = true;
-                if (!MousePressed)
-                {
-                    MousePressed = true;
-                    MousePosition.X = CurrentMouseState.X;
-                    MousePosition.Y = CurrentMouseState.Y;
-
-                    if (ElapsedTime <= 500)
-                    {
-                        DoubleClick = true;
-                        ElapsedTime = 0;
-                    }
-                    else
-                    {
-                        DoubleClick = false;
-                    } 
-                    ElapsedTime = 0;
-                }
-            }
-            else
-            {
-                MousePressed = false;
-                ElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
-            }
-
-            return MousePosition;
         }
 
         /// <summary>
@@ -423,7 +404,7 @@ namespace AdventureGame
             //Draw all foreground things
             DrawInteractiveObjects(ForegroundThings);
 
-            if (RevealkeyPressed())
+            if (InputHandler.RevealkeyPressed())
             {
                 DrawInteractiveSymbol();
             }
@@ -456,14 +437,6 @@ namespace AdventureGame
                 temp.Y = thing.Position.Y + thing.Texture.Height/2 - InteractiveSymbol.Height/2;
                 spriteBatch.Draw(InteractiveSymbol, temp, null, Color.White, 0f, Vector2.Zero, 1, SpriteEffects.None, 0f);
             }
-        }
-
-        /// <summary>
-        /// Checks if the key for revealing interactives is pressed (probably space)
-        /// </summary>
-        private bool RevealkeyPressed()
-        {
-            return false;
         }
     }
 }

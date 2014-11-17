@@ -15,8 +15,9 @@ namespace AdventureGame
         public string[] ForegroundImages { get; set; }
         public string Background;
         public float BackgroundScale = 1;
-        public float PlayerScale = 1;
-        public float SmallestScale = 1;
+        public float PlayerScaleMax = 1;
+        public float PlayerScaleMin = 1;
+        public float PlayerScaleBase = 1;
         public Vector2 PlayerStartingPosition = Vector2.Zero;
 
         public List<NPC> NPCs = new List<NPC>();
@@ -28,7 +29,7 @@ namespace AdventureGame
             this.FileName = roomInformationFile;
         }
 
-        public void InitializeRoom()
+        public void Initialize()
         {
             ParseTextFile();
             InitializeLists();           
@@ -80,11 +81,14 @@ namespace AdventureGame
                         case "PlayerStartingYOnBackground":
                             float.TryParse(words[1], out this.PlayerStartingPosition.Y);
                             break;
-                        case "SmallestScale":
-                            float.TryParse(words[1], out this.SmallestScale);
+                        case "PlayerScaleBase":
+                            float.TryParse(words[1], out this.PlayerScaleBase);
                             break;
-                        case "PlayerScale":
-                            float.TryParse(words[1], out this.PlayerScale);
+                        case "PlayerScaleMin":
+                            float.TryParse(words[1], out this.PlayerScaleMin);
+                            break;
+                        case "PlayerScaleMax":
+                            float.TryParse(words[1], out this.PlayerScaleMax);
                             break;
                         case "BackgroundScale":
                             float.TryParse(words[1], out this.BackgroundScale);

@@ -16,9 +16,12 @@ namespace AdventureGame
         /// </summary>
         public Vector2 Position;
         public Vector2 Direction;
+        public Vector2 TargetPoint;
         private bool active = false;
         public float Scale { get; set; }
-        public float RoomScale { get; set; }
+        public float BaseScale { get; set; }
+        public float MaxScale { get; set; }
+        public float MinScale { get; set; }
         public string PlayerTexture;
         public bool Active 
         {
@@ -33,26 +36,27 @@ namespace AdventureGame
         }
         public bool Running { get; set; }
         public bool MovingLeft { get; set; }
+        public bool TargetReached
+        {
+            get
+            {
+                return ((Math.Abs(this.Position.X - this.TargetPoint.X) < 10) &&
+                        (Math.Abs(this.Position.Y - this.TargetPoint.Y) < 10));
+            }
+        }
         public float MoveSpeed { get; set; }
         public float WalkSpeed { get; set; }
         public float RunSpeed { get; set; }
         public int Width
         {
-            get { return PlayerAnimation.FrameWidth; }
+            get { return (int)(this.PlayerAnimation.FrameWidth * this.Scale); }
         }
         public int Height
         {
-            get { return PlayerAnimation.FrameHeight; }
+            get { return (int)(PlayerAnimation.FrameHeight * this.Scale); }
         }
 
         public Player() { }
-
-        public Player(Vector2 startingPositionOnBackground)
-            : this()
-        {
-            this.Position.X = startingPositionOnBackground.X;
-            this.Position.Y = startingPositionOnBackground.Y;
-        }
 
         public void Initialize(Animation animation, Vector2 position)
         {
@@ -106,37 +110,29 @@ namespace AdventureGame
         /// <summary>
         /// Moves player until within a 10 pixel square of the target
         /// </summary>
-        /// <param name="point">Target point</param>
-       
-
-        public bool MoveToPoint(bool startMoving, Vector2 point)
+        public void MoveToTargetPoint()
         {
-            bool targetReached = ((Math.Abs(this.Position.X - point.X) < 10) &&
-                                  (Math.Abs(this.Position.Y - point.Y) < 10));
-
-            if (startMoving && !targetReached)
+            if (!TargetReached)
             {
-                MoveTowardsPoint(point);
+                MoveTowardsTargetPoint();
             }
             else
             {
                 this.Direction = Vector2.Zero;
                 this.Running = false;
             }
-
-            return targetReached;
         }
 
         /// <summary>
         /// Move player towards target point
         /// </summary>
         /// <param name="point">Target point</param>
-        private void MoveTowardsPoint(Vector2 point)
+        public void MoveTowardsTargetPoint()
         {
-            this.Direction.X = point.X - this.Position.X;
-            this.Direction.Y = point.Y - this.Position.Y;
+            this.Direction.X = TargetPoint.X - this.Position.X;
+            this.Direction.Y = TargetPoint.Y - this.Position.Y;
             this.Direction.Normalize();
-
+            
             this.Position += this.Direction * this.MoveSpeed;
         }
 
@@ -156,12 +152,25 @@ namespace AdventureGame
         }
 
         /// <summary>
-        /// Scale player sprite by it's Y relative to the background
+        /// Scale player sprite by it's Y relative to the background (scale = ky + m)
         /// </summary>
-        public void ScalePlayerSprite(Vector2 backgroundVector, int backgroundHeight, float viewportWidth, float smallestScale, float naturalScreenWidth)
+        public void ScalePlayerSprite(Vector2 backgroundVector, int backgroundHeight)
         {
-            this.Scale = this.RoomScale*(((this.Position.Y - backgroundVector.Y) / backgroundHeight + smallestScale)
-                * (viewportWidth / naturalScreenWidth));
+            this.Scale = (this.MaxScale-this.MinScale) * ((this.Position.Y - backgroundVector.Y) / backgroundHeight) + this.MinScale;
+
+            /*
+             //A way to scale differently up and down on the screen, dividingLine == the height at which we want the scaling to change
+             float scaleHeight = ((this.Position.Y - backgroundVector.Y) / backgroundHeight) * backgroundHeight;
+             if(scaleFactor < dividingLine)
+             {
+                this.Scale = (this.BaseScale-this.MinScale) * ((this.Position.Y - backgroundVector.Y) / backgroundHeight) + this.MinScale;
+             }
+             else
+             {
+                this.Scale = (this.MaxScale-this.BaseScale) * ((this.Position.Y - backgroundVector.Y) / backgroundHeight) + this.BaseScale;
+             }
+           */
+
         }
 
         /// <summary>
@@ -169,8 +178,8 @@ namespace AdventureGame
         /// </summary>
         public void ClampPlayer(int viewportWidth, int viewportHeight)
         {
-            this.Position.X = MathHelper.Clamp(Position.X, this.Scale * this.Width / 2, viewportWidth - this.Width * this.Scale / 2);
-            this.Position.Y = MathHelper.Clamp(Position.Y, this.Scale * this.Height / 2, viewportHeight - this.Height * this.Scale / 2);
+            this.Position.X = MathHelper.Clamp(Position.X, this.Width / 2, viewportWidth - this.Width / 2);
+            this.Position.Y = MathHelper.Clamp(Position.Y, this.Height / 2, viewportHeight - this.Height / 2);
 
         }
 
