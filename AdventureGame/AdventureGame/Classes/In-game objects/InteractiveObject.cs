@@ -46,6 +46,8 @@ namespace AdventureGame
             return Observation.StartConversation();
         }
 
+        public virtual void Interact() { }
+
         public virtual void Initialize() 
         {
             if (FileName != "")

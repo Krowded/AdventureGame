@@ -17,7 +17,7 @@ namespace AdventureGame
             this.FileName = fileName;
         }
 
-        public void TalkTo()
+        public override void Interact()
         {
             Dialogue.StartConversation();
         }
