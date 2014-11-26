@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Storage;
-using System;
 using System.Collections.Generic;
 #endregion
 
