@@ -17,6 +17,7 @@ namespace AdventureGame
         //Window  and graphics managing
         GraphicsDeviceManager Graphics;
         SpriteBatch spriteBatch;
+        SpriteFont font;
 
         //The size for which the game is programmed (consistency important for scaling)
         const int NaturalScreenWidth = 1920;
@@ -24,11 +25,15 @@ namespace AdventureGame
 
         float WindowScale;
 
+        const string Font = "TestFont1";
+
         //The current room, where most is loaded from
         Room CurrentRoom;
+        const string StartingRoom = @"Content/TextContent/Rooms/Room1.txt";
 
         //Player
         Player player;
+        const string PlayerFile = @"Content/TextContent/Player/Player.txt";
 
         //Mousehandling variables
         InputHandling InputHandler = new InputHandling();
@@ -57,8 +62,6 @@ namespace AdventureGame
         List<Door> doors = new List<Door>();
         List<InteractiveObject> Collidables = new List<InteractiveObject>();
         List<InteractiveObject> AllThings = new List<InteractiveObject>();
-        List<InteractiveObject> BackgroundThings = new List<InteractiveObject>();
-        List<InteractiveObject> ForegroundThings = new List<InteractiveObject>();
 
         public AdventureGame()
             : base()
@@ -87,8 +90,8 @@ namespace AdventureGame
             //???
 
             //Initialize player variables
-            player = new Player();
-            player.ParseTextFile(@"Content/TextContent/Player/Player.txt");
+            player = new Player(PlayerFile);
+            player.ParseTextFile();
 
             //Probably Room dependent
             player.RunSpeed = GraphicsDevice.Viewport.Width / 240;
@@ -124,6 +127,7 @@ namespace AdventureGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>(Font);
 
             // TODO: use this.Content to load your game content here
             
@@ -133,7 +137,7 @@ namespace AdventureGame
             playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, player.Scale, true);
             player.Initialize(playerAnimation, player.Position);
 
-            LoadNewRoom(new Room(@"Content/TextContent/Rooms/Room1.txt"));
+            LoadNewRoom(new Room(StartingRoom));
         }
 
         /// <summary>
@@ -179,7 +183,7 @@ namespace AdventureGame
             }
         }
 
-        /// Loads
+        // Load methods
         private void LoadNewRoom(Room newRoom)
         {
             //Initialize new room
@@ -199,7 +203,6 @@ namespace AdventureGame
             AllThings.AddRange(items);
             AllThings.AddRange(npcs);
             AllThings.AddRange(doors);
-            LoadBackgroundAndForegroundThings();
             LoadCollidables();
             foreach (InteractiveObject thing in AllThings)
             {
@@ -248,20 +251,6 @@ namespace AdventureGame
                 npcs.Add(npc);
             }
         }
-        private void LoadBackgroundAndForegroundThings() 
-        {
-            foreach (InteractiveObject thing in AllThings)
-            {
-                if (thing.Foreground)
-                {
-                    ForegroundThings.Add(thing);
-                }
-                else
-                {
-                    BackgroundThings.Add(thing);
-                }
-            }
-        }
         private void LoadCollidables()
         {
             foreach (InteractiveObject thing in AllThings)
@@ -282,6 +271,7 @@ namespace AdventureGame
             // TODO: Unload any non ContentManager content here
         }
 
+        // Updater methods
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -302,7 +292,6 @@ namespace AdventureGame
             UpdateAllThings(gameTime); //Does nothing
             base.Update(gameTime);
         }
-
         /// <summary>
         /// Updates the player character
         /// </summary>
@@ -343,7 +332,6 @@ namespace AdventureGame
             player.ClampPlayer(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);    
             player.Update(gameTime);        
         }     
-
         /// <summary>
         /// Updates all NPCs, Items and Doors
         /// </summary>
@@ -351,7 +339,6 @@ namespace AdventureGame
         private void UpdateAllThings(GameTime gameTime)
         {
         }
-
         /// <summary>
         /// Takes care of scrolling
         /// </summary>
@@ -395,19 +382,33 @@ namespace AdventureGame
                 SpriteEffects.None, 0);
 
             //Draw all background things in the room
-            DrawInteractiveObjects(BackgroundThings);
-
+            foreach (InteractiveObject thing in AllThings)
+            {
+                if (!thing.Foreground)
+                {
+                    thing.Draw(spriteBatch);
+                }
+            }
+            
             //Draw player
             player.Draw(spriteBatch);
 
             //Draw all foreground things
-            DrawInteractiveObjects(ForegroundThings);
-
+            foreach (InteractiveObject thing in AllThings)
+            {
+                if (thing.Foreground)
+                {
+                    thing.Draw(spriteBatch);
+                }
+            }
+            
             if (InputHandler.RevealkeyPressed())
             {
                 DrawInteractiveSymbol();
             }
 
+            spriteBatch.DrawString(font, "TESTINGTESTINGTESTING", player.Position, Color.Blue);
+            
             //End
             spriteBatch.End();
             base.Draw(gameTime);
@@ -423,7 +424,6 @@ namespace AdventureGame
                 thing.Draw(spriteBatch);
             }
         }
-
         /// <summary>
         /// Draws a symbol to mark anything interactable (to prevent pixelhunting problems)
         /// </summary>

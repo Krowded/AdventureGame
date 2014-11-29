@@ -10,6 +10,7 @@ namespace AdventureGame
 {
     class Player
     {
+        private string FileName { get; set; }
         public Animation PlayerAnimation;
         /// <summary>
         /// The coordinates of the middle of the player sprite
@@ -56,7 +57,7 @@ namespace AdventureGame
             get { return (int)(PlayerAnimation.FrameHeight * this.Scale); }
         }
 
-        public Player() { }
+        public Player(string playerFile) { FileName = playerFile; }
 
         public void Initialize(Animation animation, Vector2 position)
         {
@@ -73,7 +74,7 @@ namespace AdventureGame
             PlayerAnimation.Update(gameTime);
         }
 
-        public void ParseTextFile(string FileName)
+        public void ParseTextFile()
         {
             StreamReader file = new StreamReader(FileName);
             {

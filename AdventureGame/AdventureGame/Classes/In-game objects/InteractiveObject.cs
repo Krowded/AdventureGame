@@ -41,12 +41,14 @@ namespace AdventureGame
         private int collidableAreaRightSide = 0;
         public float CollidableAreaRightSide { get { return this.Position.X + this.Width + collidableAreaRightSide; } }
 
-        public string LookAt()
+        public virtual string LookAt()
         {
             return Observation.StartConversation();
         }
 
         public virtual void Interact() { }
+
+        public virtual void Interact(InteractiveObject item) { }
 
         public virtual void Initialize() 
         {

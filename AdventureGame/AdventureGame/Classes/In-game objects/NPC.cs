@@ -22,8 +22,12 @@ namespace AdventureGame
             Dialogue.StartConversation();
         }
 
-        public void activateAnimation(string animationChoice) { }
+        public override void Interact(InteractiveObject item)
+        {
+            base.Interact(item);
+        }
 
+        public void activateAnimation(string animationChoice) { }
 
         protected override void ParseTextFile()
         {

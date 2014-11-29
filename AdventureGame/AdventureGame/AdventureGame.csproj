@@ -49,6 +49,7 @@
     <Compile Include="Classes\In-game objects\Room.cs" />
     <Compile Include="Classes\Main\AdventureGame.cs" />
     <Compile Include="Classes\Main\Program.cs" />
+    <Compile Include="Classes\Visuals and movement\Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Input and output %28non-visual%29\SaveAndLoad.cs" />
     <Compile Include="Classes\Visuals and movement\Scrolling.cs" />
@@ -83,6 +84,9 @@
     <Content Include="Content\TextContent\Rooms\RoomFileTemplate.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\TestFont1.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Visuals\In-Game Objects\Doors\door.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

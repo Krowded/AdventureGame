@@ -20,7 +20,7 @@ namespace AdventureGame
             this.FileName = fileName;
         }
 
-        public Room EnterDoor()
+        public override void Interact()
         {
             string passageGranted = "true";
             if (Dialogue != null)
@@ -30,11 +30,11 @@ namespace AdventureGame
 
             if (passageGranted == "true")
             {
-                return Destination;
+                //return Destination;
             }
             else
             {
-                return null;
+                //return null;
             }
         }
 

@@ -17,6 +17,13 @@ namespace AdventureGame
             this.FileName = fileName;
         }
 
+        public override void Interact()
+        {
+            base.Interact();
+        }
+
+        public override void Interact(InteractiveObject item) { }
+
         public Item Combine(Item otherItem)
         {
             int line = FindCombination(this.Name, otherItem.Name);
