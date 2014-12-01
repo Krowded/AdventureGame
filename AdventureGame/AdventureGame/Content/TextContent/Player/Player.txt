@@ -1,1 +1,1 @@
-﻿PlayerTexture:Visuals/In-Game Objects/Player/player
+﻿PlayerTexture:running

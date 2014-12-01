@@ -134,7 +134,7 @@ namespace AdventureGame
             //Initialize the player
             Animation playerAnimation = new Animation();
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
-            playerAnimation.Initialize(playerTexture, Vector2.Zero, 115, 69, 1, 30, Color.White, player.Scale, true);
+            playerAnimation.Initialize(playerTexture, Vector2.Zero, 122, 138, 29, 30, Color.White, player.Scale, true);
             player.Initialize(playerAnimation, player.Position);
 
             LoadNewRoom(new Room(StartingRoom));

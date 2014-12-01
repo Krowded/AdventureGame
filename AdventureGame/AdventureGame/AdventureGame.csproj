@@ -35,6 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classes\Main\Menu.cs" />
     <Compile Include="Classes\Visuals and movement\Animation.cs" />
     <Compile Include="Classes\Visuals and movement\Collision.cs" />
     <Compile Include="Classes\Dialogue\DialogueTree.cs" />
@@ -84,6 +85,9 @@
     <Content Include="Content\TextContent\Rooms\RoomFileTemplate.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\running.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\TestFont1.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
