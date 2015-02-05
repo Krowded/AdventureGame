@@ -53,7 +53,7 @@ namespace AdventureGame
         int BackgroundWidth = 1920;
         int BackgroundHeight = 1080;
 
-        //The symbol for interactives
+        //The symbol for marking interactives
         Texture2D InteractiveSymbol;
 
         //Lists of interactables in the room
@@ -309,7 +309,9 @@ namespace AdventureGame
                 {
                     if (Vector2.Distance(player.Position, thing.MidPointPosition) < thing.DistanceToInteract)
                     {
-                        thing.LookAt();
+                        if (thing is Door)
+                        {
+                        }
                     }
                     else
                     {

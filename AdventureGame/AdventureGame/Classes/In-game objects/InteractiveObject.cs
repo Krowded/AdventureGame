@@ -131,5 +131,17 @@ namespace AdventureGame
             spriteBatch.Draw(this.Texture, this.Position, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, 0f);
         }
 
+        public virtual void Save()
+        {
+            System.IO.File.WriteAllText("Savefiles/Current/" + Name + ".sav", "test");
+        }
+
+
+        //Does this call the correct ParseTextFile()?
+        public virtual void Load()
+        {
+            FileName = SaveHandler.CurrentSave;
+            ParseTextFile();
+        }
     }
 }

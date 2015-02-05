@@ -10,7 +10,8 @@ namespace AdventureGame
     class Room
     {
         private string FileName { get; set; }
-
+        
+        public string Name { get; set; }
         public string[] BackgroundImages { get; set; }
         public string[] ForegroundImages { get; set; }
         public string Background;
@@ -53,7 +54,7 @@ namespace AdventureGame
             }
         }
 
-        private  void ParseTextFile()
+        private void ParseTextFile()
         {
             StreamReader file = new StreamReader(FileName);
             {
@@ -63,6 +64,9 @@ namespace AdventureGame
                     string[] words = line.Split(':');
                     switch (words[0])
                     {
+                        case "Name":
+                            this.Name = words[1];
+                            break;
                         case "Background":
                             this.Background = words[1];
                             break;
@@ -100,6 +104,43 @@ namespace AdventureGame
                     }
                 }
             }
+        }
+
+        public void Save()
+        {
+            foreach (NPC npc in NPCs)
+            {
+                npc.Save();
+            }
+            foreach (Door door in Doors)
+            {
+                door.Save();
+            }
+            foreach (Item item in Items)
+            {
+                item.Save();
+            }
+
+            System.IO.File.WriteAllText(SaveHandler.CurrentSave + Name + ".sav", "test");
+        }
+
+        public void Load()
+        {
+            foreach (NPC npc in NPCs)
+            {
+                npc.Load();
+            }
+            foreach (Door door in Doors)
+            {
+                door.Load();
+            }
+            foreach (Item item in Items)
+            {
+                item.Load();
+            }
+
+            FileName = SaveHandler.CurrentSave;
+            ParseTextFile();
         }
     }
 }
