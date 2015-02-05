@@ -213,8 +213,9 @@ namespace AdventureGame
         /// Perform the scroll
         /// </summary>
         /// <param name="scrollDirection">Opposite of player direction</param>
-        public void Scroll(ref Vector2 backgroundPosition, ref Vector2 mousePosition)
+        public void Scroll(ref Vector2 backgroundPosition, ref Vector2 mousePosition, Player player)
         {
+            player.StillScrollingX = false;
             //X-axis
             if ((ScrollingLeft || ScrollingRight) && !ClampedX)
             {
@@ -225,6 +226,7 @@ namespace AdventureGame
             {
                 backgroundPosition.X += ScrollDirection.X * ScrollSpeed;
                 mousePosition.X += ScrollDirection.X * ScrollSpeed;
+                player.StillScrollingX = true;
             }
             
             //Y-axis

@@ -11,13 +11,17 @@ namespace AdventureGame
     class Player
     {
         private string FileName { get; set; }
-        public Animation PlayerAnimation;
+        public Animation RunningAnimation = new Animation();
+        public Animation WalkingAnimation = new Animation();
+        public Animation StandingAnimation = new Animation();
+        private Animation CurrentAnimation = new Animation();
         /// <summary>
         /// The coordinates of the middle of the player sprite
         /// </summary>
         public Vector2 Position;
         public Vector2 Direction;
         public Vector2 TargetPoint;
+        public bool StillScrollingX = false;
         private bool active = false;
         public float Scale { get; set; }
         public float BaseScale { get; set; }
@@ -50,28 +54,29 @@ namespace AdventureGame
         public float RunSpeed { get; set; }
         public int Width
         {
-            get { return (int)(this.PlayerAnimation.FrameWidth * this.Scale); }
+            get { return (int)(this.CurrentAnimation.FrameWidth * this.Scale); }
         }
         public int Height
         {
-            get { return (int)(PlayerAnimation.FrameHeight * this.Scale); }
+            get { return (int)(this.CurrentAnimation.FrameHeight * this.Scale); }
         }
 
         public Player(string playerFile) { FileName = playerFile; }
 
-        public void Initialize(Animation animation, Vector2 position)
+        public void Initialize(Texture2D texture, Vector2 position)
         {
-            PlayerAnimation = animation;
+            RunningAnimation.Initialize(texture, Vector2.Zero, 122, 138, 29, 30, Color.White, this.Scale, true);
             Position = position;
             Active = true;
+            CurrentAnimation = RunningAnimation;
         }
 
         public void Update(GameTime gameTime)
         {
             SetPlayerSpriteDirection();
             UpdateMoveSpeed();
-            PlayerAnimation.Position = Position;
-            PlayerAnimation.Update(gameTime);
+            CurrentAnimation.Position = Position;
+            CurrentAnimation.Update(gameTime);
         }
 
         public void ParseTextFile()
@@ -100,11 +105,11 @@ namespace AdventureGame
         {
             if (MovingLeft)
             {
-                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.FlipHorizontally);
+                CurrentAnimation.Draw(spriteBatch, Scale, SpriteEffects.FlipHorizontally);
             }
             else
             {
-                PlayerAnimation.Draw(spriteBatch, Scale, SpriteEffects.None);
+                CurrentAnimation.Draw(spriteBatch, Scale, SpriteEffects.None);
             }
         }
 
@@ -142,13 +147,16 @@ namespace AdventureGame
         /// </summary>
         private void SetPlayerSpriteDirection()
         {
-            if (this.Direction.X < 0)
+            if (!StillScrollingX)
             {
-                this.MovingLeft = true;
-            }
-            else if (this.Direction.X > 0)
-            {
-                this.MovingLeft = false;
+                if (this.Direction.X < 0)
+                {
+                    this.MovingLeft = true;
+                }
+                else if (this.Direction.X > 0)
+                {
+                    this.MovingLeft = false;
+                }
             }
         }
 

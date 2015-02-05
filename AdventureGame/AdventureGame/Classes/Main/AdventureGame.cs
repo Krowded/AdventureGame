@@ -91,7 +91,6 @@ namespace AdventureGame
 
             //Initialize player variables
             player = new Player(PlayerFile);
-            player.ParseTextFile();
 
             //Probably Room dependent
             player.RunSpeed = GraphicsDevice.Viewport.Width / 240;
@@ -132,10 +131,9 @@ namespace AdventureGame
             // TODO: use this.Content to load your game content here
             
             //Initialize the player
-            Animation playerAnimation = new Animation();
+            player.ParseTextFile();
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
-            playerAnimation.Initialize(playerTexture, Vector2.Zero, 122, 138, 29, 30, Color.White, player.Scale, true);
-            player.Initialize(playerAnimation, player.Position);
+            player.Initialize(playerTexture, player.Position);
 
             LoadNewRoom(new Room(StartingRoom));
         }
@@ -347,7 +345,7 @@ namespace AdventureGame
         {
             Scroller.UpdateScrollingVariables(player);
             Scroller.UpdateStillScrollingDirection(player);
-            Scroller.Scroll(ref BackgroundPosition, ref InputHandler.MousePosition);
+            Scroller.Scroll(ref BackgroundPosition, ref InputHandler.MousePosition, player); //UGLY!!!
             Scroller.BackgroundClamp(ref BackgroundPosition, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
             Scroller.CompensateForScrolling(player);
 
