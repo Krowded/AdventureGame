@@ -206,5 +206,8 @@ namespace AdventureGame
                 this.MoveSpeed = this.WalkSpeed;
             }
         }
+
+        public void Save() { }
+        public void Load() { }
     }
 }

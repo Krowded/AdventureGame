@@ -8,12 +8,12 @@ namespace AdventureGame
 {
     static class SaveHandler
     {
-        public static string CurrentSave = "Savefiles/Current/";
+        public static string CurrentSavePath = "Savefiles/Current/";
         public static string SaveDirectory = "Savefiles/Savegames/";
 
         public static void Save(string savename)
         {
-            string[] filePaths = Directory.GetFiles(CurrentSave);
+            string[] filePaths = Directory.GetFiles(CurrentSavePath);
 
             DeleteDirectory(savename);
 
@@ -23,6 +23,16 @@ namespace AdventureGame
             {
                 File.Move(filePath, SaveDirectory + savename);
             }
+        }
+
+        public static List<string> GetSavegames()
+        {
+            List<string> list = new List<string>();
+            foreach (string str in Directory.GetDirectories(SaveDirectory))
+            {
+                list.Add(Path.GetDirectoryName(str));
+            }
+            return list;
         }
 
         private static void CreateDirectory(string savename)
@@ -41,7 +51,7 @@ namespace AdventureGame
 
         public static void DeleteCurrent()
         {
-            string[] filePaths = Directory.GetFiles(CurrentSave);
+            string[] filePaths = Directory.GetFiles(CurrentSavePath);
             foreach (string filePath in filePaths)
             {
                 DeleteFile(filePath);
@@ -53,9 +63,9 @@ namespace AdventureGame
             File.Delete(filePath);
         }
 
-        public static List<string> GetSaveFiles()
+        public static List<string> GetSaveFiles(string savename)
         {
-            string[] filePaths = Directory.GetDirectories(SaveDirectory);
+            string[] filePaths = Directory.GetDirectories(SaveDirectory + savename);
             List<string> list = new List<string>();
             foreach (string str in filePaths)
             {
@@ -67,10 +77,10 @@ namespace AdventureGame
         public static void Load(string savename)
         {
             DeleteCurrent();
-            foreach (string file in GetSaveFiles())
+            foreach (string file in GetSaveFiles(savename))
             {
                 string fileName = Path.GetFileName(file);
-                string destinationFile = Path.Combine(CurrentSave, fileName);
+                string destinationFile = Path.Combine(CurrentSavePath, fileName);
                 File.Copy(file, destinationFile);
             }
         }

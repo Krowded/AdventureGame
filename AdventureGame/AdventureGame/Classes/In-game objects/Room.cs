@@ -9,7 +9,8 @@ namespace AdventureGame
 {
     class Room
     {
-        private string FileName { get; set; }
+        private string StartingFilePath { get; set; }
+        private string CurrentFilePath { get; set; }
         
         public string Name { get; set; }
         public string[] BackgroundImages { get; set; }
@@ -27,12 +28,20 @@ namespace AdventureGame
         
         public Room(string roomInformationFile)
         {
-            this.FileName = roomInformationFile;
+            this.StartingFilePath = roomInformationFile;
         }
 
         public void Initialize()
         {
-            ParseTextFile();
+            CurrentFilePath = SaveHandler.CurrentSavePath + Path.GetFileName(StartingFilePath);
+            if (File.Exists(CurrentFilePath))
+            {
+                ParseTextFile(CurrentFilePath);
+            }
+            else
+            {
+                ParseTextFile(StartingFilePath);
+            }
             InitializeLists();           
         }
 
@@ -54,9 +63,9 @@ namespace AdventureGame
             }
         }
 
-        private void ParseTextFile()
+        private void ParseTextFile(string filePath)
         {
-            StreamReader file = new StreamReader(FileName);
+            StreamReader file = new StreamReader(filePath);
             {
                 string line;
                 while ((line = file.ReadLine()) != null)
@@ -99,7 +108,7 @@ namespace AdventureGame
                             break;
                         default:
                             {
-                                throw new InvalidOperationException("Text file error in " + FileName);
+                                throw new InvalidOperationException("Text file error in " + filePath);
                             }
                     }
                 }
@@ -121,26 +130,32 @@ namespace AdventureGame
                 item.Save();
             }
 
-            System.IO.File.WriteAllText(SaveHandler.CurrentSave + Name + ".sav", "test");
-        }
+            try
+            {
+                File.Delete(CurrentFilePath);   
+            }
+            catch {}
 
-        public void Load()
-        {
-            foreach (NPC npc in NPCs)
+            File.AppendAllText(CurrentFilePath, "Name:" + this.Name + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Background:" + this.Background + Environment.NewLine);
+            foreach(Door door in Doors)
             {
-                npc.Load();
+                File.AppendAllText(CurrentFilePath, "Door:" + door.StartingFilePath + Environment.NewLine);
             }
-            foreach (Door door in Doors)
+            foreach(NPC npc in NPCs)
             {
-                door.Load();
+                File.AppendAllText(CurrentFilePath, "NPC:" + npc.StartingFilePath + Environment.NewLine);
             }
-            foreach (Item item in Items)
+            foreach(Item item in Items)
             {
-                item.Load();
+                File.AppendAllText(CurrentFilePath, "Item:" + item.StartingFilePath + Environment.NewLine);
             }
-
-            FileName = SaveHandler.CurrentSave;
-            ParseTextFile();
+            File.AppendAllText(CurrentFilePath, "PlayerStartingXOnBackground:" + PlayerStartingPosition.X + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PlayerStartingYOnBackground:" + PlayerStartingPosition.Y + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PlayerScaleBase:" + PlayerScaleBase + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PlayerScaleMin:" + PlayerScaleMin + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PlayerScaleMax:" + PlayerScaleMax + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "BackgroundScale:" + BackgroundScale + Environment.NewLine);
         }
     }
 }

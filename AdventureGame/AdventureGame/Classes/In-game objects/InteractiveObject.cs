@@ -11,7 +11,8 @@ namespace AdventureGame
     public class InteractiveObject
     {
         //Base file
-        public string FileName { get; set; }
+        public string StartingFilePath { get; set; }
+        public string CurrentFilePath { get; set; }
 
         //Appearance
         public string Name { get; set; }
@@ -52,19 +53,25 @@ namespace AdventureGame
 
         public virtual void Initialize() 
         {
-            if (FileName != "")
+            CurrentFilePath = SaveHandler.CurrentSavePath + Path.GetFileName(StartingFilePath);
+            if (File.Exists(CurrentFilePath))
             {
-                ParseTextFile();
+                ParseTextFile(CurrentFilePath);
+            }
+            else if (StartingFilePath != "")
+            {
+                ParseTextFile(StartingFilePath);
             }
             else
             {
                 throw new ArgumentException("FileName can not be empty");
             }
+
         }
 
-        protected virtual void ParseTextFile()
+        protected virtual void ParseTextFile(string filePath)
         {
-            StreamReader file = new StreamReader(FileName);
+            StreamReader file = new StreamReader(filePath);
             {
                 string line;
                 float scale = 0;
@@ -133,15 +140,20 @@ namespace AdventureGame
 
         public virtual void Save()
         {
-            System.IO.File.WriteAllText("Savefiles/Current/" + Name + ".sav", "test");
+            File.Delete(CurrentFilePath);
+            File.AppendAllText(CurrentFilePath, "PositionX:" + Position.X + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PositionY:" + Position.Y + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Observation:" + Observation.StartingFilePath + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Name:" + Name + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Image:" + Image + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Scale:" + Scale + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Collidable:" + Collidable + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Foreground:" + Foreground + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "CollidableAreaTop:" + collidableAreaTop + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "CollidableAreaBottom" + collidableAreaBottom+ Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "CollidableAreaLeftSide" + collidableAreaLeftSide + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "CollidableAreaRightSide" + collidableAreaRightSide + Environment.NewLine);
         }
 
-
-        //Does this call the correct ParseTextFile()?
-        public virtual void Load()
-        {
-            FileName = SaveHandler.CurrentSave;
-            ParseTextFile();
-        }
     }
 }

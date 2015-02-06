@@ -15,9 +15,9 @@ namespace AdventureGame
         public Room Destination { get; set; }
         public string PartnerDoorName { get; set; }
         
-        public Door(string fileName)
+        public Door(string filePath)
         {
-            this.FileName = fileName;
+            this.StartingFilePath = filePath;
         }
 
         public override void Interact()
@@ -38,10 +38,10 @@ namespace AdventureGame
             }
         }
 
-        protected override void ParseTextFile()
+        protected override void ParseTextFile(string filePath)
         {
-            base.ParseTextFile();
-            StreamReader file = new StreamReader(FileName);
+            base.ParseTextFile(filePath);
+            StreamReader file = new StreamReader(filePath);
             {
                 string line;
                 while ((line = file.ReadLine()) != null)
@@ -67,7 +67,7 @@ namespace AdventureGame
         public override void Save()
         {
             base.Save();
-            System.IO.File.AppendAllText(SaveHandler.CurrentSave + Name + ".sav", "test");
+            System.IO.File.AppendAllText(SaveHandler.CurrentSavePath + Name + ".sav", "test");
         }
     }
 }

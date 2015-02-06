@@ -7,5 +7,8 @@ namespace AdventureGame
 {
     class Inventory
     {
+        public void Save() { }
+        public void Load() { }
+
     }
 }

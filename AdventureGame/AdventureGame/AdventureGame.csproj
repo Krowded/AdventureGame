@@ -66,6 +66,9 @@
     <Content Include="Content\TextContent\Doors\Door1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\TextContent\Items\CombinationDialogue.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\TextContent\Items\Item1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -88,7 +91,7 @@
     <None Include="Content\running.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\TestFont1.xnb">
+    <None Include="Savefiles\TestFont1.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Visuals\In-Game Objects\Doors\door.xnb">

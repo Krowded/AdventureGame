@@ -7,14 +7,48 @@ namespace AdventureGame
 {
     public class DialogueTree
     {
+        public string StartingFilePath { get; set; }
+        public string CurrentFilePath { get; set; }
         public string StatementsFile { get; set; }
         public string AnswersFile { get; set; }
         public int LastStatement { get; set; }
 
-        public DialogueTree(string statements, string answers = null)
+        public DialogueTree(string filePath)
         {
-            StatementsFile = statements;
-            AnswersFile = answers;
+            if (filePath != "")
+            {
+                StartingFilePath = filePath;
+                CurrentFilePath = SaveHandler.CurrentSavePath + System.IO.Path.GetFileName(StartingFilePath);
+                if (System.IO.File.Exists(CurrentFilePath))
+                {
+                    ParseTextFile(CurrentFilePath);
+                }
+                else
+                {
+                    ParseTextFile(StartingFilePath);
+                }
+            }
+        }
+
+        private void ParseTextFile(string filePath)
+        {
+            System.IO.StreamReader file = new System.IO.StreamReader(filePath);
+            {
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] words = line.Split(':');
+                    switch (words[0])
+                    {
+                        case "Answers":
+                            AnswersFile = words[1];
+                            break;
+                        case "Statements":
+                            StatementsFile = words[1];
+                            break;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -72,5 +106,7 @@ namespace AdventureGame
             string[] linesOfText = null;
             return linesOfText;
         }
+
+        public void Save() { }
     }
 }

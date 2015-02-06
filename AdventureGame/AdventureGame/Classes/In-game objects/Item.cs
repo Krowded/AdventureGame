@@ -10,11 +10,11 @@ namespace AdventureGame
 {
     class Item : InteractiveObject
     {
-        static readonly DialogueTree CombinationDialogue = new DialogueTree("TextContent/Items/CombinationDialogue.txt");
+        static readonly DialogueTree CombinationDialogue = new DialogueTree("Content/TextContent/Items/CombinationDialogue.txt");
 
-        public Item(string fileName)
+        public Item(string filePath)
         {
-            this.FileName = fileName;
+            this.StartingFilePath = filePath;
         }
 
         public override void Interact()
@@ -39,7 +39,7 @@ namespace AdventureGame
         public override void Save()
         {
             base.Save();
-            System.IO.File.AppendAllText(SaveHandler.CurrentSave + Name + ".sav", "test");
+            System.IO.File.AppendAllText(SaveHandler.CurrentSavePath + Name + ".sav", "test");
         }
     }
 }

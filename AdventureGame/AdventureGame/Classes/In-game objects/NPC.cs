@@ -12,9 +12,9 @@ namespace AdventureGame
     {
         public DialogueTree Dialogue { get; set; }
 
-        public NPC(string fileName)
+        public NPC(string filePath)
         {
-            this.FileName = fileName;
+            this.StartingFilePath = filePath;
         }
 
         public override void Interact()
@@ -29,10 +29,10 @@ namespace AdventureGame
 
         public void activateAnimation(string animationChoice) { }
 
-        protected override void ParseTextFile()
+        protected override void ParseTextFile(string filePath)
         {
-            base.ParseTextFile();
-            StreamReader file = new StreamReader(FileName);
+            base.ParseTextFile(filePath);
+            StreamReader file = new StreamReader(filePath);
             {
                 string line;
                 while ((line = file.ReadLine()) != null)
@@ -51,7 +51,7 @@ namespace AdventureGame
         public override void Save()
         {
             base.Save();
-            System.IO.File.AppendAllText(SaveHandler.CurrentSave + Name + ".sav", "test");
+            Dialogue.Save();
         }
     }
 }
