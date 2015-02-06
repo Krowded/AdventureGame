@@ -91,7 +91,7 @@
     <None Include="Content\running.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Savefiles\TestFont1.xnb">
+    <None Include="Content\TestFont1.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Visuals\In-Game Objects\Doors\door.xnb">
