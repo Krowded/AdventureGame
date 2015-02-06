@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Storage;
 using System.Collections.Generic;
+using System.IO;
 #endregion
 
 namespace AdventureGame
@@ -26,6 +27,8 @@ namespace AdventureGame
         float WindowScale;
 
         const string Font = "TestFont1";
+
+        private static string CurrentFilePath = SaveHandler.CurrentSavePath + "game.sav";
 
         //The current room, where most is loaded from
         Room CurrentRoom;
@@ -80,6 +83,11 @@ namespace AdventureGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            /////////////////////////////////////FIX//////////////////////////////////////////////////////////////77
+            if (File.Exists(CurrentFilePath))
+            {
+                ParseTextFile(CurrentFilePath);
+            }
 
             //Initialize mouse
             InputHandler.Begin = false;
@@ -90,7 +98,7 @@ namespace AdventureGame
             //???
 
             //Initialize player variables
-            player = new Player(PlayerFile);
+            player = new Player();
 
             //Probably Room dependent
             player.RunSpeed = GraphicsDevice.Viewport.Width / 240;
@@ -131,12 +139,25 @@ namespace AdventureGame
             // TODO: use this.Content to load your game content here
             
             //Initialize the player
-            player.ParseTextFile();
+            player.ParseTextFile(PlayerFile);
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
             player.Initialize(playerTexture, player.Position);
 
             LoadNewRoom(new Room(StartingRoom));
         }
+
+        ////////////Needs expansion
+        public void SaveProgress()
+        {
+            player.Save();
+            CurrentRoom.Save();
+            SaveHandler.DeleteFile(CurrentFilePath);
+            File.AppendAllText(CurrentFilePath, "CurrentRoom:" + CurrentRoom.StartingFilePath + System.Environment.NewLine);
+        }
+        public void SaveSettings() { }
+
+        //Used to load stuff from text files
+        private void ParseTextFile(string filePath) { }
 
         /// <summary>
         /// Makes the background match player starting coordinates

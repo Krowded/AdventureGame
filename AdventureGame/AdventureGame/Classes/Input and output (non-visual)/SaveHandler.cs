@@ -9,7 +9,7 @@ namespace AdventureGame
     static class SaveHandler
     {
         public static string CurrentSavePath = "Savefiles/Current/";
-        public static string SaveDirectory = "Savefiles/Savegames/";
+        private static string SaveDirectory = "Savefiles/Savegames/";
 
         public static void Save(string savename)
         {
@@ -25,12 +25,13 @@ namespace AdventureGame
             }
         }
 
+        //To display alternatives when loading/overwriting
         public static List<string> GetSavegames()
         {
             List<string> list = new List<string>();
-            foreach (string str in Directory.GetDirectories(SaveDirectory))
+            foreach (string directory in Directory.GetDirectories(SaveDirectory))
             {
-                list.Add(Path.GetDirectoryName(str));
+                list.Add(Path.GetDirectoryName(directory));
             }
             return list;
         }
@@ -63,7 +64,7 @@ namespace AdventureGame
             File.Delete(filePath);
         }
 
-        public static List<string> GetSaveFiles(string savename)
+        private static List<string> GetSaveFiles(string savename)
         {
             string[] filePaths = Directory.GetDirectories(SaveDirectory + savename);
             List<string> list = new List<string>();

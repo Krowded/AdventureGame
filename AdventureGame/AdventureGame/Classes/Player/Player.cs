@@ -10,7 +10,6 @@ namespace AdventureGame
 {
     class Player
     {
-        private string FileName { get; set; }
         public Animation RunningAnimation = new Animation();
         public Animation WalkingAnimation = new Animation();
         public Animation StandingAnimation = new Animation();
@@ -61,14 +60,21 @@ namespace AdventureGame
             get { return (int)(this.CurrentAnimation.FrameHeight * this.Scale); }
         }
 
-        public Player(string playerFile) { FileName = playerFile; }
+        public Player() {}
 
         public void Initialize(Texture2D texture, Vector2 position)
         {
-            RunningAnimation.Initialize(texture, Vector2.Zero, 122, 138, 29, 30, Color.White, this.Scale, true);
-            Position = position;
-            Active = true;
-            CurrentAnimation = RunningAnimation;
+            if (File.Exists(SaveHandler.CurrentSavePath + "player.sav"))
+            {
+                ParseTextFile(SaveHandler.CurrentSavePath + "player.sav");
+            }
+            else
+            {
+                RunningAnimation.Initialize(texture, Vector2.Zero, 122, 138, 29, 30, Color.White, this.Scale, true);
+                Position = position;
+                Active = true;
+                CurrentAnimation = RunningAnimation;
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -79,9 +85,9 @@ namespace AdventureGame
             CurrentAnimation.Update(gameTime);
         }
 
-        public void ParseTextFile()
+        public void ParseTextFile(string filePath)
         {
-            StreamReader file = new StreamReader(FileName);
+            StreamReader file = new StreamReader(filePath);
             {
                 string line;
                 while ((line = file.ReadLine()) != null)
@@ -94,7 +100,7 @@ namespace AdventureGame
                             break;
                         default:
                             {
-                                throw new InvalidOperationException("Text file error in " + FileName);
+                                throw new InvalidOperationException("Text file error in " + filePath);
                             }
                     }
                 }
@@ -207,7 +213,26 @@ namespace AdventureGame
             }
         }
 
-        public void Save() { }
-        public void Load() { }
+        public void Save() 
+        { 
+            string CurrentFilePath = SaveHandler.CurrentSavePath + "player.sav";
+            SaveHandler.DeleteFile(CurrentFilePath);
+            File.AppendAllText(CurrentFilePath, "DirectionX:" + Direction.X + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "DirectionY:" + Direction.Y + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "TargetPointX:" + TargetPoint.X + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "TargetPointY:" + TargetPoint.Y + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "StillScrollingX" + StillScrollingX + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "active:" + active + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Scale:" + Scale + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "BaseScale:" + BaseScale + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "MaxScale:" + MaxScale + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "MinScale:" + MinScale + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PlayerTexture:" + PlayerTexture + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Running:" + Running + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "MovingLeft" + MovingLeft + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "MoveSpeed:" + MoveSpeed + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "WalkSpeed:" + WalkSpeed + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "MoveSpeed:" + RunSpeed + Environment.NewLine);
+        }
     }
 }

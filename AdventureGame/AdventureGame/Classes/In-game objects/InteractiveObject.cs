@@ -140,7 +140,7 @@ namespace AdventureGame
 
         public virtual void Save()
         {
-            File.Delete(CurrentFilePath);
+            SaveHandler.DeleteFile(CurrentFilePath);
             File.AppendAllText(CurrentFilePath, "PositionX:" + Position.X + Environment.NewLine);
             File.AppendAllText(CurrentFilePath, "PositionY:" + Position.Y + Environment.NewLine);
             File.AppendAllText(CurrentFilePath, "Observation:" + Observation.StartingFilePath + Environment.NewLine);

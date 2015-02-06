@@ -9,7 +9,7 @@ namespace AdventureGame
 {
     class Room
     {
-        private string StartingFilePath { get; set; }
+        public string StartingFilePath { get; set; }
         private string CurrentFilePath { get; set; }
         
         public string Name { get; set; }
