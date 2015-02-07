@@ -8,11 +8,10 @@ using System.IO;
 
 namespace AdventureGame
 {
-    class Item : InteractiveObject
+    internal class Item : InteractiveObject
     {
         //static readonly DialogueTree CombinationDialogue = new DialogueTree("CombinationDialogue.sav");
         protected override string Identifier { get { return "Item"; } }
-
 
         public Item(string fileName)
         {

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace AdventureGame
 {
-    class Room
+    internal class Room
     {
         private string Identifier { get { return "Room"; } }
         private string SaveInfo = "";

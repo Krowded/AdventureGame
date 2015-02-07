@@ -8,7 +8,7 @@ using System.IO;
 
 namespace AdventureGame
 {
-    class Player
+    internal class Player
     {
         private string Identifier { get { return "Player"; } }
         public string FileName;

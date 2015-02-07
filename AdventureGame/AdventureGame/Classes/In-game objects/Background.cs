@@ -8,7 +8,7 @@ using System.IO;
 
 namespace AdventureGame
 {
-    class Background
+    internal class Background
     {
         public Texture2D BGTexture;
         public Vector2 Position;

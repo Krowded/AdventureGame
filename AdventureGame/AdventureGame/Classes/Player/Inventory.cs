@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AdventureGame
 {
-    class Inventory
+    internal class Inventory
     {
         public void Save() { }
         public void Load() { }

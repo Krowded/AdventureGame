@@ -17,7 +17,7 @@ namespace AdventureGame
         private static readonly string PlayerDirectory = "Content/TextContent/Player/";
         private static readonly string DialogueDirectory = "Content/TextContent/Dialogues/";
 
-        public static void Save(string savename)
+        internal static void Save(string savename)
         {
             string[] filePaths = Directory.GetFiles(CurrentSavePath);
 
@@ -31,7 +31,7 @@ namespace AdventureGame
             }
         }
 
-        public static List<string> GetSavegames()
+        internal static List<string> GetSavegames()
         {
             List<string> list = new List<string>();
             foreach (string directory in Directory.GetDirectories(SaveDirectory))
@@ -50,7 +50,7 @@ namespace AdventureGame
             }
             return list;
         }
-        public static string GetFilePath(string identifier, string filename)
+        internal static string GetFilePath(string identifier, string filename)
         {
             string filepath = CurrentSavePath + filename;
             if (File.Exists(filepath))
@@ -103,11 +103,11 @@ namespace AdventureGame
             File.Delete(filePath);
         }
 
-        public static void SaveToCurrent(string saveInfo, string filename)
+        internal static void SaveToCurrent(string saveInfo, string filename)
         {
             File.WriteAllText(CurrentSavePath + filename, saveInfo);
         }
-        public static void DeleteCurrent()
+        internal static void DeleteCurrent()
         {
             string[] filePaths = Directory.GetFiles(CurrentSavePath);
             foreach (string filePath in filePaths)
@@ -116,12 +116,12 @@ namespace AdventureGame
                     DeleteFile(filePath);
             }
         }
-        public static void DeleteCurrentFile(string filename)
+        internal static void DeleteCurrentFile(string filename)
         {
             DeleteFile(CurrentSavePath + filename + ".sav");
         }
 
-        public static void LoadSavegame(string savename)
+        internal static void LoadSavegame(string savename)
         {
             DeleteCurrent();
             foreach (string file in GetSaveFiles(savename))

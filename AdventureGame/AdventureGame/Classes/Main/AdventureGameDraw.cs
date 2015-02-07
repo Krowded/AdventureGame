@@ -48,8 +48,8 @@ namespace AdventureGame
                     thing.Draw(spriteBatch);
                 }
             }
-            
-            if (InputHandler.RevealkeyPressed())
+
+            if (AdventureGame.InputHandler.RevealkeyPressed())
             {
                 DrawInteractiveSymbol();
             }

@@ -9,7 +9,7 @@ using System.IO;
 
 namespace AdventureGame
 {
-    class Door : InteractiveObject
+    internal class Door : InteractiveObject
     {
         protected override string Identifier { get {return "Door";} }
         public DialogueTree Dialogue { get; set; }

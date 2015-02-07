@@ -8,7 +8,7 @@ using System.IO;
 
 namespace AdventureGame
 {
-    class NPC : InteractiveObject
+    internal class NPC : InteractiveObject
     {
         protected override string Identifier { get { return "NPC"; } }
 

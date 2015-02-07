@@ -40,7 +40,7 @@
     <Compile Include="Classes\Main\AdventureGameLoad.cs" />
     <Compile Include="Classes\Main\AdventureGameSave.cs" />
     <Compile Include="Classes\Main\Menu.cs" />
-    <Compile Include="Classes\Main\AdventureGameUpdate.cs" />
+    <Compile Include="Classes\Main\UpdateHandler.cs" />
     <Compile Include="Classes\Visuals and movement\Animation.cs" />
     <Compile Include="Classes\Visuals and movement\Collision.cs" />
     <Compile Include="Classes\Dialogue\DialogueTree.cs" />

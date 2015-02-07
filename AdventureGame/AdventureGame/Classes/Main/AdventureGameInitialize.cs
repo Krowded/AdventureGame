@@ -18,49 +18,52 @@ namespace AdventureGame
         static readonly bool NewGame = true;
 
         //Window  and graphics managing
-        GraphicsDeviceManager Graphics;
-        SpriteBatch spriteBatch;
-        SpriteFont font;
+        internal static GraphicsDeviceManager Graphics;
+        internal static SpriteBatch spriteBatch;
+        internal static SpriteFont font;
 
         //The size for which the game is programmed (consistency important for scaling)
-        const int NaturalScreenWidth = 1920;
-        const int NaturalScreenHeight = 1080;
+        internal static readonly int NaturalScreenWidth = 1920;
+        internal static readonly int NaturalScreenHeight = 1080;
+        internal static int ViewportWidth;
+        internal static int ViewportHeight;
 
         float WindowScale;
 
-        const string Font = "TestFont1";
+        internal static readonly string Font = "TestFont1";
 
         //The current room, where most is loaded from
-        Room CurrentRoom;
-        const string StartingRoom = "Room1.sav";
+        internal static Room CurrentRoom;
+        internal static readonly string StartingRoom = "Room1.sav";
 
         //Player
-        Player player;
-        const string PlayerFile = "Player.sav";
+        internal static Player player;
+        internal static readonly string PlayerFile = "Player.sav";
 
         //Mousehandling variables
-        InputHandling InputHandler = new InputHandling();
+        internal static InputHandling InputHandler = new InputHandling();
 
         //Scrolling
-        ScrollHandler Scroller;
+        internal static ScrollHandler Scroller;
 
-        //Collision
-        Collision Collider;
+        //Updater
+        private static UpdateHandler Updater = new UpdateHandler();
+        
+        //Loader
+        internal static LoadHandler Loader;
 
-        //State variables
-        Vector2 LastTargetPoint;
-
-        Background background = new Background();
+        //Background
+        internal static Background background = new Background();
 
         //The symbol for marking interactives
-        Texture2D InteractiveSymbol;
+        internal static Texture2D InteractiveSymbol;
 
         //Lists of interactables in the room
-        List<Item> items = new List<Item>();
-        List<NPC> npcs = new List<NPC>();
-        List<Door> doors = new List<Door>();
-        List<InteractiveObject> Collidables = new List<InteractiveObject>();
-        List<InteractiveObject> AllThings = new List<InteractiveObject>();
+        internal static List<Item> items = new List<Item>();
+        internal static List<NPC> npcs = new List<NPC>();
+        internal static List<Door> doors = new List<Door>();
+        internal static List<InteractiveObject> Collidables = new List<InteractiveObject>();
+        internal static List<InteractiveObject> AllThings = new List<InteractiveObject>();
 
         public AdventureGame()
             : base()
@@ -90,9 +93,6 @@ namespace AdventureGame
             InputHandler.MousePressed = false;
             InputHandler.DoubleClick = false;
 
-            //Initialize savefile
-            //???
-
             //Initialize player variables
             player = new Player(PlayerFile);
 
@@ -108,18 +108,71 @@ namespace AdventureGame
                                      GraphicsDevice.Viewport.Width / 2,
                                      GraphicsDevice.Viewport.Height / 2);
 
-            //Collision
-            Collider = new Collision();
-
             //Sets the natural screen size (supposed to resize automatically)
             Graphics.PreferredBackBufferWidth = NaturalScreenWidth;
             Graphics.PreferredBackBufferHeight = NaturalScreenHeight;
             WindowScale = GraphicsDevice.Viewport.Width / NaturalScreenWidth; ;
+            ViewportWidth = GraphicsDevice.Viewport.Width;
+            ViewportHeight = GraphicsDevice.Viewport.Height;
 
             //TouchPanel.EnabledGestures = GestureType.FreeDrag;  <- fix this at the end so that it works for phones, etc. as well
 
+            Loader = new LoadHandler(Content);
+
             //The end
             base.Initialize();
+        }
+
+        // Updater methods
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            //Exit if esc is hit
+            if (InputHandler.EscPressed())
+                Exit();
+
+            //Save mousestates
+            
+            InputHandler.UpdateMouseStates();
+
+            // TODO: Add your update logic here
+            Updater.UpdatePlayer(gameTime);
+            Updater.UpdateScrolling(gameTime);
+            Updater.UpdateAllThings(gameTime); //Does nothing
+            base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>(Font);
+
+            // TODO: use this.Content to load your game content here
+
+            //Initialize the player
+            Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
+            player.Initialize(playerTexture, player.Position);
+
+            Loader.LoadNewRoom(new Room(StartingRoom));
+        }
+
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
         }
     }
 }

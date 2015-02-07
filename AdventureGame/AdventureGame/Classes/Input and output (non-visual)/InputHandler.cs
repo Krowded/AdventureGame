@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace AdventureGame
 {
-    class InputHandling
+    internal class InputHandling
     {
         private MouseState CurrentMouseState;
         private MouseState PreviousMouseState;

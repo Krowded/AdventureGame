@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace AdventureGame
 {
-    class ScrollHandler
+    internal class ScrollHandler
     {
         //Scrolling varibles
         private float ScrollSpeed { get; set; }

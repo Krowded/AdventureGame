@@ -8,7 +8,7 @@ using System.IO;
 
 namespace AdventureGame
 {
-    class InteractiveObject
+    internal class InteractiveObject
     {
         //Base file
         public string FileName { get; set; }
