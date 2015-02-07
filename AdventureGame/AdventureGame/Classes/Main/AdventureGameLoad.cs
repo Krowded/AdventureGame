@@ -143,6 +143,11 @@ namespace AdventureGame
                 player.Position.Y = GraphicsDevice.Viewport.Height / 2;
             }
         }
+        /// <summary>
+        /// Used to load stuff from text files
+        /// </summary>
+        /// <param name="filePath">Save file</param>
+        private void ParseTextFile(string filePath) { }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload

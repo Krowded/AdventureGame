@@ -132,8 +132,5 @@ namespace AdventureGame
             //The end
             base.Initialize();
         }
-
-        //Used to load stuff from text files
-        private void ParseTextFile(string filePath) { }
     }
 }

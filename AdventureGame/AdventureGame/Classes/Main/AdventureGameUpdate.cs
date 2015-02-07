@@ -58,6 +58,7 @@ namespace AdventureGame
                             CurrentRoom.Save();
                             Door door = (Door)thing;
                             LoadNewRoom(new Room(answer), door);
+                            player.TargetPoint = player.Position;
                             return;
                         }
                         else if (thing is NPC) { }
