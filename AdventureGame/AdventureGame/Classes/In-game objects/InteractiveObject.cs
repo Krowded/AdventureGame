@@ -67,7 +67,7 @@ namespace AdventureGame
             }
             else
             {
-                throw new ArgumentException("FileName can not be empty");
+                throw new ArgumentException("StartingFilePath can not be empty");
             }
 
         }
@@ -144,8 +144,8 @@ namespace AdventureGame
         public virtual void Save()
         {
             SaveHandler.DeleteFile(CurrentFilePath);
-            File.AppendAllText(CurrentFilePath, "PositionX:" + Position.X + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "PositionY:" + Position.Y + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PositionX:" + PositionOnBackground.X + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PositionY:" + PositionOnBackground.Y + Environment.NewLine);
             try
             {
                 File.AppendAllText(CurrentFilePath, "Observation:" + Observation.StartingFilePath + Environment.NewLine);

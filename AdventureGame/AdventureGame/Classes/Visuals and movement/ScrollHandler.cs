@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace AdventureGame
 {
-    class Scrolling
+    class ScrollHandler
     {
         //Scrolling varibles
         private float ScrollSpeed { get; set; }
@@ -35,7 +35,7 @@ namespace AdventureGame
         private bool ClampedX { get; set; }
         private bool ClampedY { get; set; }
         
-        public Scrolling(int leftScrollBorder, int rightScrollBorder, 
+        public ScrollHandler(int leftScrollBorder, int rightScrollBorder, 
                          int upperScrollBorder, int lowerScrollBorder, 
                          int middleOfScreenX, int middleOfScreenY)
         {

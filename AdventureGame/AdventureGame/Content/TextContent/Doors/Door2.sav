@@ -5,5 +5,5 @@ PartnerDoorName:Test Door
 Image:Visuals/In-Game Objects/Doors/door
 Destination:Room1.sav
 Scale:1
-Collidable:true
+Collidable:false
 Foreground:false
