@@ -36,8 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Classes\In-game objects\Background.cs" />
-    <Compile Include="Classes\Main\AdventureGameDraw.cs" />
-    <Compile Include="Classes\Main\AdventureGameLoad.cs" />
+    <Compile Include="Classes\Main\DrawHandler.cs" />
+    <Compile Include="Classes\Main\LoadHandler.cs" />
     <Compile Include="Classes\Main\AdventureGameSave.cs" />
     <Compile Include="Classes\Main\Menu.cs" />
     <Compile Include="Classes\Main\UpdateHandler.cs" />

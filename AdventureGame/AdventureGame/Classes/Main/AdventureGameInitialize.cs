@@ -52,6 +52,9 @@ namespace AdventureGame
         //Loader
         internal static LoadHandler Loader;
 
+        //Drawer
+        internal static DrawHandler Drawer;
+
         //Background
         internal static Background background = new Background();
 
@@ -118,6 +121,7 @@ namespace AdventureGame
             //TouchPanel.EnabledGestures = GestureType.FreeDrag;  <- fix this at the end so that it works for phones, etc. as well
 
             Loader = new LoadHandler(Content);
+            Drawer = new DrawHandler();
 
             //The end
             base.Initialize();
@@ -165,7 +169,6 @@ namespace AdventureGame
             Loader.LoadNewRoom(new Room(StartingRoom));
         }
 
-
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
@@ -173,6 +176,16 @@ namespace AdventureGame
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+        }
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            Drawer.Draw();
+            base.Draw(gameTime);
         }
     }
 }
