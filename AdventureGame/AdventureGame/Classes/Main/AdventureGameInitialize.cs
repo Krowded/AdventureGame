@@ -42,18 +42,10 @@ namespace AdventureGame
 
         //Mousehandling variables
         internal static InputHandling InputHandler = new InputHandling();
-
-        //Scrolling
         internal static ScrollHandler Scroller;
-
-        //Updater
-        private static UpdateHandler Updater = new UpdateHandler();
-        
-        //Loader
         internal static LoadHandler Loader;
-
-        //Drawer
-        internal static DrawHandler Drawer;
+        private static UpdateHandler Updater = new UpdateHandler();
+        private static DrawHandler Drawer = new DrawHandler();
 
         //Background
         internal static Background background = new Background();
@@ -103,7 +95,7 @@ namespace AdventureGame
             player.RunSpeed = GraphicsDevice.Viewport.Width / 240;
             player.WalkSpeed = GraphicsDevice.Viewport.Width / 480;
 
-            //Scroller
+            Loader = new LoadHandler(Content);
             Scroller = new ScrollHandler(GraphicsDevice.Viewport.Width / 3,
                                      2 * GraphicsDevice.Viewport.Width / 3,
                                      GraphicsDevice.Viewport.Height / 3,
@@ -114,14 +106,13 @@ namespace AdventureGame
             //Sets the natural screen size (supposed to resize automatically)
             Graphics.PreferredBackBufferWidth = NaturalScreenWidth;
             Graphics.PreferredBackBufferHeight = NaturalScreenHeight;
-            WindowScale = GraphicsDevice.Viewport.Width / NaturalScreenWidth; ;
+            WindowScale = GraphicsDevice.Viewport.Width / NaturalScreenWidth;
+
+            //Save window size
             ViewportWidth = GraphicsDevice.Viewport.Width;
             ViewportHeight = GraphicsDevice.Viewport.Height;
 
             //TouchPanel.EnabledGestures = GestureType.FreeDrag;  <- fix this at the end so that it works for phones, etc. as well
-
-            Loader = new LoadHandler(Content);
-            Drawer = new DrawHandler();
 
             //The end
             base.Initialize();

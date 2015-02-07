@@ -43,25 +43,21 @@ namespace AdventureGame
         protected override void ParseTextFile(string filePath)
         {
             base.ParseTextFile(filePath);
-            using (StreamReader file = new StreamReader(filePath))
+            string[] lines = File.ReadAllLines(filePath);
+            foreach (string line in lines)
             {
-                string line;
-                while ((line = file.ReadLine()) != null)
+                string[] words = line.Split(':');
+                switch (words[0])
                 {
-                    string[] words = line.Split(':');
-                    switch (words[0])
-                    {
-                        case "PartnerDoorName":
-                            this.PartnerDoorName = words[1];
-                            break;
-                        case "Destination":
-                            this.Destination = words[1];
-                            break;
-                        case "Dialogue":
-                            this.Dialogue = new DialogueTree(words[1]);
-                            break;
-                    }
-
+                    case "PartnerDoorName":
+                        this.PartnerDoorName = words[1];
+                        break;
+                    case "Destination":
+                        this.Destination = words[1];
+                        break;
+                    case "Dialogue":
+                        this.Dialogue = new DialogueTree(words[1]);
+                        break;
                 }
             }
         }

@@ -58,53 +58,51 @@ namespace AdventureGame
 
         private void ParseTextFile(string filePath)
         {
-            using (StreamReader file = new StreamReader(filePath))
+            string[] lines = File.ReadAllLines(filePath);
+            foreach (string line in lines)
             {
-                string line;
-                while ((line = file.ReadLine()) != null)
+                string[] words = line.Split(':');
+                switch (words[0])
                 {
-                    string[] words = line.Split(':');
-                    switch (words[0])
-                    {
-                        case "Name":
-                            this.Name = words[1];
-                            break;
-                        case "Background":
-                            this.Background = words[1];
-                            break;
-                        case "Door":
-                            this.Doors.Add(new Door(words[1]));
-                            break;
-                        case "NPC":
-                            this.NPCs.Add(new NPC(words[1]));
-                            break;
-                        case "Item":
-                            this.Items.Add(new Item(words[1]));
-                            break;
-                        case "PlayerStartingXOnBackground":
-                             float.TryParse(words[1], out this.PlayerStartingPosition.X);
-                            break;
-                        case "PlayerStartingYOnBackground":
-                            float.TryParse(words[1], out this.PlayerStartingPosition.Y);
-                            break;
-                        case "PlayerScaleBase":
-                            float.TryParse(words[1], out this.PlayerScaleBase);
-                            break;
-                        case "PlayerScaleMin":
-                            float.TryParse(words[1], out this.PlayerScaleMin);
-                            break;
-                        case "PlayerScaleMax":
-                            float.TryParse(words[1], out this.PlayerScaleMax);
-                            break;
-                        case "BackgroundScale":
-                            float.TryParse(words[1], out this.BackgroundScale);
-                            break;
-                        default:
-                            {
-                                throw new InvalidOperationException("Text file error in " + filePath);
-                            }
-                    }
+                    case "Name":
+                        this.Name = words[1];
+                        break;
+                    case "Background":
+                        this.Background = words[1];
+                        break;
+                    case "Door":
+                        this.Doors.Add(new Door(words[1]));
+                        break;
+                    case "NPC":
+                        this.NPCs.Add(new NPC(words[1]));
+                        break;
+                    case "Item":
+                        this.Items.Add(new Item(words[1]));
+                        break;
+                    case "PlayerStartingXOnBackground":
+                            float.TryParse(words[1], out this.PlayerStartingPosition.X);
+                        break;
+                    case "PlayerStartingYOnBackground":
+                        float.TryParse(words[1], out this.PlayerStartingPosition.Y);
+                        break;
+                    case "PlayerScaleBase":
+                        float.TryParse(words[1], out this.PlayerScaleBase);
+                        break;
+                    case "PlayerScaleMin":
+                        float.TryParse(words[1], out this.PlayerScaleMin);
+                        break;
+                    case "PlayerScaleMax":
+                        float.TryParse(words[1], out this.PlayerScaleMax);
+                        break;
+                    case "BackgroundScale":
+                        float.TryParse(words[1], out this.BackgroundScale);
+                        break;
+                    default:
+                        {
+                            throw new InvalidOperationException("Text file error in " + filePath);
+                        }
                 }
+                
             }
         }
 

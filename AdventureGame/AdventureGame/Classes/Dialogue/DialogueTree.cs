@@ -21,21 +21,18 @@ namespace AdventureGame
 
         private void ParseTextFile(string filePath)
         {
-            using (System.IO.StreamReader file = new System.IO.StreamReader(filePath))
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+            foreach (string line in lines)
             {
-                string line;
-                while ((line = file.ReadLine()) != null)
+                string[] words = line.Split(':');
+                switch (words[0])
                 {
-                    string[] words = line.Split(':');
-                    switch (words[0])
-                    {
-                        case "Answers":
-                            AnswersFile = words[1];
-                            break;
-                        case "Statements":
-                            StatementsFile = words[1];
-                            break;
-                    }
+                    case "Answers":
+                        AnswersFile = words[1];
+                        break;
+                    case "Statements":
+                        StatementsFile = words[1];
+                        break;
                 }
             }
         }
