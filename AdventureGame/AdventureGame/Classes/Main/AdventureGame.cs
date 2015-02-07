@@ -13,7 +13,7 @@ namespace AdventureGame
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public partial class AdventureGame : Game
+    public class AdventureGame : Game
     {
         static readonly bool NewGame = true;
 
@@ -28,7 +28,7 @@ namespace AdventureGame
         internal static int ViewportWidth;
         internal static int ViewportHeight;
 
-        float WindowScale;
+        internal static float WindowScale;
 
         internal static readonly string Font = "TestFont1";
 
@@ -40,7 +40,7 @@ namespace AdventureGame
         internal static Player player;
         internal static readonly string PlayerFile = "Player.sav";
 
-        //Mousehandling variables
+        //Handler instances
         internal static InputHandling InputHandler = new InputHandling();
         internal static ScrollHandler Scroller;
         internal static LoadHandler Loader;
@@ -118,7 +118,6 @@ namespace AdventureGame
             base.Initialize();
         }
 
-        // Updater methods
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -178,5 +177,23 @@ namespace AdventureGame
             Drawer.Draw();
             base.Draw(gameTime);
         }
+
+
+        ////////////Needs fixing////////////////
+        private string SaveInfo = "";
+        private string FileName = "game.sav";
+        public void SaveProgress()
+        {
+            player.Save();
+            CurrentRoom.Save();
+            SaveHandler.DeleteCurrentFile("game");
+            File.AppendAllText(SaveHandler.GetFilePath("game", "game"), "CurrentRoom:" + CurrentRoom.FileName + System.Environment.NewLine);
+            SaveHandler.DeleteCurrentFile(FileName);
+            SaveInfo += "CurrentRoom:" + CurrentRoom.FileName + System.Environment.NewLine;
+            SaveHandler.SaveToCurrent(SaveInfo, FileName);
+            SaveInfo = "";
+        }
+        public void SaveSettings() { }
+        ///////////////////////////////////////
     }
 }

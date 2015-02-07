@@ -36,11 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Classes\In-game objects\Background.cs" />
-    <Compile Include="Classes\Main\DrawHandler.cs" />
-    <Compile Include="Classes\Main\LoadHandler.cs" />
-    <Compile Include="Classes\Main\AdventureGameSave.cs" />
+    <Compile Include="Classes\Logic\DrawHandler.cs" />
+    <Compile Include="Classes\Logic\LoadHandler.cs" />
     <Compile Include="Classes\Main\Menu.cs" />
-    <Compile Include="Classes\Main\UpdateHandler.cs" />
+    <Compile Include="Classes\Logic\UpdateHandler.cs" />
     <Compile Include="Classes\Visuals and movement\Animation.cs" />
     <Compile Include="Classes\Visuals and movement\Collision.cs" />
     <Compile Include="Classes\Dialogue\DialogueTree.cs" />
@@ -53,7 +52,7 @@
     <Compile Include="Classes\Visuals and movement\Pathfinding.cs" />
     <Compile Include="Classes\Player\Player.cs" />
     <Compile Include="Classes\In-game objects\Room.cs" />
-    <Compile Include="Classes\Main\AdventureGameInitialize.cs" />
+    <Compile Include="Classes\Main\AdventureGame.cs" />
     <Compile Include="Classes\Main\Program.cs" />
     <Compile Include="Classes\Visuals and movement\Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
