@@ -79,7 +79,7 @@ namespace AdventureGame
                 LastTargetPoint = player.TargetPoint;
                 player.MoveToTargetPoint();
             }
-            player.ScalePlayerSprite(BackgroundPosition, BackgroundHeight);
+            player.ScalePlayerSprite(background.Position, background.Height);
             //player.ClampPlayer(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);  //Not really needed   
             player.Update(gameTime);
         }
@@ -98,8 +98,8 @@ namespace AdventureGame
         {
             Scroller.UpdateScrollingVariables(player);
             Scroller.UpdateStillScrollingDirection(player);
-            Scroller.Scroll(ref BackgroundPosition, ref InputHandler.MousePosition, player); //UGLY!!!
-            Scroller.BackgroundClamp(ref BackgroundPosition, -(BackgroundWidth - GraphicsDevice.Viewport.Width), 0, -(BackgroundHeight - GraphicsDevice.Viewport.Height), 0);
+            Scroller.Scroll(ref background.Position, ref InputHandler.MousePosition, player); //UGLY!!!
+            Scroller.BackgroundClamp(ref background.Position, -(background.Width - GraphicsDevice.Viewport.Width), 0, -(background.Height - GraphicsDevice.Viewport.Height), 0);
             Scroller.CompensateForScrolling(player);
 
             SyncInteractiveObjectsWithBackground(AllThings);
@@ -111,7 +111,7 @@ namespace AdventureGame
         {
             foreach (InteractiveObject thing in thingList)
             {
-                thing.Position = BackgroundPosition + thing.PositionOnBackground;
+                thing.Position = background.Position + thing.PositionOnBackground;
             }
         }
     }

@@ -52,11 +52,7 @@ namespace AdventureGame
         //State variables
         Vector2 LastTargetPoint;
 
-        //Background
-        Texture2D MainBackground;
-        Vector2 BackgroundPosition;
-        int BackgroundWidth = 1920;
-        int BackgroundHeight = 1080;
+        Background background = new Background();
 
         //The symbol for marking interactives
         Texture2D InteractiveSymbol;

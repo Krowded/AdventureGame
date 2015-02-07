@@ -25,7 +25,7 @@ namespace AdventureGame
             spriteBatch.Begin();
 
             //Draw the background
-            spriteBatch.Draw(MainBackground, BackgroundPosition, null, Color.Red, 0, Vector2.Zero, CurrentRoom.BackgroundScale, 
+            spriteBatch.Draw(background.BGTexture, background.Position, null, Color.Red, 0, Vector2.Zero, CurrentRoom.BackgroundScale, 
                 SpriteEffects.None, 0);
 
             //Draw all background things in the room

@@ -55,7 +55,8 @@ namespace AdventureGame
             string[] filePaths = Directory.GetFiles(CurrentSavePath);
             foreach (string filePath in filePaths)
             {
-                DeleteFile(filePath);
+                if(filePath.EndsWith(".sav"))
+                    DeleteFile(filePath);
             }
         }
 

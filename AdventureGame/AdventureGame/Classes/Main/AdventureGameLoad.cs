@@ -73,10 +73,7 @@ namespace AdventureGame
                 }
             }
             //Initialize the background
-            MainBackground = Content.Load<Texture2D>(CurrentRoom.Background);
-            BackgroundHeight = (int)(MainBackground.Height * CurrentRoom.BackgroundScale);
-            BackgroundWidth = (int)(MainBackground.Width * CurrentRoom.BackgroundScale);
-
+            background = new Background(Content.Load<Texture2D>(CurrentRoom.Background), new Vector2(0,0), CurrentRoom.BackgroundScale);
             CenterPlayer();
 
             //Reset basic variables
@@ -124,21 +121,21 @@ namespace AdventureGame
         /// </summary>
         private void CenterPlayer()
         {
-            if (player.Position.X > GraphicsDevice.Viewport.Width / 2 && player.Position.X < BackgroundWidth - GraphicsDevice.Viewport.Width / 2)
+            if (player.Position.X > GraphicsDevice.Viewport.Width / 2 && player.Position.X < background.Width - GraphicsDevice.Viewport.Width / 2)
             {
-                BackgroundPosition.X = -player.Position.X + GraphicsDevice.Viewport.Width / 2;
+                background.Position.X = -player.Position.X + GraphicsDevice.Viewport.Width / 2;
                 foreach (InteractiveObject thing in AllThings)
                 {
-                    thing.Position.X -= BackgroundPosition.X;
+                    thing.Position.X -= background.Position.X;
                 }
                 player.Position.X = GraphicsDevice.Viewport.Width / 2;
             }
-            if (player.Position.Y > GraphicsDevice.Viewport.Height / 2 && player.Position.Y < BackgroundHeight - GraphicsDevice.Viewport.Height / 2)
+            if (player.Position.Y > GraphicsDevice.Viewport.Height / 2 && player.Position.Y < background.Height - GraphicsDevice.Viewport.Height / 2)
             {
-                BackgroundPosition.Y = -player.Position.Y + GraphicsDevice.Viewport.Height / 2;
+                background.Position.Y = -player.Position.Y + GraphicsDevice.Viewport.Height / 2;
                 foreach (InteractiveObject thing in AllThings)
                 {
-                    thing.Position.Y -= BackgroundPosition.Y;
+                    thing.Position.Y -= background.Position.Y;
                 }
                 player.Position.Y = GraphicsDevice.Viewport.Height / 2;
             }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AdventureGame
 {
-    public class DialogueTree
+    class DialogueTree
     {
         public string StartingFilePath { get; set; }
         public string CurrentFilePath { get; set; }

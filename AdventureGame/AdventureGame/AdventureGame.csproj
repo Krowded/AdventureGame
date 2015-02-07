@@ -35,6 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classes\In-game objects\Background.cs" />
     <Compile Include="Classes\Main\AdventureGameDraw.cs" />
     <Compile Include="Classes\Main\AdventureGameLoad.cs" />
     <Compile Include="Classes\Main\AdventureGameSave.cs" />
