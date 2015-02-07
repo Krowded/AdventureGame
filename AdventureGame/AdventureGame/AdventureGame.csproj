@@ -74,7 +74,7 @@
     <None Include="Content\TextContent\Doors\Door2.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\TextContent\Items\CombinationDialogue.sav">
+    <None Include="Content\TextContent\Dialogues\CombinationDialogue.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\TextContent\Items\Item1.sav">

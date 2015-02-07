@@ -8,8 +8,14 @@ namespace AdventureGame
 {
     static class SaveHandler
     {
-        public static string CurrentSavePath = "Savefiles/Current/";
-        private static string SaveDirectory = "Savefiles/Savegames/";
+        private static readonly string CurrentSavePath = "Savefiles/Current/";
+        private static readonly string SaveDirectory = "Savefiles/Savegames/";
+        private static readonly string ItemDirectory = "Content/TextContent/Items/";
+        private static readonly string DoorDirectory = "Content/TextContent/Doors/";
+        private static readonly string NPCDirectory = "Content/TextContent/NPCs/";
+        private static readonly string RoomDirectory = "Content/TextContent/Rooms/";
+        private static readonly string PlayerDirectory = "Content/TextContent/Player/";
+        private static readonly string DialogueDirectory = "Content/TextContent/Dialogues/";
 
         public static void Save(string savename)
         {
@@ -23,6 +29,11 @@ namespace AdventureGame
             {
                 File.Move(filePath, SaveDirectory + savename);
             }
+        }
+
+        public static void SaveToCurrent(string saveInfo, string filename)
+        {
+            File.WriteAllText(CurrentSavePath + filename + ".sav", saveInfo);
         }
 
         //To display alternatives when loading/overwriting
@@ -50,6 +61,11 @@ namespace AdventureGame
             catch { }
         }
 
+        public static void DeleteCurrentFile(string filename)
+        {
+            DeleteFile(CurrentSavePath + filename + ".sav");
+        }
+
         public static void DeleteCurrent()
         {
             string[] filePaths = Directory.GetFiles(CurrentSavePath);
@@ -60,7 +76,7 @@ namespace AdventureGame
             }
         }
 
-        public static void DeleteFile(string filePath)
+        private static void DeleteFile(string filePath)
         {
             File.Delete(filePath);
         }
@@ -84,6 +100,42 @@ namespace AdventureGame
                 string fileName = Path.GetFileName(file);
                 string destinationFile = Path.Combine(CurrentSavePath, fileName);
                 File.Copy(file, destinationFile);
+            }
+        }
+
+        public static string GetFilePath(string identifier, string filename)
+        {
+            string filepath = CurrentSavePath + filename;
+            if (File.Exists(filepath))
+            {
+                return filepath;
+            }
+            else
+            {
+                switch (identifier)
+                {
+                    case "Door":
+                        filepath = DoorDirectory;
+                        break;
+                    case "Item":
+                        filepath = ItemDirectory;
+                        break;
+                    case "NPC":
+                        filepath = NPCDirectory;
+                        break;
+                    case "Room":
+                        filepath = RoomDirectory;
+                        break;
+                    case "Player":
+                        filepath = PlayerDirectory;
+                        break;
+                    case "Dialogue":
+                        filepath = DialogueDirectory;
+                        break;
+                    default:
+                        throw new ArgumentException("Unknown identifier for filename: " + filename);
+                }
+                return filepath + filename;
             }
         }
     }

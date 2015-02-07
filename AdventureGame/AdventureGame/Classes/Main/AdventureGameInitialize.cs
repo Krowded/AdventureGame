@@ -30,15 +30,13 @@ namespace AdventureGame
 
         const string Font = "TestFont1";
 
-        private static string CurrentFilePath = SaveHandler.CurrentSavePath + "game.sav";
-
         //The current room, where most is loaded from
         Room CurrentRoom;
         const string StartingRoom = "Room1.sav";
 
         //Player
         Player player;
-        const string PlayerFile = "Content/TextContent/Player/Player.sav";
+        const string PlayerFile = "Player.sav";
 
         //Mousehandling variables
         InputHandling InputHandler = new InputHandling();
@@ -86,11 +84,6 @@ namespace AdventureGame
             {
                 SaveHandler.DeleteCurrent();
             }
-            /////////////////////////////////////FIX//////////////////////////////////////////////////////////////77
-            if (File.Exists(CurrentFilePath))
-            {
-                ParseTextFile(CurrentFilePath);
-            }
 
             //Initialize mouse
             InputHandler.Begin = false;
@@ -101,7 +94,7 @@ namespace AdventureGame
             //???
 
             //Initialize player variables
-            player = new Player();
+            player = new Player(PlayerFile);
 
             //Probably Room dependent
             player.RunSpeed = GraphicsDevice.Viewport.Width / 240;

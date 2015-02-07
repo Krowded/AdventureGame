@@ -10,6 +10,10 @@ namespace AdventureGame
 {
     class Player
     {
+        private string Identifier { get { return "Player"; } }
+        public string FileName;
+        private string SaveInfo = "";
+
         public Animation RunningAnimation = new Animation();
         public Animation WalkingAnimation = new Animation();
         public Animation StandingAnimation = new Animation();
@@ -60,21 +64,18 @@ namespace AdventureGame
             get { return (int)(this.CurrentAnimation.FrameHeight * this.Scale); }
         }
 
-        public Player() {}
+        public Player(string fileName) 
+        { 
+            FileName = fileName;
+            ParseTextFile(SaveHandler.GetFilePath(Identifier, FileName));
+        }
 
         public void Initialize(Texture2D texture, Vector2 position)
         {
-            if (File.Exists(SaveHandler.CurrentSavePath + "player.sav"))
-            {
-                ParseTextFile(SaveHandler.CurrentSavePath + "player.sav");
-            }
-            else
-            {
-                RunningAnimation.Initialize(texture, Vector2.Zero, 122, 138, 29, 30, Color.White, this.Scale, true);
-                Position = position;
-                Active = true;
-                CurrentAnimation = RunningAnimation;
-            }
+            RunningAnimation.Initialize(texture, Vector2.Zero, 122, 138, 29, 30, Color.White, this.Scale, true);
+            Position = position;
+            Active = true;
+            CurrentAnimation = RunningAnimation;
         }
 
         public void Update(GameTime gameTime)
@@ -215,24 +216,24 @@ namespace AdventureGame
 
         public void Save() 
         { 
-            string CurrentFilePath = SaveHandler.CurrentSavePath + "player.sav";
-            SaveHandler.DeleteFile(CurrentFilePath);
-            File.AppendAllText(CurrentFilePath, "DirectionX:" + Direction.X + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "DirectionY:" + Direction.Y + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "TargetPointX:" + TargetPoint.X + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "TargetPointY:" + TargetPoint.Y + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "StillScrollingX" + StillScrollingX + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "active:" + active + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Scale:" + Scale + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "BaseScale:" + BaseScale + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "MaxScale:" + MaxScale + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "MinScale:" + MinScale + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "PlayerTexture:" + PlayerTexture + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Running:" + Running + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "MovingLeft" + MovingLeft + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "MoveSpeed:" + MoveSpeed + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "WalkSpeed:" + WalkSpeed + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "MoveSpeed:" + RunSpeed + Environment.NewLine);
+            SaveHandler.DeleteCurrentFile(FileName);
+            SaveInfo +=  "DirectionX:" + Direction.X + Environment.NewLine;
+            SaveInfo +=  "DirectionY:" + Direction.Y + Environment.NewLine;
+            SaveInfo +=  "TargetPointX:" + TargetPoint.X + Environment.NewLine;
+            SaveInfo +=  "TargetPointY:" + TargetPoint.Y + Environment.NewLine;
+            SaveInfo +=  "StillScrollingX" + StillScrollingX + Environment.NewLine;
+            SaveInfo +=  "active:" + active + Environment.NewLine;
+            SaveInfo +=  "Scale:" + Scale + Environment.NewLine;
+            SaveInfo +=  "BaseScale:" + BaseScale + Environment.NewLine;
+            SaveInfo +=  "MaxScale:" + MaxScale + Environment.NewLine;
+            SaveInfo +=  "MinScale:" + MinScale + Environment.NewLine;
+            SaveInfo +=  "PlayerTexture:" + PlayerTexture + Environment.NewLine;
+            SaveInfo +=  "Running:" + Running + Environment.NewLine;
+            SaveInfo +=  "MovingLeft" + MovingLeft + Environment.NewLine;
+            SaveInfo +=  "MoveSpeed:" + MoveSpeed + Environment.NewLine;
+            SaveInfo +=  "WalkSpeed:" + WalkSpeed + Environment.NewLine;
+            SaveInfo +=  "MoveSpeed:" + RunSpeed + Environment.NewLine;
+            SaveHandler.SaveToCurrent(SaveInfo, FileName);
         }
     }
 }

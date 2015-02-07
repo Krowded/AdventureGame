@@ -9,11 +9,9 @@ namespace AdventureGame
 {
     class Room
     {
-        static readonly string RoomDirectory = "Content/TextContent/Rooms/";
-
-        public string StartingFilePath { get; set; }
-        private string CurrentFilePath { get; set; }
-        
+        private string Identifier { get { return "Room"; } }
+        private string SaveInfo = "";
+        public string FileName { get; set; }
         public string Name { get; set; }
         public string[] BackgroundImages { get; set; }
         public string[] ForegroundImages { get; set; }
@@ -28,22 +26,15 @@ namespace AdventureGame
         public List<Door> Doors = new List<Door>();
         public List<Item> Items = new List<Item>();
         
-        public Room(string roomFileName)
+        public Room(string fileName)
         {
-            this.StartingFilePath = RoomDirectory + roomFileName;
+            FileName = fileName;
+            Name = fileName.Remove(fileName.Length - 4);
         }
 
         public void Initialize()
         {
-            CurrentFilePath = SaveHandler.CurrentSavePath + Path.GetFileName(StartingFilePath);
-            if (File.Exists(CurrentFilePath))
-            {
-                ParseTextFile(CurrentFilePath);
-            }
-            else
-            {
-                ParseTextFile(StartingFilePath);
-            }
+            ParseTextFile(SaveHandler.GetFilePath(Identifier, FileName));
             InitializeLists();           
         }
 
@@ -132,32 +123,28 @@ namespace AdventureGame
                 item.Save();
             }
 
-            try
-            {
-                File.Delete(CurrentFilePath);   
-            }
-            catch {}
+            try { SaveHandler.DeleteCurrentFile(Name); } catch {}
 
-            File.AppendAllText(CurrentFilePath, "Name:" + Name + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Background:" + Background + Environment.NewLine);
+            SaveInfo += "Background:" + Background + Environment.NewLine;
             foreach(Door door in Doors)
             {
-                File.AppendAllText(CurrentFilePath, "Door:" + door.StartingFilePath + Environment.NewLine);
+                SaveInfo += "Door:" + door.FileName + Environment.NewLine;
             }
             foreach(NPC npc in NPCs)
             {
-                File.AppendAllText(CurrentFilePath, "NPC:" + npc.StartingFilePath + Environment.NewLine);
+                SaveInfo += "NPC:" + npc.FileName + Environment.NewLine;
             }
             foreach(Item item in Items)
             {
-                File.AppendAllText(CurrentFilePath, "Item:" + item.StartingFilePath + Environment.NewLine);
+                SaveInfo += "Item:" + item.FileName + Environment.NewLine;
             }
-            File.AppendAllText(CurrentFilePath, "PlayerStartingXOnBackground:" + PlayerStartingPosition.X + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "PlayerStartingYOnBackground:" + PlayerStartingPosition.Y + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "PlayerScaleBase:" + PlayerScaleBase + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "PlayerScaleMin:" + PlayerScaleMin + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "PlayerScaleMax:" + PlayerScaleMax + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "BackgroundScale:" + BackgroundScale + Environment.NewLine);
+            SaveInfo += "PlayerStartingXOnBackground:" + PlayerStartingPosition.X + Environment.NewLine;
+            SaveInfo += "PlayerStartingYOnBackground:" + PlayerStartingPosition.Y + Environment.NewLine;
+            SaveInfo += "PlayerScaleBase:" + PlayerScaleBase + Environment.NewLine;
+            SaveInfo += "PlayerScaleMin:" + PlayerScaleMin + Environment.NewLine;
+            SaveInfo += "PlayerScaleMax:" + PlayerScaleMax + Environment.NewLine;
+            SaveInfo += "BackgroundScale:" + BackgroundScale + Environment.NewLine;
+            SaveHandler.SaveToCurrent(SaveInfo, Name);
         }
     }
 }

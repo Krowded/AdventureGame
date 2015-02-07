@@ -17,8 +17,8 @@ namespace AdventureGame
         {
             player.Save();
             CurrentRoom.Save();
-            SaveHandler.DeleteFile(CurrentFilePath);
-            File.AppendAllText(CurrentFilePath, "CurrentRoom:" + CurrentRoom.StartingFilePath + System.Environment.NewLine);
+            SaveHandler.DeleteCurrentFile("game");
+            File.AppendAllText(SaveHandler.GetFilePath("game", "game"), "CurrentRoom:" + CurrentRoom.FileName + System.Environment.NewLine);
         }
         public void SaveSettings() { }
     }

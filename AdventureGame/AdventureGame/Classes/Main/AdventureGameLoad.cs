@@ -25,7 +25,6 @@ namespace AdventureGame
             // TODO: use this.Content to load your game content here
 
             //Initialize the player
-            player.ParseTextFile(PlayerFile);
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
             player.Initialize(playerTexture, player.Position);
 

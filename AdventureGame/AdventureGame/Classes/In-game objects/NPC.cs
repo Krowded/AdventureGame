@@ -10,12 +10,14 @@ namespace AdventureGame
 {
     class NPC : InteractiveObject
     {
-        static readonly string NPCDirectory = "Content/TextContent/NPCs/";
+        protected override string Identifier { get { return "NPC"; } }
+
         public DialogueTree Dialogue { get; set; }
 
         public NPC(string fileName)
         {
-            this.StartingFilePath = NPCDirectory + fileName;
+            FileName = fileName;
+            Name = fileName.Remove(fileName.Length - 4);
         }
 
         public override string Interact()

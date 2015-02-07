@@ -7,27 +7,16 @@ namespace AdventureGame
 {
     class DialogueTree
     {
+        private string Identifier { get { return "Dialogue"; } }
         public string StartingFilePath { get; set; }
         public string CurrentFilePath { get; set; }
         public string StatementsFile { get; set; }
         public string AnswersFile { get; set; }
         public int LastStatement { get; set; }
 
-        public DialogueTree(string filePath)
+        public DialogueTree(string fileName)
         {
-            if (filePath != "")
-            {
-                StartingFilePath = filePath;
-                CurrentFilePath = SaveHandler.CurrentSavePath + System.IO.Path.GetFileName(StartingFilePath);
-                if (System.IO.File.Exists(CurrentFilePath))
-                {
-                    ParseTextFile(CurrentFilePath);
-                }
-                else
-                {
-                    ParseTextFile(StartingFilePath);
-                }
-            }
+            ParseTextFile(SaveHandler.GetFilePath(Identifier, fileName));
         }
 
         private void ParseTextFile(string filePath)

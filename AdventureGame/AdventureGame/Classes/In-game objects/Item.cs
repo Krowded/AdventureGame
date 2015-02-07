@@ -10,12 +10,14 @@ namespace AdventureGame
 {
     class Item : InteractiveObject
     {
-        static readonly string ItemDirectory = "Content/TextContent/Items/";
-        static readonly DialogueTree CombinationDialogue = new DialogueTree("Content/TextContent/Items/CombinationDialogue.sav");
+        //static readonly DialogueTree CombinationDialogue = new DialogueTree("CombinationDialogue.sav");
+        protected override string Identifier { get { return "Item"; } }
+
 
         public Item(string fileName)
         {
-            this.StartingFilePath = ItemDirectory + fileName;
+            FileName = fileName;
+            Name = fileName.Remove(fileName.Length - 4);
         }
 
         public override string Interact()
@@ -28,7 +30,7 @@ namespace AdventureGame
         public Item Combine(Item otherItem)
         {
             int line = FindCombination(this.Name, otherItem.Name);
-            CombinationDialogue.StartConversation(line);
+            //CombinationDialogue.StartConversation(line);
             return null;
         }
 

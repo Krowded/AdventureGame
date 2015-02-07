@@ -11,8 +11,9 @@ namespace AdventureGame
     class InteractiveObject
     {
         //Base file
-        public string StartingFilePath { get; set; }
-        public string CurrentFilePath { get; set; }
+        public string FileName { get; set; }
+        protected string SaveInfo = "";
+        protected virtual string Identifier { get { return "Object"; } }
 
         //Appearance
         public string Name { get; set; }
@@ -56,20 +57,7 @@ namespace AdventureGame
 
         public virtual void Initialize() 
         {
-            CurrentFilePath = SaveHandler.CurrentSavePath + Path.GetFileName(StartingFilePath);
-            if (File.Exists(CurrentFilePath))
-            {
-                ParseTextFile(CurrentFilePath);
-            }
-            else if (StartingFilePath != "")
-            {
-                ParseTextFile(StartingFilePath);
-            }
-            else
-            {
-                throw new ArgumentException("StartingFilePath can not be empty");
-            }
-
+            ParseTextFile(SaveHandler.GetFilePath(Identifier, FileName));
         }
 
         protected virtual void ParseTextFile(string filePath)
@@ -143,23 +131,21 @@ namespace AdventureGame
 
         public virtual void Save()
         {
-            SaveHandler.DeleteFile(CurrentFilePath);
-            File.AppendAllText(CurrentFilePath, "PositionX:" + PositionOnBackground.X + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "PositionY:" + PositionOnBackground.Y + Environment.NewLine);
-            try
-            {
-                File.AppendAllText(CurrentFilePath, "Observation:" + Observation.StartingFilePath + Environment.NewLine);
-            }
-            catch { }
-            File.AppendAllText(CurrentFilePath, "Name:" + Name + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Image:" + Image + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Scale:" + Scale + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Collidable:" + Collidable + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Foreground:" + Foreground + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "CollidableAreaTop:" + collidableAreaTop + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "CollidableAreaBottom:" + collidableAreaBottom+ Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "CollidableAreaLeftSide:" + collidableAreaLeftSide + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "CollidableAreaRightSide:" + collidableAreaRightSide + Environment.NewLine);
+            SaveHandler.DeleteCurrentFile(Name);
+            SaveInfo += "PositionX:" + PositionOnBackground.X + Environment.NewLine;
+            SaveInfo += "PositionY:" + PositionOnBackground.Y + Environment.NewLine;
+            try { SaveInfo += "Observation:" + Observation.StartingFilePath + Environment.NewLine; } catch { }
+            SaveInfo += "Name:" + Name + Environment.NewLine;
+            SaveInfo += "Image:" + Image + Environment.NewLine;
+            SaveInfo += "Scale:" + Scale + Environment.NewLine;
+            SaveInfo += "Collidable:" + Collidable + Environment.NewLine;
+            SaveInfo += "Foreground:" + Foreground + Environment.NewLine;
+            SaveInfo += "CollidableAreaTop:" + collidableAreaTop + Environment.NewLine;
+            SaveInfo += "CollidableAreaBottom:" + collidableAreaBottom+ Environment.NewLine;
+            SaveInfo += "CollidableAreaLeftSide:" + collidableAreaLeftSide + Environment.NewLine;
+            SaveInfo += "CollidableAreaRightSide:" + collidableAreaRightSide + Environment.NewLine;
+            SaveHandler.SaveToCurrent(SaveInfo, Name);
+            SaveInfo = "";
         }
 
     }
