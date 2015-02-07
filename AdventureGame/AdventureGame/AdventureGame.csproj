@@ -63,24 +63,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\TextContent\Doors\Door1.txt">
+    <None Include="Content\TextContent\Doors\Door1.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\TextContent\Items\CombinationDialogue.txt">
+    </None>
+    <None Include="Content\TextContent\Doors\Door2.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\TextContent\Items\Item1.txt">
+    </None>
+    <None Include="Content\TextContent\Items\CombinationDialogue.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\TextContent\NPCs\NPC1.txt">
+    </None>
+    <None Include="Content\TextContent\Items\Item1.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\TextContent\Player\Player.txt">
+    </None>
+    <None Include="Content\TextContent\NPCs\NPC1.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\TextContent\Rooms\Room1.txt">
+    </None>
+    <None Include="Content\TextContent\Player\Player.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="Content\TextContent\Rooms\Room1.sav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Icon.ico" />
     <Content Include="Content\TextContent\Doors\DoorFileTemplate.txt" />
     <Content Include="Content\TextContent\Items\ItemFileTemplate.txt" />
@@ -92,6 +95,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\TestFont1.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\TextContent\Rooms\Room2.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Visuals\In-Game Objects\Doors\door.xnb">

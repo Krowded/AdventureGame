@@ -47,7 +47,10 @@ namespace AdventureGame
             return Observation.StartConversation();
         }
 
-        public virtual void Interact() { }
+        public virtual string Interact() 
+        {
+            return null;
+        }
 
         public virtual void Interact(InteractiveObject item) { }
 
@@ -71,7 +74,7 @@ namespace AdventureGame
 
         protected virtual void ParseTextFile(string filePath)
         {
-            StreamReader file = new StreamReader(filePath);
+            using (StreamReader file = new StreamReader(filePath))
             {
                 string line;
                 float scale = 0;
@@ -143,7 +146,11 @@ namespace AdventureGame
             SaveHandler.DeleteFile(CurrentFilePath);
             File.AppendAllText(CurrentFilePath, "PositionX:" + Position.X + Environment.NewLine);
             File.AppendAllText(CurrentFilePath, "PositionY:" + Position.Y + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Observation:" + Observation.StartingFilePath + Environment.NewLine);
+            try
+            {
+                File.AppendAllText(CurrentFilePath, "Observation:" + Observation.StartingFilePath + Environment.NewLine);
+            }
+            catch { }
             File.AppendAllText(CurrentFilePath, "Name:" + Name + Environment.NewLine);
             File.AppendAllText(CurrentFilePath, "Image:" + Image + Environment.NewLine);
             File.AppendAllText(CurrentFilePath, "Scale:" + Scale + Environment.NewLine);

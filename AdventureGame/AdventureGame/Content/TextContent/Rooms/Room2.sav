@@ -1,0 +1,11 @@
+﻿Name:Test room 2
+Background:Visuals/In-Game Objects/Rooms/mainbackground
+Item:Item1.sav
+NPC:NPC1.sav
+Door:Door2.sav
+PlayerStartingXOnBackground:500
+PlayerStartingYOnBackground:500
+PlayerScaleMax:1
+PlayerScaleMin:0,1
+PlayerScaleBase:1
+BackgroundScale:2,4

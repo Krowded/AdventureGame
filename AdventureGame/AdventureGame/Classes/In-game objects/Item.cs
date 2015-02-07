@@ -10,16 +10,17 @@ namespace AdventureGame
 {
     class Item : InteractiveObject
     {
-        static readonly DialogueTree CombinationDialogue = new DialogueTree("Content/TextContent/Items/CombinationDialogue.txt");
+        static readonly string ItemDirectory = "Content/TextContent/Items/";
+        static readonly DialogueTree CombinationDialogue = new DialogueTree("Content/TextContent/Items/CombinationDialogue.sav");
 
-        public Item(string filePath)
+        public Item(string fileName)
         {
-            this.StartingFilePath = filePath;
+            this.StartingFilePath = ItemDirectory + fileName;
         }
 
-        public override void Interact()
+        public override string Interact()
         {
-            base.Interact();
+            return base.Interact();
         }
 
         public override void Interact(InteractiveObject item) { }

@@ -32,7 +32,7 @@ namespace AdventureGame
 
         private void ParseTextFile(string filePath)
         {
-            System.IO.StreamReader file = new System.IO.StreamReader(filePath);
+            using (System.IO.StreamReader file = new System.IO.StreamReader(filePath))
             {
                 string line;
                 while ((line = file.ReadLine()) != null)

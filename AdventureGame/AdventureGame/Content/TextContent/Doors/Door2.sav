@@ -1,0 +1,9 @@
+﻿PositionX:200
+PositionY:600
+Name:Test Destination Door
+PartnerDoorName:Test Door
+Image:Visuals/In-Game Objects/Doors/door
+Destination:Room1.sav
+Scale:1
+Collidable:true
+Foreground:false

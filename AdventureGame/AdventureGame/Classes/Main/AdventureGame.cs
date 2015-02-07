@@ -32,11 +32,11 @@ namespace AdventureGame
 
         //The current room, where most is loaded from
         Room CurrentRoom;
-        const string StartingRoom = @"Content/TextContent/Rooms/Room1.txt";
+        const string StartingRoom = "Room1.sav";
 
         //Player
         Player player;
-        const string PlayerFile = @"Content/TextContent/Player/Player.txt";
+        const string PlayerFile = "Content/TextContent/Player/Player.sav";
 
         //Mousehandling variables
         InputHandling InputHandler = new InputHandling();
@@ -330,9 +330,15 @@ namespace AdventureGame
                 {
                     if (Vector2.Distance(player.Position, thing.MidPointPosition) < thing.DistanceToInteract)
                     {
+                        string answer = thing.Interact();
                         if (thing is Door)
                         {
+                            CurrentRoom.Save();
+                            LoadNewRoom(new Room(answer));
+                            return;
                         }
+                        else if (thing is NPC) { }
+                        else if (thing is Item) { }
                     }
                     else
                     {

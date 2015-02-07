@@ -3,7 +3,7 @@ PositionY:600
 Name:Test Door
 PartnerDoorName:Test Destination Door
 Image:Visuals/In-Game Objects/Doors/door
-Destination:Content/TextContent/In-Game Objects/Rooms/Room1.txt
+Destination:Room2.sav
 Scale:1
 Collidable:true
 Foreground:false

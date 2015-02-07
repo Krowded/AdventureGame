@@ -11,16 +11,17 @@ namespace AdventureGame
 {
     class Door : InteractiveObject
     {
+        static readonly string DoorDirectory = "Content/TextContent/Doors/";
         public DialogueTree Dialogue { get; set; }
-        public Room Destination { get; set; }
+        public string Destination { get; set; }
         public string PartnerDoorName { get; set; }
         
-        public Door(string filePath)
+        public Door(string fileName)
         {
-            this.StartingFilePath = filePath;
+            this.StartingFilePath = DoorDirectory + fileName;
         }
 
-        public override void Interact()
+        public override string Interact()
         {
             string passageGranted = "true";
             if (Dialogue != null)
@@ -30,18 +31,18 @@ namespace AdventureGame
 
             if (passageGranted == "true")
             {
-                //return Destination;
+                return Destination;
             }
             else
             {
-                //return null;
+                return null;
             }
         }
 
         protected override void ParseTextFile(string filePath)
         {
             base.ParseTextFile(filePath);
-            StreamReader file = new StreamReader(filePath);
+            using (StreamReader file = new StreamReader(filePath))
             {
                 string line;
                 while ((line = file.ReadLine()) != null)
@@ -53,7 +54,7 @@ namespace AdventureGame
                             this.PartnerDoorName = words[1];
                             break;
                         case "Destination":
-                            this.Destination = new Room(words[1]);
+                            this.Destination = words[1];
                             break;
                         case "Dialogue":
                             this.Dialogue = new DialogueTree(words[1]);

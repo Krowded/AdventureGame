@@ -9,6 +9,8 @@ namespace AdventureGame
 {
     class Room
     {
+        static readonly string RoomDirectory = "Content/TextContent/Rooms/";
+
         public string StartingFilePath { get; set; }
         private string CurrentFilePath { get; set; }
         
@@ -26,9 +28,9 @@ namespace AdventureGame
         public List<Door> Doors = new List<Door>();
         public List<Item> Items = new List<Item>();
         
-        public Room(string roomInformationFile)
+        public Room(string roomFileName)
         {
-            this.StartingFilePath = roomInformationFile;
+            this.StartingFilePath = RoomDirectory + roomFileName;
         }
 
         public void Initialize()
@@ -65,7 +67,7 @@ namespace AdventureGame
 
         private void ParseTextFile(string filePath)
         {
-            StreamReader file = new StreamReader(filePath);
+            using (StreamReader file = new StreamReader(filePath))
             {
                 string line;
                 while ((line = file.ReadLine()) != null)
@@ -136,8 +138,8 @@ namespace AdventureGame
             }
             catch {}
 
-            File.AppendAllText(CurrentFilePath, "Name:" + this.Name + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "Background:" + this.Background + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Name:" + Name + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "Background:" + Background + Environment.NewLine);
             foreach(Door door in Doors)
             {
                 File.AppendAllText(CurrentFilePath, "Door:" + door.StartingFilePath + Environment.NewLine);

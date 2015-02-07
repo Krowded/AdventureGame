@@ -10,16 +10,18 @@ namespace AdventureGame
 {
     class NPC : InteractiveObject
     {
+        static readonly string NPCDirectory = "Content/TextContent/NPCs/";
         public DialogueTree Dialogue { get; set; }
 
-        public NPC(string filePath)
+        public NPC(string fileName)
         {
-            this.StartingFilePath = filePath;
+            this.StartingFilePath = NPCDirectory + fileName;
         }
 
-        public override void Interact()
+        public override string Interact()
         {
             Dialogue.StartConversation();
+            return "test";
         }
 
         public override void Interact(InteractiveObject item)
@@ -32,7 +34,7 @@ namespace AdventureGame
         protected override void ParseTextFile(string filePath)
         {
             base.ParseTextFile(filePath);
-            StreamReader file = new StreamReader(filePath);
+            using(StreamReader file = new StreamReader(filePath))
             {
                 string line;
                 while ((line = file.ReadLine()) != null)
@@ -51,7 +53,7 @@ namespace AdventureGame
         public override void Save()
         {
             base.Save();
-            Dialogue.Save();
+            //Dialogue.Save();
         }
     }
 }
