@@ -123,7 +123,7 @@ namespace AdventureGame
                 item.Save();
             }
 
-            try { SaveHandler.DeleteCurrentFile(Name); } catch {}
+            try { SaveHandler.DeleteCurrentFile(FileName); } catch {}
 
             SaveInfo += "Background:" + Background + Environment.NewLine;
             foreach(Door door in Doors)
@@ -144,7 +144,7 @@ namespace AdventureGame
             SaveInfo += "PlayerScaleMin:" + PlayerScaleMin + Environment.NewLine;
             SaveInfo += "PlayerScaleMax:" + PlayerScaleMax + Environment.NewLine;
             SaveInfo += "BackgroundScale:" + BackgroundScale + Environment.NewLine;
-            SaveHandler.SaveToCurrent(SaveInfo, Name);
+            SaveHandler.SaveToCurrent(SaveInfo, FileName);
         }
     }
 }

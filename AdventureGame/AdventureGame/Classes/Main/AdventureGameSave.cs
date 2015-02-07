@@ -12,6 +12,8 @@ namespace AdventureGame
 {
     public partial class AdventureGame : Game
     {
+        private string SaveInfo = "";
+        private string FileName = "game.sav";
         ////////////Needs expansion
         public void SaveProgress()
         {
@@ -19,6 +21,10 @@ namespace AdventureGame
             CurrentRoom.Save();
             SaveHandler.DeleteCurrentFile("game");
             File.AppendAllText(SaveHandler.GetFilePath("game", "game"), "CurrentRoom:" + CurrentRoom.FileName + System.Environment.NewLine);
+            SaveHandler.DeleteCurrentFile(FileName);
+            SaveInfo += "CurrentRoom:" + CurrentRoom.FileName + System.Environment.NewLine;
+            SaveHandler.SaveToCurrent(SaveInfo, FileName);
+            SaveInfo = "";
         }
         public void SaveSettings() { }
     }

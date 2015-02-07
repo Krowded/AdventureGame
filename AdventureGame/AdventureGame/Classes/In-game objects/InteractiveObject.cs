@@ -131,7 +131,7 @@ namespace AdventureGame
 
         public virtual void Save()
         {
-            SaveHandler.DeleteCurrentFile(Name);
+            SaveHandler.DeleteCurrentFile(FileName);
             SaveInfo += "PositionX:" + PositionOnBackground.X + Environment.NewLine;
             SaveInfo += "PositionY:" + PositionOnBackground.Y + Environment.NewLine;
             try { SaveInfo += "Observation:" + Observation.StartingFilePath + Environment.NewLine; } catch { }
@@ -144,7 +144,7 @@ namespace AdventureGame
             SaveInfo += "CollidableAreaBottom:" + collidableAreaBottom+ Environment.NewLine;
             SaveInfo += "CollidableAreaLeftSide:" + collidableAreaLeftSide + Environment.NewLine;
             SaveInfo += "CollidableAreaRightSide:" + collidableAreaRightSide + Environment.NewLine;
-            SaveHandler.SaveToCurrent(SaveInfo, Name);
+            SaveHandler.SaveToCurrent(SaveInfo, FileName);
             SaveInfo = "";
         }
 

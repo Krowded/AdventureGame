@@ -31,12 +31,6 @@ namespace AdventureGame
             }
         }
 
-        public static void SaveToCurrent(string saveInfo, string filename)
-        {
-            File.WriteAllText(CurrentSavePath + filename + ".sav", saveInfo);
-        }
-
-        //To display alternatives when loading/overwriting
         public static List<string> GetSavegames()
         {
             List<string> list = new List<string>();
@@ -46,41 +40,6 @@ namespace AdventureGame
             }
             return list;
         }
-
-        private static void CreateDirectory(string savename)
-        {
-            Directory.CreateDirectory(SaveDirectory + savename);
-        }
-
-        private static void DeleteDirectory(string savename)
-        {
-            try
-            {
-                Directory.Delete(SaveDirectory + savename);
-            }
-            catch { }
-        }
-
-        public static void DeleteCurrentFile(string filename)
-        {
-            DeleteFile(CurrentSavePath + filename + ".sav");
-        }
-
-        public static void DeleteCurrent()
-        {
-            string[] filePaths = Directory.GetFiles(CurrentSavePath);
-            foreach (string filePath in filePaths)
-            {
-                if(filePath.EndsWith(".sav"))
-                    DeleteFile(filePath);
-            }
-        }
-
-        private static void DeleteFile(string filePath)
-        {
-            File.Delete(filePath);
-        }
-
         private static List<string> GetSaveFiles(string savename)
         {
             string[] filePaths = Directory.GetDirectories(SaveDirectory + savename);
@@ -91,18 +50,6 @@ namespace AdventureGame
             }
             return list;
         }
-
-        public static void Load(string savename)
-        {
-            DeleteCurrent();
-            foreach (string file in GetSaveFiles(savename))
-            {
-                string fileName = Path.GetFileName(file);
-                string destinationFile = Path.Combine(CurrentSavePath, fileName);
-                File.Copy(file, destinationFile);
-            }
-        }
-
         public static string GetFilePath(string identifier, string filename)
         {
             string filepath = CurrentSavePath + filename;
@@ -136,6 +83,52 @@ namespace AdventureGame
                         throw new ArgumentException("Unknown identifier for filename: " + filename);
                 }
                 return filepath + filename;
+            }
+        }
+
+        private static void CreateDirectory(string savename)
+        {
+            Directory.CreateDirectory(SaveDirectory + savename);
+        }
+        private static void DeleteDirectory(string savename)
+        {
+            try
+            {
+                Directory.Delete(SaveDirectory + savename);
+            }
+            catch { }
+        }
+        private static void DeleteFile(string filePath)
+        {
+            File.Delete(filePath);
+        }
+
+        public static void SaveToCurrent(string saveInfo, string filename)
+        {
+            File.WriteAllText(CurrentSavePath + filename, saveInfo);
+        }
+        public static void DeleteCurrent()
+        {
+            string[] filePaths = Directory.GetFiles(CurrentSavePath);
+            foreach (string filePath in filePaths)
+            {
+                if (filePath.EndsWith(".sav"))
+                    DeleteFile(filePath);
+            }
+        }
+        public static void DeleteCurrentFile(string filename)
+        {
+            DeleteFile(CurrentSavePath + filename + ".sav");
+        }
+
+        public static void LoadSavegame(string savename)
+        {
+            DeleteCurrent();
+            foreach (string file in GetSaveFiles(savename))
+            {
+                string fileName = Path.GetFileName(file);
+                string destinationFile = Path.Combine(CurrentSavePath, fileName);
+                File.Copy(file, destinationFile);
             }
         }
     }
