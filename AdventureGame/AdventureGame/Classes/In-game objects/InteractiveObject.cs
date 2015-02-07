@@ -157,9 +157,9 @@ namespace AdventureGame
             File.AppendAllText(CurrentFilePath, "Collidable:" + Collidable + Environment.NewLine);
             File.AppendAllText(CurrentFilePath, "Foreground:" + Foreground + Environment.NewLine);
             File.AppendAllText(CurrentFilePath, "CollidableAreaTop:" + collidableAreaTop + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "CollidableAreaBottom" + collidableAreaBottom+ Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "CollidableAreaLeftSide" + collidableAreaLeftSide + Environment.NewLine);
-            File.AppendAllText(CurrentFilePath, "CollidableAreaRightSide" + collidableAreaRightSide + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "CollidableAreaBottom:" + collidableAreaBottom+ Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "CollidableAreaLeftSide:" + collidableAreaLeftSide + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "CollidableAreaRightSide:" + collidableAreaRightSide + Environment.NewLine);
         }
 
     }

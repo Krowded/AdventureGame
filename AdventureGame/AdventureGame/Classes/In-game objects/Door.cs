@@ -12,6 +12,7 @@ namespace AdventureGame
     class Door : InteractiveObject
     {
         static readonly string DoorDirectory = "Content/TextContent/Doors/";
+
         public DialogueTree Dialogue { get; set; }
         public string Destination { get; set; }
         public string PartnerDoorName { get; set; }
@@ -68,7 +69,8 @@ namespace AdventureGame
         public override void Save()
         {
             base.Save();
-            System.IO.File.AppendAllText(SaveHandler.CurrentSavePath + Name + ".sav", "test");
+            File.AppendAllText(CurrentFilePath, "Destination:" + Destination + Environment.NewLine);
+            File.AppendAllText(CurrentFilePath, "PartnerDoorName:" + PartnerDoorName + Environment.NewLine);
         }
     }
 }

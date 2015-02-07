@@ -40,7 +40,6 @@ namespace AdventureGame
         public override void Save()
         {
             base.Save();
-            System.IO.File.AppendAllText(SaveHandler.CurrentSavePath + Name + ".sav", "test");
         }
     }
 }
