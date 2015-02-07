@@ -83,6 +83,11 @@ namespace AdventureGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            //NEW GAME
+            if (true)
+            {
+                SaveHandler.DeleteCurrent();
+            }
             /////////////////////////////////////FIX//////////////////////////////////////////////////////////////77
             if (File.Exists(CurrentFilePath))
             {
