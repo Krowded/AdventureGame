@@ -9,7 +9,11 @@ namespace AdventureGame
     {
         string FilePath;
 
+        public bool Active = false;
+
         public bool Trigger() { return false; }
+
+        public void Update() { }
 
         public void Save() { }
     }

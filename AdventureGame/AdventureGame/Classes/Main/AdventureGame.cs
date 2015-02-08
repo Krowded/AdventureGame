@@ -42,9 +42,8 @@ namespace AdventureGame
 
         //Handler instances
         internal static InputHandling InputHandler = new InputHandling();
-        internal static ScrollHandler Scroller;
         internal static LoadHandler Loader;
-        private static UpdateHandler Updater = new UpdateHandler();
+        private static UpdateHandler Updater;
         private static DrawHandler Drawer = new DrawHandler();
 
         //Background
@@ -59,6 +58,12 @@ namespace AdventureGame
         internal static List<Door> doors = new List<Door>();
         internal static List<InteractiveObject> Collidables = new List<InteractiveObject>();
         internal static List<InteractiveObject> AllThings = new List<InteractiveObject>();
+        internal static List<Script> Scripts = new List<Script>();
+
+        //Text
+        internal static string CurrentStatementToDisplay;
+        internal static List<string> CurrentAnswersToDisplay = new List<string>();
+        internal static float TextSize = 1;
 
         public AdventureGame()
             : base()
@@ -76,6 +81,11 @@ namespace AdventureGame
         /// </summary>
         protected override void Initialize()
         {
+            //Test
+            CurrentStatementToDisplay = "TestTestTesticles";
+            CurrentAnswersToDisplay.Add("Test1");
+            CurrentAnswersToDisplay.Add("Test2");
+
             // TODO: Add your initialization logic here
             //NEW GAME
             if (NewGame)
@@ -83,10 +93,9 @@ namespace AdventureGame
                 SaveHandler.DeleteCurrent();
             }
 
-            //Initialize mouse
-            InputHandler.Begin = false;
-            InputHandler.MousePressed = false;
-            InputHandler.DoubleClick = false;
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>(Font);
 
             //Initialize player variables
             player = new Player(PlayerFile);
@@ -94,14 +103,6 @@ namespace AdventureGame
             //Probably Room dependent
             player.RunSpeed = GraphicsDevice.Viewport.Width / 240;
             player.WalkSpeed = GraphicsDevice.Viewport.Width / 480;
-
-            Loader = new LoadHandler(Content);
-            Scroller = new ScrollHandler(GraphicsDevice.Viewport.Width / 3,
-                                     2 * GraphicsDevice.Viewport.Width / 3,
-                                     GraphicsDevice.Viewport.Height / 3,
-                                     2 * GraphicsDevice.Viewport.Height / 3,
-                                     GraphicsDevice.Viewport.Width / 2,
-                                     GraphicsDevice.Viewport.Height / 2);
 
             //Sets the natural screen size (supposed to resize automatically)
             Graphics.PreferredBackBufferWidth = NaturalScreenWidth;
@@ -113,6 +114,8 @@ namespace AdventureGame
             ViewportHeight = GraphicsDevice.Viewport.Height;
 
             //TouchPanel.EnabledGestures = GestureType.FreeDrag;  <- fix this at the end so that it works for phones, etc. as well
+
+            InitializeHandlers();
 
             //The end
             base.Initialize();
@@ -129,15 +132,18 @@ namespace AdventureGame
             if (InputHandler.EscPressed())
                 Exit();
 
-            //Save mousestates
-            
-            InputHandler.UpdateMouseStates();
-
-            // TODO: Add your update logic here
-            Updater.UpdatePlayer(gameTime);
-            Updater.UpdateScrolling(gameTime);
-            Updater.UpdateAllThings(gameTime); //Does nothing
+            Updater.Update(gameTime);
             base.Update(gameTime);
+        }
+
+        private void InitializeHandlers()
+        {
+            InputHandler.Begin = false;
+            InputHandler.MousePressed = false;
+            InputHandler.DoubleClick = false;
+            Loader = new LoadHandler(Content);
+            Updater = new UpdateHandler();
+ 
         }
 
         /// <summary>
@@ -146,12 +152,6 @@ namespace AdventureGame
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = Content.Load<SpriteFont>(Font);
-
-            // TODO: use this.Content to load your game content here
-
             //Initialize the player
             Texture2D playerTexture = Content.Load<Texture2D>(player.PlayerTexture);
             player.Initialize(playerTexture, player.Position);

@@ -55,7 +55,7 @@ namespace AdventureGame
                 DrawInteractiveSymbol();
             }
 
-            AdventureGame.spriteBatch.DrawString(AdventureGame.font, "TESTINGTESTINGTESTING", AdventureGame.player.Position, Color.Blue);
+            DrawText();
 
             AdventureGame.spriteBatch.End();
             //End
@@ -69,6 +69,19 @@ namespace AdventureGame
             foreach (InteractiveObject thing in objectList)
             {
                 thing.Draw(AdventureGame.spriteBatch);
+            }
+        }
+      
+        private void DrawText()
+        {
+            AdventureGame.spriteBatch.DrawString(AdventureGame.font, AdventureGame.CurrentStatementToDisplay, new Vector2(AdventureGame.ViewportWidth/2, AdventureGame.ViewportHeight/4), Color.Blue, 0, Vector2.Zero, AdventureGame.TextSize, SpriteEffects.None, 0);
+            int counter = 0;
+            foreach (string line in AdventureGame.CurrentAnswersToDisplay)
+            {
+                AdventureGame.spriteBatch.DrawString(AdventureGame.font, line, 
+                                      new Vector2((AdventureGame.ViewportWidth/2), (float)(AdventureGame.ViewportHeight*(4.0/5.0)+20*AdventureGame.TextSize*counter)), 
+                                      Color.Yellow, 0, Vector2.Zero, AdventureGame.TextSize, SpriteEffects.None, 0);
+                counter++;
             }
         }
         /// <summary>

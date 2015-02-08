@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Classes\In-game objects\Background.cs" />
-    <Compile Include="Classes\Logic\DrawHandler.cs" />
+    <Compile Include="Classes\Visuals and movement\DrawHandler.cs" />
     <Compile Include="Classes\Logic\LoadHandler.cs" />
     <Compile Include="Classes\Main\Menu.cs" />
     <Compile Include="Classes\Logic\UpdateHandler.cs" />

@@ -8,6 +8,8 @@ namespace AdventureGame
 {
     internal class ScrollHandler
     {
+        private Player player;
+
         //Scrolling varibles
         private float ScrollSpeed { get; set; }
         private Vector2 ScrollDirection;
@@ -36,39 +38,44 @@ namespace AdventureGame
         private bool ClampedY { get; set; }
         
         public ScrollHandler(int leftScrollBorder, int rightScrollBorder, 
-                         int upperScrollBorder, int lowerScrollBorder, 
-                         int middleOfScreenX, int middleOfScreenY)
+                             int upperScrollBorder, int lowerScrollBorder)
         {
             this.LeftScrollBorder = leftScrollBorder;
             this.RightScrollBorder = rightScrollBorder;
             this.UpperScrollBorder = upperScrollBorder;
             this.LowerScrollBorder = lowerScrollBorder;
-            this.MiddleOfScreenX = middleOfScreenX;
-            this.MiddleOfScreenY = middleOfScreenY;
+            this.MiddleOfScreenX = AdventureGame.ViewportWidth / 2;
+            this.MiddleOfScreenY = AdventureGame.ViewportHeight / 2;
+            this.player = AdventureGame.player;
+        }
+
+        public void UpdateVariables()
+        {            
+            UpdateMovingVariables();
+            UpdateScrollingVariables();
+            UpdateStillScrollingDirection();
         }
 
         /// <summary>
         /// Updates all scrolling variables and booleans
         /// </summary>
-        public void UpdateScrollingVariables(Player player)
+        private void UpdateScrollingVariables()
         {
-            UpdateMovingVariables(player);
-           
             if (this.Moving)
             {
                 this.ScrollDirection = -player.Direction;
             }
 
-            UpdateXAxisScrollingVariables(player);
-            UpdateYAxisScrollingVariables(player);
-            UpdateScrollSpeed(player);
+            UpdateXAxisScrollingVariables();
+            UpdateYAxisScrollingVariables();
+            UpdateScrollSpeed();
         }
 
         /// <summary>
         /// Checks if player is trying to move towards the edge of the screen on the X-axis
         /// and updates all scrolling booleans accordingly
         /// </summary>
-        private void UpdateXAxisScrollingVariables(Player player)
+        private void UpdateXAxisScrollingVariables()
         {
             if (player.Position.X < LeftScrollBorder && MovingLeft)
             {
@@ -102,7 +109,7 @@ namespace AdventureGame
         /// Checks if player is trying to move towards the edge of the screen on the Y-axis
         /// and updates all scrolling booleans accordingly
         /// </summary>
-        private void UpdateYAxisScrollingVariables(Player player)
+        private void UpdateYAxisScrollingVariables()
         {
             if (player.Position.Y < UpperScrollBorder && MovingUp)
             {
@@ -134,7 +141,7 @@ namespace AdventureGame
         /// <summary>
         /// Check which direction player is moving and change booleans
         /// </summary>
-        private void UpdateMovingVariables(Player player)
+        private void UpdateMovingVariables()
         {
             //X-axis
             if (player.Direction.X > 0)
@@ -177,7 +184,7 @@ namespace AdventureGame
         /// <summary>
         /// Adjust scrollspeed to make it smooth
         /// </summary>
-        private void UpdateScrollSpeed(Player player)
+        private void UpdateScrollSpeed()
         {
             if (ScrollingUp || ScrollingDown || ScrollingLeft || ScrollingRight)
             {
@@ -193,38 +200,38 @@ namespace AdventureGame
         /// Makes sure the screen doesnt go outside the background
         /// Sets ClampedX and ClampedY if clamped
         /// </summary>
-        public void BackgroundClamp(ref Vector2 backgroundPosition,
+        public void BackgroundClamp(Background background,
                                     float lowerLimitX, float upperLimitX, 
                                     float lowerLimitY, float upperLimitY)
         {
             //Clamp background position
-            backgroundPosition.X = MathHelper.Clamp(backgroundPosition.X, lowerLimitX, upperLimitX);
-            backgroundPosition.Y = MathHelper.Clamp(backgroundPosition.Y, lowerLimitY, upperLimitY);
+            background.Position.X = MathHelper.Clamp(background.Position.X, lowerLimitX, upperLimitX);
+            background.Position.Y = MathHelper.Clamp(background.Position.Y, lowerLimitY, upperLimitY);
 
             //Set Clamped booleans if clamped
             const int epsilon = 1;
-            ClampedX = (((Math.Abs(backgroundPosition.X - lowerLimitX) < epsilon) && (MovingRight || !Moving)) ||
-                        ((Math.Abs(backgroundPosition.X - upperLimitX) < epsilon) && (MovingLeft || !Moving)));
-            ClampedY = (((Math.Abs(backgroundPosition.Y - lowerLimitY) < epsilon) && (MovingDown || !Moving)) ||
-                        ((Math.Abs(backgroundPosition.Y - upperLimitY) < epsilon) && (MovingUp || !Moving)));
+            ClampedX = (((Math.Abs(background.Position.X - lowerLimitX) < epsilon) && (MovingRight || !Moving)) ||
+                        ((Math.Abs(background.Position.X - upperLimitX) < epsilon) && (MovingLeft || !Moving)));
+            ClampedY = (((Math.Abs(background.Position.Y - lowerLimitY) < epsilon) && (MovingDown || !Moving)) ||
+                        ((Math.Abs(background.Position.Y - upperLimitY) < epsilon) && (MovingUp || !Moving)));
         }
 
         /// <summary>
         /// Perform the scroll
         /// </summary>
         /// <param name="scrollDirection">Opposite of player direction</param>
-        public void Scroll(ref Vector2 backgroundPosition, ref Vector2 mousePosition, Player player)
+        public void Scroll(Background background, ref Vector2 mousePosition)
         {
             player.StillScrollingX = false;
             //X-axis
             if ((ScrollingLeft || ScrollingRight) && !ClampedX)
             {
-                backgroundPosition.X += ScrollDirection.X * ScrollSpeed;
+                background.Position.X += ScrollDirection.X * ScrollSpeed;
                 mousePosition.X += ScrollDirection.X * ScrollSpeed;
             }
             else if (StillScrollingX)
             {
-                backgroundPosition.X += ScrollDirection.X * ScrollSpeed;
+                background.Position.X += ScrollDirection.X * ScrollSpeed;
                 mousePosition.X += ScrollDirection.X * ScrollSpeed;
                 player.StillScrollingX = true;
             }
@@ -232,12 +239,12 @@ namespace AdventureGame
             //Y-axis
             if ((ScrollingUp || ScrollingDown ) && !ClampedY)
             {
-                backgroundPosition.Y += ScrollDirection.Y * ScrollSpeed;
+                background.Position.Y += ScrollDirection.Y * ScrollSpeed;
                 mousePosition.Y += ScrollDirection.Y * ScrollSpeed;
             }
             else if (StillScrollingY)
             {
-                backgroundPosition.Y += ScrollDirection.Y * ScrollSpeed;
+                background.Position.Y += ScrollDirection.Y * ScrollSpeed;
                 mousePosition.Y += ScrollDirection.Y * ScrollSpeed;
             }
         }
@@ -245,7 +252,7 @@ namespace AdventureGame
         /// <summary>
         /// Makes sure the screen scrolls in the right direction during StillScrolling
         /// </summary>
-        public void UpdateStillScrollingDirection(Player player)
+        private void UpdateStillScrollingDirection()
         {
             if (StillScrollingX)
             {
@@ -269,7 +276,7 @@ namespace AdventureGame
         /// <summary>
         /// Compensate for screen scrolling
         /// </summary>
-        public void CompensateForScrolling(Player player)
+        public void CompensateForScrolling()
         {
             //X-axis
             if ((ScrollingLeft || ScrollingRight) && !ClampedX)

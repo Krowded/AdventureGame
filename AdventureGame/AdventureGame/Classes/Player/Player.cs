@@ -118,6 +118,15 @@ namespace AdventureGame
         }
 
         /// <summary>
+        /// Stop moving
+        /// </summary>
+        public void Stop()
+        {
+            TargetPoint.X = Position.X;
+            TargetPoint.Y = Position.Y;
+        }
+
+        /// <summary>
         /// Moves player until within a 10 pixel square of the target
         /// </summary>
         public void MoveToTargetPoint()

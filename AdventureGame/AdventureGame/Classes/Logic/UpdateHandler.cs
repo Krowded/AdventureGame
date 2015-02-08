@@ -14,19 +14,46 @@ namespace AdventureGame
     {
         Vector2 LastTargetPoint;
         Collision Collider;
+        ScrollHandler Scroller;
 
         public UpdateHandler()
         {
+            Scroller = new ScrollHandler((int)(AdventureGame.ViewportWidth / 3f),
+                                         (int)(AdventureGame.ViewportWidth * (2f/3f)),
+                                         (int)(AdventureGame.ViewportHeight / 3f),
+                                         (int)(AdventureGame.ViewportHeight * (2f/3f)));
             Collider = new Collision();
         }
 
+        public void Update(GameTime gameTime)
+        {
+            //Save mousestates
+            
+            AdventureGame.InputHandler.UpdateMouseStates();
+
+            UpdateScripts(gameTime);
+            UpdatePlayer(gameTime);
+            UpdateScrolling(gameTime);
+            UpdateAllThings(gameTime); //Does nothing
+        }
+        private void UpdateScripts(GameTime gameTime) 
+        {
+            foreach (Script script in AdventureGame.Scripts)
+            {
+                if (script.Active)
+                {
+                    script.Update();
+                }
+            }
+        }
         /// <summary>
         /// Updates the player character
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void UpdatePlayer(GameTime gameTime)
+        private void UpdatePlayer(GameTime gameTime)
         {
             //Movement controlled by mouse
+
             AdventureGame.player.TargetPoint = AdventureGame.InputHandler.HandleMouse(gameTime);
             AdventureGame.player.Running = AdventureGame.InputHandler.DoubleClick;
 
@@ -45,7 +72,7 @@ namespace AdventureGame
                             AdventureGame.CurrentRoom.Save();
                             Door door = (Door)thing;
                             AdventureGame.Loader.LoadNewRoom(new Room(answer), door);
-                            AdventureGame.player.TargetPoint = AdventureGame.player.Position;
+                            AdventureGame.player.Stop();
                             return;
                         }
                         else if (thing is NPC) { }
@@ -57,7 +84,7 @@ namespace AdventureGame
                     }
                 }
                 //Check for collisions
-                else if (Collider.ManagedCollisionCheck(AdventureGame.player, AdventureGame.Collidables, LastTargetPoint, AdventureGame.ViewportWidth, AdventureGame.ViewportHeight))
+                else if (Collider.ManagedCollisionCheck(LastTargetPoint))
                 {
                     AdventureGame.player.TargetPoint = AdventureGame.player.Position;
                     AdventureGame.InputHandler.MousePosition = AdventureGame.player.Position; //This should be changed, MousePosition shouldnt have to be changed anymore here
@@ -74,27 +101,26 @@ namespace AdventureGame
         /// Updates all NPCs, Items and Doors
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void UpdateAllThings(GameTime gameTime)
+        private void UpdateAllThings(GameTime gameTime)
         {
         }
         /// <summary>
         /// Takes care of scrolling
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void UpdateScrolling(GameTime gameTime)
+        private void UpdateScrolling(GameTime gameTime)
         {
-            AdventureGame.Scroller.UpdateScrollingVariables(AdventureGame.player);
-            AdventureGame.Scroller.UpdateStillScrollingDirection(AdventureGame.player);
-            AdventureGame.Scroller.Scroll(ref AdventureGame.background.Position, ref AdventureGame.InputHandler.MousePosition, AdventureGame.player); //UGLY!!!
-            AdventureGame.Scroller.BackgroundClamp(ref AdventureGame.background.Position, -(AdventureGame.background.Width - AdventureGame.ViewportWidth), 0, -(AdventureGame.background.Height - AdventureGame.ViewportHeight), 0);
-            AdventureGame.Scroller.CompensateForScrolling(AdventureGame.player);
+            Scroller.UpdateVariables();
+            Scroller.Scroll(AdventureGame.background, ref AdventureGame.InputHandler.MousePosition); //UGLY!!!
+            Scroller.BackgroundClamp(AdventureGame.background, -(AdventureGame.background.Width - AdventureGame.ViewportWidth), 0, -(AdventureGame.background.Height - AdventureGame.ViewportHeight), 0);
+            Scroller.CompensateForScrolling();
 
             SyncInteractiveObjectsWithBackground(AdventureGame.AllThings);
         }
         /// <summary>
         /// Makes sure things stay in sync with background
         /// </summary>
-        public void SyncInteractiveObjectsWithBackground(List<InteractiveObject> thingList)
+        private void SyncInteractiveObjectsWithBackground(List<InteractiveObject> thingList)
         {
             foreach (InteractiveObject thing in thingList)
             {
